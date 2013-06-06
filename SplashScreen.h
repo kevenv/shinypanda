@@ -1,5 +1,5 @@
-#ifndef SPE_GAME_H
-#define SPE_GAME_H
+#ifndef SPE_SPLASH_SCREEN
+#define SPE_SPLASH_SCREEN
 
 #include "GameState.h"
 
@@ -8,11 +8,11 @@ namespace spe
 
 class Engine;
 
-class Game : public GameState
+class SplashScreen : public GameState
 {
 public:
-	Game();
-	~Game();
+	SplashScreen();
+	~SplashScreen();
 
 	void init();
 	void clear();

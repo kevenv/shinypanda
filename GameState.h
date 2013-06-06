@@ -4,6 +4,8 @@
 namespace spe
 {
 
+class Engine;
+
 class GameState
 {
 public:
@@ -16,9 +18,9 @@ public:
 	virtual void pause() = 0;
 	virtual void resume() = 0;
 
-	virtual void handleEvents() = 0;
+	virtual void handleEvents(Engine* engine) = 0;
 	virtual void update(float dt) = 0;
-	virtual void render() = 0;
+	virtual void render(Engine* engine) = 0;
 };
 
 }

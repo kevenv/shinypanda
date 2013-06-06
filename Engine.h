@@ -2,10 +2,13 @@
 #define SPE_ENGINE_H
 
 #include <stack>
-#include "GameState.h"
+#include <string>
+#include <SFML/Graphics.hpp>
 
 namespace spe
 {
+
+class GameState;
 
 class Engine
 {
@@ -21,9 +24,14 @@ public:
 
 	void clear();
 
+	inline sf::RenderWindow* getWindow() { return &_window; }
+	inline void quit() { _running = false; }
+
 private:
 	bool _running;
 	std::stack<GameState*> _states;
+	static std::string _version;
+	sf::RenderWindow _window;
 };
 
 }

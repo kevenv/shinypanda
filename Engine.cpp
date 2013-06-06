@@ -5,15 +5,35 @@
 #include "Game.h"
 #include "Log.h"
 #include <stack>
+#include <string>
+#include <sstream>
+
+#include "SplashScreen.h"
 
 namespace spe
 {
 
+std::string Engine::_version = "0.1.0";
+
 Engine::Engine(int argc, char* argv[])
 {
-	Log() << "test";
+	std::stringstream sstream;
+	sstream << _version;
+	std::string windowTitle = "Shiny Panda Engine v" + sstream.str();
+
+	Log() << windowTitle;
+	//parseArgs(argc, argv);
 	//load config
 	//init SFML
+	int windowWidth = 800;
+	int windowHeight = 600;
+	
+	sf::Uint32 windowOptions = 0;
+	int fpsLimit = 60;
+
+	_window.create(sf::VideoMode(windowWidth, windowHeight), windowTitle);//, windowOptions);
+
+	_window.setFramerateLimit(fpsLimit);
 }
 
 Engine::~Engine()
@@ -22,13 +42,14 @@ Engine::~Engine()
 
 int Engine::run()
 {
-	changeState(new Game());
+	changeState(new SplashScreen());
 
 	while(_running) {
-		_states.top()->handleEvents();
+		_states.top()->handleEvents(this);
 		_states.top()->update(30.0);
-		_states.top()->render();
-		//flip buffer
+		_window.clear();
+		_states.top()->render(this);
+		_window.display();
 		//sleep
 	}
 
@@ -46,7 +67,7 @@ void Engine::changeState(GameState* gameState)
 void Engine::popState()
 {
 	if(!_states.empty()) {
-		_states.top()->clear(); 
+		_states.top()->clear();
 		delete _states.top();
 		_states.pop();
 	}
