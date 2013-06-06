@@ -50,7 +50,7 @@ public:
 	Create new log message
 	logType : log message type
 	*/
-	Log(enum LOG_TYPE logType = LOG_TYPE::INFO);
+	Log(enum LOG_TYPE logType = INFO);
 	~Log();
 
 	friend const Log& operator<<(const Log& log, int n);

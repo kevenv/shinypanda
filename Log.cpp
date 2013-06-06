@@ -13,7 +13,7 @@ namespace spe
 
 std::ofstream* Log::_file = NULL;
 std::stringstream Log::_buffer;
-enum LOG_TYPE Log::_logType = LOG_TYPE::NO_TYPE;
+enum LOG_TYPE Log::_logType = NO_TYPE;
 char Log::_logTypeStr[] = {'*','?', '!', 'X'};
 
 bool Log::_initialized = false;
@@ -95,7 +95,7 @@ void Log::writePadding()
 
 void Log::writeLog()
 {
-	if(Log::_logType != LOG_TYPE::DEBUG || Log::_debugMode) {
+	if(Log::_logType != DEBUG || Log::_debugMode) {
 		*Log::_file << Log::_buffer.str();
 
 		if(Log::_printToConsole) {
