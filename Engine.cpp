@@ -29,7 +29,7 @@ Engine::Engine(int argc, char* argv[])
 	int windowHeight = 600;
 	
 	sf::Uint32 windowOptions = 0;
-	int fpsLimit = 0;
+	int fpsLimit = 60;
 
 	_window.create(sf::VideoMode(windowWidth, windowHeight), windowTitle);//, windowOptions);
 
