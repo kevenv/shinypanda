@@ -59,6 +59,7 @@ public:
 	friend const Log& operator<<(const Log& log, double n);
 	friend const Log& operator<<(const Log& log, char c);
 	friend const Log& operator<<(const Log& log, char* str);
+	friend const Log& operator<<(const Log& log, const char* str);
 	friend const Log& operator<<(const Log& log, std::string& str);
 	friend const Log& operator<<(const Log& log, std::ostream& (*endl)(std::ostream&));
 
