@@ -12,7 +12,7 @@ protected:
     sf::Texture _sprites;
     sf::Sprite _sprite;
     const char* _name;
-    int _height, _length, _x, _y;
+    int _height, _length;
 public:
     Character(const char* name, const char* file, int nbcol, int nbLig, int x = 0, int y = 0);
 
@@ -21,6 +21,7 @@ public:
     virtual void jump() = 0;
 
     virtual const char* getName();
+    virtual sf::Sprite getSprite();
 };
 
 }

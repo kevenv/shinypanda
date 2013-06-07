@@ -27,7 +27,7 @@ Engine::Engine(int argc, char* argv[])
 	//init SFML
 	int windowWidth = 800;
 	int windowHeight = 600;
-	
+
 	sf::Uint32 windowOptions = 0;
 	int fpsLimit = 60;
 

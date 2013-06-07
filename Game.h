@@ -2,6 +2,8 @@
 #define SPE_GAME_H
 
 #include "GameState.h"
+
+#include "Player.h"
 #include <SFML/Graphics.hpp>
 
 namespace spe
@@ -25,6 +27,7 @@ public:
 	void update(Engine* engine, float dt);
 	void render(Engine* engine);
 private:
+    Player _player;
 	int _fps;
 	sf::Text _fpsText;
 	sf::Font _font;
