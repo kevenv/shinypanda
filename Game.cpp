@@ -3,6 +3,7 @@
 
 #include "GameState.h"
 #include "Engine.h"
+#include "Player.h"
 #include <iostream>
 #include <sstream>
 #include <SFML/Graphics.hpp>
@@ -10,7 +11,7 @@
 namespace spe
 {
 
-Game::Game()
+Game::Game() :_player(Player("Player", "sprites.png", 8, 9, 100, 100))
 {
 	_font.loadFromFile("arial.ttf");
 
@@ -55,6 +56,7 @@ void Game::handleEvents(Engine* engine)
 void Game::update(Engine* engine, float dt)
 {
 	_fps = 1/dt;
+	_player.update(dt);
 }
 
 void Game::render(Engine* engine)
@@ -65,6 +67,8 @@ void Game::render(Engine* engine)
 	square.setFillColor(sf::Color::Green);
 	square.setPosition(40,40);
 	window->draw(square);
+
+	window -> draw(_player.getSprite());
 
 	std::stringstream sstream;
 	sstream << _fps;
