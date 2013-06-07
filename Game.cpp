@@ -3,12 +3,21 @@
 
 #include "GameState.h"
 #include "Engine.h"
+#include <iostream>
+#include <sstream>
+#include <SFML/Graphics.hpp>
 
 namespace spe
 {
 
 Game::Game()
 {
+	_font.loadFromFile("arial.ttf");
+
+	_fpsText.setString("0");
+	_fpsText.setCharacterSize(20);
+	_fpsText.setColor(sf::Color::Red);
+	_fpsText.setFont(_font);
 }
 
 Game::~Game()
@@ -34,7 +43,7 @@ void Game::resume()
 void Game::handleEvents(Engine* engine)
 {
 	sf::Event event;
-    while (engine->getWindow()->pollEvent(event))
+    if (engine->getWindow()->pollEvent(event))
     {
         if (event.type == sf::Event::Closed) {
             engine->getWindow()->close();
@@ -45,6 +54,7 @@ void Game::handleEvents(Engine* engine)
 
 void Game::update(float dt)
 {
+	_fps = 1/dt;
 }
 
 void Game::render(Engine* engine)
@@ -55,6 +65,12 @@ void Game::render(Engine* engine)
 	square.setFillColor(sf::Color::Green);
 	square.setPosition(40,40);
 	window->draw(square);
+
+	std::stringstream sstream;
+	sstream << _fps;
+	_fpsText.setString(sstream.str());
+
+	window->draw(_fpsText);
 }
 
 }

@@ -33,6 +33,7 @@ Engine::Engine(int argc, char* argv[])
 
 	_window.create(sf::VideoMode(windowWidth, windowHeight), windowTitle);//, windowOptions);
 
+	//_window.setVerticalSyncEnabled(true);
 	_window.setFramerateLimit(fpsLimit);
 }
 
@@ -44,13 +45,16 @@ int Engine::run()
 {
 	changeState(new SplashScreen());
 
+	sf::Clock clock;
+	float elapsedTime = 0;
+
 	while(_running) {
 		_states.top()->handleEvents(this);
-		_states.top()->update(30.0);
+		_states.top()->update(elapsedTime);
 		_window.clear();
 		_states.top()->render(this);
 		_window.display();
-		//sleep
+		elapsedTime = clock.restart().asSeconds();
 	}
 
 	clear();

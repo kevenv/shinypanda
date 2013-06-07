@@ -2,6 +2,7 @@
 #define SPE_GAME_H
 
 #include "GameState.h"
+#include <SFML/Graphics.hpp>
 
 namespace spe
 {
@@ -23,6 +24,10 @@ public:
 	void handleEvents(Engine* engine);
 	void update(float dt);
 	void render(Engine* engine);
+private:
+	int _fps;
+	sf::Text _fpsText;
+	sf::Font _font;
 };
 
 }
