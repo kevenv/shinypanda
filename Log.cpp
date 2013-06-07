@@ -152,6 +152,12 @@ const Log& operator<<(const Log& log, char* str)
 	return log;
 }
 
+const Log& operator<<(const Log& log, const char* str)
+{
+	Log::_buffer << str;
+	return log;
+}
+
 const Log& operator<<(const Log& log, std::string& str)
 {
 	Log::_buffer << str;
