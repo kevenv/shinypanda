@@ -15,9 +15,9 @@ void Player::update(float dt)
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
         _x--;
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
         _x++;
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         jump();
 
 }
