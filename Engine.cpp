@@ -29,7 +29,7 @@ Engine::Engine(int argc, char* argv[])
 	int windowHeight = 600;
 	
 	sf::Uint32 windowOptions = 0;
-	int fpsLimit = 60;
+	int fpsLimit = 0;
 
 	_window.create(sf::VideoMode(windowWidth, windowHeight), windowTitle);//, windowOptions);
 
@@ -50,7 +50,7 @@ int Engine::run()
 
 	while(_running) {
 		_states.top()->handleEvents(this);
-		_states.top()->update(elapsedTime);
+		_states.top()->update(this, elapsedTime);
 		_window.clear();
 		_states.top()->render(this);
 		_window.display();

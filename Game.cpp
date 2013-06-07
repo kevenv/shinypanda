@@ -52,7 +52,7 @@ void Game::handleEvents(Engine* engine)
     }
 }
 
-void Game::update(float dt)
+void Game::update(Engine* engine, float dt)
 {
 	_fps = 1/dt;
 }

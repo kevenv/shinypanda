@@ -19,7 +19,7 @@ public:
 	virtual void resume() = 0;
 
 	virtual void handleEvents(Engine* engine) = 0;
-	virtual void update(float dt) = 0;
+	virtual void update(Engine* engine, float dt) = 0;
 	virtual void render(Engine* engine) = 0;
 };
 

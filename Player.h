@@ -6,7 +6,7 @@
 namespace spe
 {
 
-class Player : virtual public Character
+class Player : public Character
 {
 public:
     Player(const char* name, const char* file, int nbCol, int nbLig, int x = 0, int y = 0);

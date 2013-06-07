@@ -22,7 +22,7 @@ public:
 	void resume();
 
 	void handleEvents(Engine* engine);
-	void update(float dt);
+	void update(Engine* engine, float dt);
 	void render(Engine* engine);
 private:
 	int _fps;
