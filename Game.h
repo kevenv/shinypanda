@@ -4,6 +4,7 @@
 #include "GameState.h"
 
 #include "Player.h"
+#include "Camera.h"
 #include <SFML/Graphics.hpp>
 
 namespace spe
@@ -14,7 +15,7 @@ class Engine;
 class Game : public GameState
 {
 public:
-	Game();
+	Game(Engine* engine);
 	~Game();
 
 	void init();
@@ -26,8 +27,10 @@ public:
 	void handleEvents(Engine* engine);
 	void update(Engine* engine, float dt);
 	void render(Engine* engine);
+
 private:
     Player _player;
+	Camera _camera;
 	int _fps;
 	sf::Text _fpsText;
 	sf::Font _font;

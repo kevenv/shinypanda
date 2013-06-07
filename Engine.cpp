@@ -33,8 +33,8 @@ Engine::Engine(int argc, char* argv[])
 
 	_window.create(sf::VideoMode(windowWidth, windowHeight), windowTitle);//, windowOptions);
 
-	//_window.setVerticalSyncEnabled(true);
-	_window.setFramerateLimit(fpsLimit);
+	_window.setVerticalSyncEnabled(true);
+	//_window.setFramerateLimit(fpsLimit);
 }
 
 Engine::~Engine()
@@ -51,7 +51,7 @@ int Engine::run()
 	while(_running) {
 		_states.top()->handleEvents(this);
 		_states.top()->update(this, elapsedTime);
-		_window.clear();
+		_window.clear(sf::Color::Black);
 		_states.top()->render(this);
 		_window.display();
 		elapsedTime = clock.restart().asSeconds();

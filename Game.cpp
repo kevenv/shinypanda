@@ -7,11 +7,15 @@
 #include <iostream>
 #include <sstream>
 #include <SFML/Graphics.hpp>
+#include "Log.h"
 
 namespace spe
 {
 
-Game::Game() :_player(Player("Player", "sprites.png", 8, 9, 100, 100))
+Game::Game(Engine* engine)
+:
+_player(Player("Player", "sprites.png", 8, 9, 0, 10)),
+_camera(engine->getWindowSize().x, engine->getWindowSize().y)
 {
 	_font.loadFromFile("arial.ttf");
 
@@ -57,18 +61,22 @@ void Game::update(Engine* engine, float dt)
 {
 	_fps = 1/dt;
 	_player.update(dt);
+	_camera.follow(_player);
+	//_camera.move(_player.getPos().x, _player.getPos().y, dt);
 }
 
 void Game::render(Engine* engine)
 {
 	sf::RenderWindow* window = engine->getWindow();
 
-	sf::RectangleShape square(sf::Vector2f(30,30));
+	sf::RectangleShape square(sf::Vector2f(800,600));
 	square.setFillColor(sf::Color::Green);
-	square.setPosition(40,40);
-	window->draw(square);
+	square.setPosition(0,0);
 
-	window -> draw(_player.getSprite());
+	window->setView(_camera.getView());
+
+	window->draw(square);
+	window->draw(_player.getSprite());
 
 	std::stringstream sstream;
 	sstream << _fps;

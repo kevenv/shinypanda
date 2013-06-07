@@ -14,10 +14,16 @@ Player::Player(const char* name, const char* file, int nbCol, int nbLig, int x, 
 
 void Player::update(float dt)
 {
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	_hasMoved = false;
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
         _sprite.move(-1,0);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		_hasMoved = true;
+	}
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
         _sprite.move(1,0);
+		_hasMoved = true;
+	}
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         jump();
 

@@ -37,7 +37,7 @@ void SplashScreen::handleEvents(Engine* engine)
     while (engine->getWindow()->pollEvent(event))
     {
         if (event.type == sf::Event::Closed) {
-            engine->changeState(new Game());
+            engine->changeState(new Game(engine));
 		}
     }
 }
@@ -45,7 +45,7 @@ void SplashScreen::handleEvents(Engine* engine)
 void SplashScreen::update(Engine* engine, float dt)
 {
 	if(_timer.getElapsedTime().asSeconds() >= 3) {
-		engine->changeState(new Game());
+		engine->changeState(new Game(engine));
 	}
 }
 
