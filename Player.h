@@ -9,7 +9,7 @@ namespace spe
 class Player : public Character
 {
 public:
-    Player(const char* name, const char* file, int nbCol, int nbLig, int x = 0, int y = 0);
+    Player(const char* name, const char* fileSprite, const char* filePosition, int x = 0, int y = 0);
     virtual void update(float dt);
     virtual void jump();
 };

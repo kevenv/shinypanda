@@ -3,22 +3,52 @@
 #include "Log.h"
 
 #include <SFML/Graphics.hpp>
+#include <fstream>
 
 namespace spe
 {
 
-Character::Character(const char* name, const char* file, int nbCol, int nbLig, int x, int y) : _name(name)
+Character::Character(const char* name, const char* fileSprite, const char* filePosition, int x, int y) : _name(name)
 {
-    if(!_sprites.loadFromFile(file))
+    readPosition(filePosition);
+    direction = 1;
+    if(!_sprites.loadFromFile(fileSprite))
     {
-        Log(ERROR) << "Can't find image file for " << _name  << ".\n";
+        Log(ERROR) << "Unable to load image file for " << _name  << ".";
     }
-    sf::Vector2u size = _sprites.getSize();
-    _height = size.y/nbLig;
-    _length = size.x/nbCol;
     _sprite.setTexture(_sprites);
-    _sprite.setTextureRect(sf::IntRect(0, 0, _length, _height));
-    _sprite.setPosition(x,y);
+    sf::IntRect* rect = &_spriteRects[_states[STAND][0]];
+    _sprite.setTextureRect(*rect);
+    _sprite.setPosition(x-rect->width/2,y-rect->height/2);
+}
+
+void Character::readPosition(const char* file)
+{
+    std::ifstream  inf (file);
+
+    if (!inf)
+    {
+        Log(ERROR) << "Unable to load position file for " << _name << ".";
+    }
+
+    int n;
+    inf >> n;
+
+    _spriteRects = new sf::IntRect[n];
+
+    int x, y, length, height;
+
+    for(int i = 0; i < n; i++)
+	{
+	    inf >> x >> y >> length >> height;
+        _spriteRects[i] = sf::IntRect(x, y, length, height);
+	}
+
+	for (int i = 0; i < NB_CHARACTER_STATES; i++)
+        for (int j = 0; j < 2; j++)
+            inf >> _states[i][j];
+
+	inf.close();
 }
 
 const char* Character::getName()
@@ -29,6 +59,11 @@ const char* Character::getName()
 sf::Sprite Character::getSprite()
 {
     return _sprite;
+}
+
+Character::~Character()
+{
+
 }
 
 }

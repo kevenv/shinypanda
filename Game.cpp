@@ -4,6 +4,7 @@
 #include "GameState.h"
 #include "Engine.h"
 #include "Player.h"
+#include "Camera.h"
 #include <iostream>
 #include <sstream>
 #include <SFML/Graphics.hpp>
@@ -14,7 +15,7 @@ namespace spe
 
 Game::Game(Engine* engine)
 :
-_player(Player("Player", "sprites.png", 8, 9, 800/2, 600/2)),
+_player(Player("Player", "sprites.png", "sprites.txt", engine->getWindowSize().x/2, engine->getWindowSize().y/2)),
 _camera(engine->getWindowSize().x, engine->getWindowSize().y)
 {
 	_font.loadFromFile("arial.ttf");
