@@ -2,12 +2,15 @@
 #include "Character.h"
 #include "Log.h"
 
+#include <stdio.h>
+#include <iostream>
 #include <SFML/Graphics.hpp>
 
 namespace spe
 {
 
-Player::Player(const char* name, const char* file, int nbCol, int nbLig, int x, int y) : Character(name, file, nbCol, nbLig, x, y)
+Player::Player(const char* name, const char* fileSprite, const char* filePosition, int x, int y)
+            : Character(name, fileSprite, filePosition, x, y)
 {
 
 }
@@ -34,7 +37,7 @@ void Player::update(float dt)
 
 void Player::jump()
 {
-    Log() << "Boing!";
+    std::cout << "Boing!\n";
 }
 
 }
