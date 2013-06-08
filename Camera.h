@@ -16,6 +16,7 @@ public:
 
 private:
 	sf::View _view;
+	sf::Vector2f _speed;
 };
 
 }

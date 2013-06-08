@@ -69,7 +69,7 @@ void Game::render(Engine* engine)
 {
 	sf::RenderWindow* window = engine->getWindow();
 
-	sf::RectangleShape square(sf::Vector2f(800,600));
+	sf::RectangleShape square(sf::Vector2f(1000,1000));
 	square.setFillColor(sf::Color::Green);
 	square.setPosition(0,0);
 
