@@ -1,3 +1,4 @@
+
 #include "Character.h"
 #include "Log.h"
 
@@ -18,7 +19,6 @@ Character::Character(const char* name, const char* file, int nbCol, int nbLig, i
     _sprite.setTexture(_sprites);
     _sprite.setTextureRect(sf::IntRect(0, 0, _length, _height));
     _sprite.setPosition(x,y);
-	_hasMoved = false;
 }
 
 const char* Character::getName()

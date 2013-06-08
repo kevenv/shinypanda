@@ -13,7 +13,6 @@ protected:
     sf::Sprite _sprite;
     const char* _name;
     int _height, _length;
-	bool _hasMoved;
 
 public:
     Character(const char* name, const char* file, int nbcol, int nbLig, int x = 0, int y = 0);
@@ -25,8 +24,7 @@ public:
     virtual const char* getName();
     virtual sf::Sprite getSprite();
 
-	inline const sf::Vector2f& getPos() const { return _sprite.getPosition(); }
-	inline bool isMoved() const { return _hasMoved; }
+	inline const sf::Vector2f getPos() const { return _sprite.getPosition(); }
 };
 
 }

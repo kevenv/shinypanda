@@ -3,12 +3,11 @@
 
 #include "GameState.h"
 #include "Game.h"
+#include "SplashScreen.h"
 #include "Log.h"
 #include <stack>
 #include <string>
 #include <sstream>
-
-#include "SplashScreen.h"
 
 namespace spe
 {

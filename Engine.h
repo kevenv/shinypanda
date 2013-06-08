@@ -26,7 +26,7 @@ public:
 
 	inline sf::RenderWindow* getWindow() { return &_window; }
 	inline void quit() { _running = false; }
-	inline const sf::Vector2u& getWindowSize() const { return _window.getSize(); }
+	inline const sf::Vector2u getWindowSize() const { return _window.getSize(); }
 
 private:
 	bool _running;
