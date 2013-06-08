@@ -71,7 +71,7 @@ void Game::render(Engine* engine)
 
 	sf::RectangleShape square(sf::Vector2f(1000,1000));
 	square.setFillColor(sf::Color::Green);
-	square.setPosition(0,0);
+	square.setPosition(-100,0);
 
 	window->setView(_camera.getView());
 

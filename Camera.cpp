@@ -26,7 +26,7 @@ void Camera::follow(Character& character)
 
 	std::cout << pos.x << ", " << pos.y << std::endl;
 	int offset = 200;
-	sf::Rect<int> limits(-100+windowX/2, 0+windowY/2, 1000/2, 1000/2+offset);
+	sf::Rect<int> limits(-100+windowX/2, 0+windowY/2, 1000/2, 1000/2+100);
 
 	if(x < limits.left) {
 		x = limits.left;
