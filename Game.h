@@ -31,9 +31,7 @@ public:
 private:
     Player _player;
 	Camera _camera;
-	int _fps;
-	sf::Text _fpsText;
-	sf::Font _font;
+	
 	sf::RectangleShape _square;
 	sf::Texture _img;
 };

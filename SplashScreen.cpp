@@ -41,19 +41,17 @@ void SplashScreen::resume()
 
 void SplashScreen::handleEvents(Engine* engine)
 {
-	sf::Event event;
-    while (engine->getWindow()->pollEvent(event))
-    {
-        if (event.type == sf::Event::Closed) {
-            engine->changeState(new Game(engine));
+	sf::Event event = engine->getEvent();
+    
+    if (event.type == sf::Event::Closed) {
+        engine->changeState(new Game(engine));
+	}
+	else if(event.type == sf::Event::KeyPressed)
+	{
+		if (event.key.code == sf::Keyboard::Escape) {
+			engine->changeState(new Game(engine));
 		}
-		else if(event.type == sf::Event::KeyPressed)
-		{
-			if (event.key.code == sf::Keyboard::Escape) {
-				engine->changeState(new Game(engine));
-			}
-		}
-    }
+	}
 }
 
 void SplashScreen::update(Engine* engine, float dt)

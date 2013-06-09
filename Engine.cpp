@@ -42,23 +42,40 @@ Engine::~Engine()
 
 int Engine::run()
 {
+	_debugScreen.init();
 	changeState(new SplashScreen());
 
 	sf::Clock clock;
 	float elapsedTime = 0;
 
 	while(_running) {
-		_states.top()->handleEvents(this);
+		handleEvents();
+
 		_states.top()->update(this, elapsedTime);
+		_debugScreen.update(this, elapsedTime);
+
 		_window.clear(sf::Color::Black);
+
 		_states.top()->render(this);
+		_debugScreen.render(this);
+
 		_window.display();
 		elapsedTime = clock.restart().asSeconds();
 	}
 
 	clear();
+	_debugScreen.clear();
 
 	return 0;
+}
+
+void Engine::handleEvents()
+{
+	while (_window.pollEvent(_event))
+    {
+		_states.top()->handleEvents(this);
+		_debugScreen.handleEvents(this);
+	}
 }
 
 void Engine::changeState(GameState* gameState)

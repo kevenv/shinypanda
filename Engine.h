@@ -4,6 +4,7 @@
 #include <stack>
 #include <string>
 #include <SFML/Graphics.hpp>
+#include "DebugScreen.h"
 
 namespace spe
 {
@@ -17,6 +18,7 @@ public:
 	~Engine();
 
 	int run();
+	void handleEvents();
 
 	void pushState(GameState* gameState);
 	void popState();
@@ -25,14 +27,18 @@ public:
 	void clear();
 
 	inline sf::RenderWindow* getWindow() { return &_window; }
+	inline const sf::Event& getEvent() { return _event; }
 	inline void quit() { _running = false; }
 	inline const sf::Vector2u getWindowSize() const { return _window.getSize(); }
 
 private:
-	bool _running;
-	std::stack<GameState*> _states;
-	static std::string _version;
 	sf::RenderWindow _window;
+	sf::Event _event;
+
+	std::stack<GameState*> _states;
+	DebugScreen _debugScreen;
+	bool _running;
+	static std::string _version;
 };
 
 }

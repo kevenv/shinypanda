@@ -34,11 +34,10 @@ void PauseScreen::clear()
 
 void PauseScreen::handleEvents(Engine* engine)
 {
-	sf::Event event;
-    while (engine->getWindow()->pollEvent(event)) {
-        if(event.type == sf::Event::GainedFocus) {
-			engine->popState();
-		}
+	sf::Event event = engine->getEvent();
+    
+    if(event.type == sf::Event::GainedFocus) {
+		engine->popState();
 	}
 }
 
