@@ -3,6 +3,7 @@
 
 #include "GameState.h"
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio/Music.hpp>
 
 namespace spe
 {
@@ -27,6 +28,10 @@ public:
 
 private:
 	sf::Clock _timer;
+	sf::Texture _logo;
+	sf::RectangleShape _square;
+	int _transparency;
+	sf::Music _thunder;
 };
 
 }

@@ -9,6 +9,14 @@ namespace spe
 SplashScreen::SplashScreen()
 {
 	_timer.restart();
+	_logo.loadFromFile("logo.png");
+	_square.setSize(sf::Vector2f(_logo.getSize().x, _logo.getSize().y));
+	_square.setPosition((800-_logo.getSize().x)/2, (600-_logo.getSize().y)/2);
+	_transparency = 0;
+	_square.setTexture(&_logo);
+
+	_thunder.openFromFile("thunder.wav");
+	_thunder.play();
 }
 
 SplashScreen::~SplashScreen()
@@ -39,12 +47,32 @@ void SplashScreen::handleEvents(Engine* engine)
         if (event.type == sf::Event::Closed) {
             engine->changeState(new Game(engine));
 		}
+		else if(event.type == sf::Event::KeyPressed)
+		{
+			if (event.key.code == sf::Keyboard::Escape) {
+				engine->changeState(new Game(engine));
+			}
+		}
     }
 }
 
 void SplashScreen::update(Engine* engine, float dt)
 {
-	if(_timer.getElapsedTime().asSeconds() >= 3) {
+	float upTime = 4;
+	float waitTime = 2;
+	float downTime = 4;
+
+	if(_timer.getElapsedTime().asSeconds() < upTime && _transparency < 255) {
+		_transparency += 1;
+		_square.setFillColor(sf::Color(255,255,255,_transparency));
+	}
+	else if(_timer.getElapsedTime().asSeconds() > (upTime + waitTime) &&
+		    _timer.getElapsedTime().asSeconds() < (upTime + waitTime + downTime) &&
+			_transparency > 0) {
+		_transparency -= 1;
+		_square.setFillColor(sf::Color(255,255,255,_transparency));
+	}
+	else if (_timer.getElapsedTime().asSeconds() > (upTime + waitTime + downTime)) {
 		engine->changeState(new Game(engine));
 	}
 }
@@ -52,18 +80,7 @@ void SplashScreen::update(Engine* engine, float dt)
 void SplashScreen::render(Engine* engine)
 {
 	sf::RenderWindow* window = engine->getWindow();
-
-	sf::RectangleShape square(sf::Vector2f(30,30));
-	square.setFillColor(sf::Color::Red);
-	window->draw(square);
-
-	sf::Texture logo;
-	logo.loadFromFile("logo.png");
-
-	sf::RectangleShape logoR(sf::Vector2f(logo.getSize().x, logo.getSize().y));
-	logoR.setPosition((800-logo.getSize().x)/2, (600-logo.getSize().y)/2);
-	logoR.setTexture(&logo);
-	window->draw(logoR);
+	window->draw(_square);
 }
 
 }
