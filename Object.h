@@ -26,10 +26,10 @@ public:
     virtual bool isColliding(int x, int y) = 0;
 
     bool isCollidable() { return _collidable; }
-    bool isTransparent() { return _trasnparent; }
+    bool isTransparent() { return _transparent; }
     bool isInReal() { return _inReal; }
     bool isInDream() { return _inDream; }
-}
+};
 
 }
 
