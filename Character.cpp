@@ -1,6 +1,7 @@
 
 #include "Character.h"
 #include "Log.h"
+#include "SpeedVector2.h"
 
 #include <SFML/Graphics.hpp>
 #include <fstream>
@@ -8,10 +9,9 @@
 namespace spe
 {
 
-Character::Character(const char* name, const char* fileSprite, const char* filePosition, int x, int y) : _name(name)
+Character::Character(const char* name, const char* fileSprite, const char* filePosition, SpeedVector2<float> speed, int x, int y) : _speed(speed), _name(name), _direction(1)
 {
     readPosition(filePosition);
-    direction = 1;
     if(!_sprites.loadFromFile(fileSprite))
     {
         Log(ERROR) << "Unable to load image file for " << _name  << ".";
