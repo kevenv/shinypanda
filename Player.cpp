@@ -17,7 +17,19 @@ Player::Player(const char* name, const char* fileSprite, const char* filePositio
 
 void Player::refreshAnimation(float dt)
 {
-    if(_speed.getDirectionX() != 0)
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    {
+        if(_state != DUCK)
+        {
+            _animationTime = dt;
+            _state = DUCK;
+        }
+        else
+            _animationTime += dt;
+        if(_speed.getDirectionX() == -_direction)
+            switchDirection();
+    }
+    else if(_speed.getDirectionX() != 0)
     {
         if(_state != WALK)
         {
@@ -44,7 +56,11 @@ void Player::refreshAnimation(float dt)
 
 void Player::update(float dt)
 {
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	{
+		_speed.slow(50*dt);
+	}
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
             _speed.slow(50*dt);
@@ -57,14 +73,6 @@ void Player::update(float dt)
 	}
 	else
         _speed.slow(50*dt);
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	{
-		_sprite.move(0,-250*dt);
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		_sprite.move(0,250*dt);
-	}
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         jump();
     _sprite.move(_speed.getVector2());

@@ -73,7 +73,20 @@ void Character::refreshSprite()
 
 int Character::getSpriteRect()
 {
-    return _states[_state][0] + (int)(20*_animationTime)%_states[_state][1];
+    int time = 20*_animationTime;
+    switch(_state)
+    {
+        case DEAD:
+        case DUCK:
+        case JUMP: //TODO JUMP
+            return _states[_state][0] + (time > _states[_state][1] ? _states[_state][1] : time);
+        case STAND:
+        case WALK:
+        case RUN:
+        case FALL:
+            return _states[_state][0] + time%_states[_state][1];
+    }
+    return -1; //Never gonna happen as long as state stay within the constants.
 }
 
 void Character::switchDirection()
