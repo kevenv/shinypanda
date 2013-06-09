@@ -13,7 +13,7 @@ namespace spe
 {
 
 Character::Character(const char* name, const char* fileSprite, const char* filePosition, SpeedVector2<float> speed, int x, int y)
-            : _speed(speed), _name(name), _state(STAND), _direction(1), _animationTime(0)
+            : _speed(speed), _name(name), _state(STAND), _direction(1), _animationTime(0), _dead(false)
 {
     readPosition(filePosition);
     if(!_sprites.loadFromFile(fileSprite))
@@ -79,12 +79,12 @@ int Character::getSpriteRect()
         case DEAD:
         case DUCK:
         case JUMP: //TODO JUMP
-            return _states[_state][0] + (time > _states[_state][1] ? _states[_state][1] : time);
+            return _states[_state][0] + (time/2 >= _states[_state][1] ? _states[_state][1]-1 : time/2);
         case STAND:
         case WALK:
         case RUN:
         case FALL:
-            return _states[_state][0] + time%_states[_state][1];
+            return _states[_state][0] + (time)%_states[_state][1];
     }
     return -1; //Never gonna happen as long as state stay within the constants.
 }

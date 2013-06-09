@@ -32,6 +32,7 @@ protected:
     int _states[NB_CHARACTER_STATES][2]; //For each states, first int is the first rect of the state, second int is the number of rects.
     int _direction; // -1: gauche, 1: droite
     float _animationTime;
+    bool _dead; //If the character is dead
     int _actualOffset; //Index of actual offset.
     sf::IntRect* _spriteRects; //Dynamic array of IntRect
     sf::Vector2i* _offsets; //Dynamic array of offsets
@@ -46,6 +47,8 @@ private:
 public:
     Character(const char* name, const char* fileSprite, const char* filePosition, SpeedVector2<float> speed, int x = 0, int y = 0);
     ~Character();
+
+    void switchDeath() { _dead = !_dead;}
 
     virtual void update(float dt) = 0;
     virtual void jump() = 0;

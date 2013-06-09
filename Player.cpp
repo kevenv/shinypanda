@@ -17,7 +17,17 @@ Player::Player(const char* name, const char* fileSprite, const char* filePositio
 
 void Player::refreshAnimation(float dt)
 {
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    if(_dead)
+    {
+        if(_state != DEAD)
+        {
+            _animationTime = dt;
+            _state = DEAD;
+        }
+        else
+            _animationTime += dt;
+    }
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
         if(_state != DUCK)
         {
@@ -26,8 +36,6 @@ void Player::refreshAnimation(float dt)
         }
         else
             _animationTime += dt;
-        if(_speed.getDirectionX() == -_direction)
-            switchDirection();
     }
     else if(_speed.getDirectionX() != 0)
     {
@@ -56,25 +64,34 @@ void Player::refreshAnimation(float dt)
 
 void Player::update(float dt)
 {
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		_speed.slow(50*dt);
-	}
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-    {
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-            _speed.slow(50*dt);
-        else
-            _speed.move(-50*dt,0);
-	}
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-    {
-        _speed.move(50*dt,0);
-	}
-	else
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::L))
+        _dead = false;
+    else if(_dead)
         _speed.slow(50*dt);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-        jump();
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::K))
+        _dead = true;
+    else
+    {
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        {
+            _speed.slow(50*dt);
+        }
+        else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        {
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+                _speed.slow(50*dt);
+            else
+                _speed.move(-50*dt,0);
+        }
+        else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        {
+            _speed.move(50*dt,0);
+        }
+        else
+            _speed.slow(50*dt);
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+            jump();
+    }
     _sprite.move(_speed.getVector2());
     refreshAnimation(dt);
 }
