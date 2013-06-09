@@ -18,7 +18,7 @@ DebugScreen::DebugScreen()
 	_fpsText.setColor(sf::Color::Red);
 	_fpsText.setFont(_font);
 
-	_active = true;
+	_active = false;
 }
 
 DebugScreen::~DebugScreen()
@@ -36,12 +36,12 @@ void DebugScreen::clear()
 void DebugScreen::handleEvents(Engine* engine)
 {
 	sf::Event event = engine->getEvent();
-    
+
     switch(event.type)
     {
 	case sf::Event::KeyPressed:
 		if(event.key.code == sf::Keyboard::F3) {
-			_active = _active ? false : true;
+			_active = !_active;
 		}
 		break;
 	default:

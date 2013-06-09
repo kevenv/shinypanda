@@ -32,8 +32,10 @@ template < typename T >
 class SpeedVector2
 {
 private:
-    T _x, _y; ///< Coordinates of the vector.
-    T _xMax, _yMax; ///< Maximum absolute values of x and y. If the value is negative, it means there is no maximum value.
+    T _x; ///< X coordinates of the vector.
+    T _y; ///< Y coordinates ofthe vector
+    T _xMax; ///< Maximum absolute value of x. If the value is negative, it means there is no maximum value.
+    T _yMax; ///< Maximum absolute value of y. If the value is negative, it means there is no maximum value.
     /**
     Verify if the values of x and y are within the maximal values. If not, change the value for the maximum value of the same sign.
 
