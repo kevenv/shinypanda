@@ -23,6 +23,7 @@ public:
     void slow(T x);
     sf::Vector2<T> getVector2() { return sf::Vector2<T>(_x,_y); }
     bool isMoving() { return _x != 0 || _y != 0; }
+    int getDirectionX() { return SGN(_x); }
 };
 
 template <typename T>

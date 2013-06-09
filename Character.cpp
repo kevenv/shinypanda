@@ -4,12 +4,14 @@
 #include "SpeedVector2.h"
 
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include <fstream>
 
 namespace spe
 {
 
-Character::Character(const char* name, const char* fileSprite, const char* filePosition, SpeedVector2<float> speed, int x, int y) : _speed(speed), _name(name), _direction(1)
+Character::Character(const char* name, const char* fileSprite, const char* filePosition, SpeedVector2<float> speed, int x, int y)
+            : _speed(speed), _name(name), _state(STAND), _direction(1), _animationTime(0)
 {
     readPosition(filePosition);
     if(!_sprites.loadFromFile(fileSprite))
@@ -51,6 +53,13 @@ void Character::readPosition(const char* file)
 	inf.close();
 }
 
+void Character::switchDirection()
+{
+    _direction *= -1;
+    _sprite.scale(-1.,1.);
+    std::cout << "switch";
+}
+
 const char* Character::getName()
 {
     return _name;
@@ -63,7 +72,7 @@ sf::Sprite Character::getSprite()
 
 Character::~Character()
 {
-
+    delete[] _spriteRects;
 }
 
 }

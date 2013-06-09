@@ -28,9 +28,14 @@ protected:
     sf::Sprite _sprite;
     SpeedVector2<float> _speed;
     const char* _name;
+    CHARACTER_STATE _state;
     int _states[NB_CHARACTER_STATES][2]; //For each states, first int is the first rect of the state, second int is the number of rects.
-    int _direction; // 0: gauche, 1: droite
+    int _direction; // -1: gauche, 1: droite
+    float _animationTime;
     sf::IntRect* _spriteRects; //Dynamic array of IntRect
+    virtual void refreshAnimation(float dt) = 0;
+    virtual void refreshSprite() = 0;
+    virtual void switchDirection();
 
 private:
     void readPosition(const char* file);

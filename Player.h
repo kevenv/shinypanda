@@ -8,6 +8,9 @@ namespace spe
 
 class Player : public Character
 {
+protected:
+    virtual void refreshAnimation(float dt);
+    virtual void refreshSprite();
 public:
     Player(const char* name, const char* fileSprite, const char* filePosition, int x = 0, int y = 0);
     virtual void update(float dt);
