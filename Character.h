@@ -42,10 +42,10 @@ protected:
     virtual int getSpriteRect();
 
 private:
-    void readPosition(const char* file);
+    void readPosition(const char* file, const int fileVersion);
 
 public:
-    Character(const char* name, const char* fileSprite, const char* filePosition, SpeedVector2<float> speed, int x = 0, int y = 0);
+    Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, SpeedVector2<float> speed, int x = 0, int y = 0);
     ~Character();
 
     void switchDeath() { _dead = !_dead;}

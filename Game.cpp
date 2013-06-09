@@ -15,7 +15,7 @@ namespace spe
 
 Game::Game(Engine* engine)
 :
-_player(Player("Player", "sprites.png", "sprites.txt", engine->getWindowSize().x/2, engine->getWindowSize().y/2)),
+_player(Player("Player", "sprites.png", "sprites.txt", 2, engine->getWindowSize().x/2, engine->getWindowSize().y/2)),
 _camera(engine->getWindowSize().x, engine->getWindowSize().y, sf::Rect<int>(0,0,1920,1080))
 {
 	_font.loadFromFile("arial.ttf");

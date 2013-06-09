@@ -12,8 +12,8 @@
 namespace spe
 {
 
-Player::Player(const char* name, const char* fileSprite, const char* filePosition, int x, int y)
-            : Character(name, fileSprite, filePosition, SpeedVector2<float>(0,0,WALK_MAX), x, y)
+Player::Player(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, int x, int y)
+            : Character(name, fileSprite, filePosition, filePositionVersion, SpeedVector2<float>(0,0,WALK_MAX), x, y)
 {
 
 }
