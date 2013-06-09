@@ -16,7 +16,7 @@ namespace spe
 Game::Game(Engine* engine)
 :
 _player(Player("Player", "sprites.png", "sprites.txt", engine->getWindowSize().x/2, engine->getWindowSize().y/2)),
-_camera(engine->getWindowSize().x, engine->getWindowSize().y)
+_camera(engine->getWindowSize().x, engine->getWindowSize().y, sf::Rect<int>(0,0,1920,1080))
 {
 	_font.loadFromFile("arial.ttf");
 
@@ -24,6 +24,14 @@ _camera(engine->getWindowSize().x, engine->getWindowSize().y)
 	_fpsText.setCharacterSize(20);
 	_fpsText.setColor(sf::Color::Red);
 	_fpsText.setFont(_font);
+
+	if(!_img.loadFromFile("test.png")) {
+		Log(ERROR) << "Can't load image 'test.png'";
+	}
+
+	_square.setSize(sf::Vector2f(1920,1080));
+	_square.setTexture(&_img);
+	_square.setPosition(0,0);
 }
 
 Game::~Game()
@@ -60,23 +68,18 @@ void Game::handleEvents(Engine* engine)
 
 void Game::update(Engine* engine, float dt)
 {
-	_fps = 1/dt;
+	_fps = (int)1/dt;
 	_player.update(dt);
-	_camera.follow(_player);
-	//_camera.move(_player.getPos().x, _player.getPos().y, dt);
+	_camera.follow(_player, dt);
 }
 
 void Game::render(Engine* engine)
 {
 	sf::RenderWindow* window = engine->getWindow();
 
-	sf::RectangleShape square(sf::Vector2f(1000,1000));
-	square.setFillColor(sf::Color::Green);
-	square.setPosition(-100,0);
-
 	window->setView(_camera.getView());
 
-	window->draw(square);
+	window->draw(_square);
 	window->draw(_player.getSprite());
 
 	std::stringstream sstream;

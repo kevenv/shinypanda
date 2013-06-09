@@ -34,6 +34,8 @@ private:
 	int _fps;
 	sf::Text _fpsText;
 	sf::Font _font;
+	sf::RectangleShape _square;
+	sf::Texture _img;
 };
 
 }

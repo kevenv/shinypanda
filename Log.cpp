@@ -106,8 +106,6 @@ void Log::writeLog()
 
 const struct tm *const Log::getTime()
 {
-	const struct tm* localTime = NULL;
-
 	const time_t rawTime = time(NULL);
 	if(rawTime == -1) {
 		return NULL;
