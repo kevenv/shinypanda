@@ -4,7 +4,6 @@
 #include "SpeedVector2.h"
 
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include <fstream>
 
 namespace spe
@@ -57,7 +56,6 @@ void Character::switchDirection()
 {
     _direction *= -1;
     _sprite.scale(-1.,1.);
-    std::cout << "switch";
 }
 
 const char* Character::getName()
