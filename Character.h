@@ -1,67 +1,168 @@
+/**
+    @file Character.h
+    @author Vincent Girard <vin100_jrare@hotmail.com>
+    @version 1.0
+
+    @section LICENSE
+
+
+
+    @section DESCRIPTION
+
+    This file is the header of a class representing a character.
+*/
 #ifndef SPE_CHARACTER_H
 #define SPE_CHARACTER_H
 
 #include "SpeedVector2.h"
 
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics.hpp> //For the graphics
 
 namespace spe
 {
-
+/**
+    @enum CHARACTER_STATE
+    @brief Each of the value represents of possible state of the character.
+*/
 enum CHARACTER_STATE
 {
-    STAND,
-    WALK,
-    RUN,
-    JUMP,
-    FALL,
-    DUCK,
-    DEAD,
+    STAND, ///< The character isn't moving.
+    WALK, ///< The character is walking.
+    RUN, ///< The character is running.
+    JUMP, ///< The character is making a jump.
+    FALL, ///< The character is falling or finished a jump.
+    DUCK, ///< The character has ducked.
+    DEAD, ///< The character died.
 };
 
-const int NB_CHARACTER_STATES = 7;
+const int NB_CHARACTER_STATES = 7; ///< Number of states possibles.
 
+/**
+    @class Character Character.h "Character.h"
+    @brief A character.
+
+    This is an abstract class which represents a character moving on the map, like the player or an ennemy.
+*/
 class Character
 {
 protected:
-    sf::Texture _sprites;
-    sf::Sprite _sprite;
-    SpeedVector2<float> _speed;
-    const char* _name;
-    CHARACTER_STATE _state;
-    int _states[NB_CHARACTER_STATES][2]; //For each states, first int is the first rect of the state, second int is the number of rects.
-    int _direction; // -1: gauche, 1: droite
-    float _animationTime;
-    bool _dead; //If the character is dead
-    int _actualOffset; //Index of actual offset.
-    sf::IntRect* _spriteRects; //Dynamic array of IntRect
-    sf::Vector2i* _offsets; //Dynamic array of offsets
+    sf::Texture _sprites; ///< Texture containing all the possible sprites of the character.
+    sf::Sprite _sprite; ///< Sprite of the character.
+    SpeedVector2<float> _speed; ///< Current momentum of the character.
+    const char* _name; ///< Name of the character.
+    CHARACTER_STATE _state; ///< Current state of the character.
+    int _states[NB_CHARACTER_STATES][2]; /**< Statix array containing information about the states.
+                                        For each states, the first int is the first rect of the state and the second int is the number of rects.*/
+    int _direction; ///< The direction of the character. -1: left, 1: right.
+    float _animationTime; ///< Current time of the animation.
+    bool _dead; ///< If the character is dead.
+    int _currentOffset; ///< Index of current offset.
+    sf::IntRect* _spriteRects; ///< Dynamic array of the sprite rectangles.
+    sf::Vector2i* _offsets; ///< Dynamic array of offsets.
+    /**
+    Add dt to the time of the animation and refresh it. Usually called by update.
+
+    @param[in] dt Time elapsed since the last refresh.
+    */
     virtual void refreshAnimation(float dt) = 0;
+    /**
+    Refresh the sprite with the current status. Usually called by refreshAnimation.
+    */
     virtual void refreshSprite();
+    /**
+    Change the direction of the Character.
+    */
     virtual void switchDirection();
+    /**
+    Get the index of the sprite IntRect associated with the current status.
+
+    @return The index of the current sprite Rect.
+    */
     virtual int getSpriteRect();
 
 private:
+    /**
+    Read the file containing all the informations for the sprites: Number of images,
+        position and size of the Sprite rectangles, offsets and
+        index of first image and number of images for each state.
+
+    @param[in] file Path of the file.
+    @param[in] fileVersion Last version of the file.
+    */
     void readPosition(const char* file, const int fileVersion);
 
 public:
-    Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, SpeedVector2<float> speed, int x = 0, int y = 0);
+    /**
+    Main constructor for the class.
+
+    @param[in] name Name of the character.
+    @param[in] fileSprite Path of the file containing the sprites.
+    @param[in] filePosition Path of the file containing the infos of the sprites.
+    @param[in] filePositionVersion Last version of the positionf file.
+    @param[in] x,y Initial position of the character.
+    */
+    Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, int x = 0, int y = 0);
+    /**
+    Destructor.
+
+    Free all ressources attached to the character.
+    */
     ~Character();
 
+    /**
+    Change the status of the character's death.
+    */
     void switchDeath() { _dead = !_dead;}
 
+    /**
+    Check all possible change of status and move the character if needed.
+
+    @param[in] dt Time elapsed since the last update.
+    */
     virtual void update(float dt) = 0;
+    /**
+    Make the character jump.
+    */
     virtual void jump() = 0;
+    /**
+    Change the character to run mode.
+    */
     virtual void run() = 0;
+    /**
+    Change the character to walk mode.
+    */
     virtual void walk() = 0;
 
+    /**
+    Verify if the speed of the last update was non-null.
+
+    @return True if the character has moved, false otherwise.
+    */
     virtual bool hasMoved() { return _speed.isMoving(); }
 
-    virtual sf::Vector2f getPosition();
-    virtual const char* getName();
-    virtual sf::Sprite getSprite();
+    /**
+    Get the position of the center of the character.
 
-	inline const sf::Vector2f getPos() const { return _sprite.getPosition(); }
+    The center is calculated for a fixed point of the character to make sur the animation is fluid.
+    It may be different from the position of the center of the sprite rectangle.
+
+    @return Position of the center, in pixels.
+    */
+    virtual sf::Vector2f getPosition();
+    /**
+    Get the name of the character.
+
+    The name of the character is given at initialization to the constructor and never changes.
+
+    @return Name of the character.
+    */
+    virtual const char* getName();
+    /**
+    Get the current sprite of the character.
+
+    @return the current sprite.
+    */
+    virtual sf::Sprite& getSprite();
 };
 
 }

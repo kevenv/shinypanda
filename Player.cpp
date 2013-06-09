@@ -1,21 +1,34 @@
+/**
+    @file Player.cpp
+    @author Vincent Girard <vin100_jrare@hotmail.com>
+    @version 1.0
+
+    @section LICENSE
+
+
+
+    @section DESCRIPTION
+
+    This file is the source of a class representing the player.
+*/
 #include "Player.h"
 #include "Character.h"
 #include "Log.h"
 #include "SpeedVector2.h"
 
-#include <iostream>
-#include <SFML/Graphics.hpp>
+#include <iostream> //For cout tests
+#include <SFML/Graphics.hpp> //For the graphics
 
-#define WALK_MAX 5
-#define RUN_MAX 10
+#define WALK_MAX 5 //Maximum speed when walking
+#define RUN_MAX 10 //Maximum speed when running
 
 namespace spe
 {
 
 Player::Player(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, int x, int y)
-            : Character(name, fileSprite, filePosition, filePositionVersion, SpeedVector2<float>(0,0,WALK_MAX), x, y)
+            : Character(name, fileSprite, filePosition, filePositionVersion, x, y)
 {
-
+    walk();
 }
 
 void Player::refreshAnimation(float dt)
@@ -111,7 +124,7 @@ void Player::update(float dt)
 
 void Player::jump()
 {
-    std::cout << "Boing!\n";
+    std::cout << "Boing!\n"; // TODO (vincent#1#): Jump
 }
 
 void Player::run()
