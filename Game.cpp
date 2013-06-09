@@ -9,6 +9,7 @@
 #include <sstream>
 #include <SFML/Graphics.hpp>
 #include "Log.h"
+#include "PauseScreen.h"
 
 namespace spe
 {
@@ -61,6 +62,9 @@ void Game::handleEvents(Engine* engine)
     {
         switch(event.type)
         {
+			case sf::Event::LostFocus:
+				engine->pushState(new PauseScreen(engine));
+				break;
             case sf::Event::Closed:
                 engine->getWindow()->close();
                 engine->quit();
