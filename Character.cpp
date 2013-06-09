@@ -36,12 +36,12 @@ void Character::readPosition(const char* file, const int fileVersion)
         Log(ERROR) << "Unable to load position file for " << _name << ".";
     }
 
-    int version
+    int version;
     inf >> version;
 
     if(version != fileVersion)
     {
-        LOG(ERROR) << "Position file for " << _name << " is out of date.";
+        Log(ERROR) << "Position file for " << _name << " is out of date.";
     }
 
     int n;
