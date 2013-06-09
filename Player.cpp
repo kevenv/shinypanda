@@ -6,11 +6,14 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
+#define WALK_MAX 5
+#define RUN_MAX 10
+
 namespace spe
 {
 
 Player::Player(const char* name, const char* fileSprite, const char* filePosition, int x, int y)
-            : Character(name, fileSprite, filePosition, SpeedVector2<float>(0,0,5), x, y)
+            : Character(name, fileSprite, filePosition, SpeedVector2<float>(0,0,WALK_MAX), x, y)
 {
 
 }
@@ -39,7 +42,16 @@ void Player::refreshAnimation(float dt)
     }
     else if(_speed.getDirectionX() != 0)
     {
-        if(_state != WALK)
+        if(_speed.getSpeedX() > WALK_MAX)
+        {
+            if(_state != RUN)
+            {
+                _animationTime = dt;
+                _state = RUN;
+            }
+            else _animationTime += dt;
+        }
+        else if(_state != WALK)
         {
             _animationTime = dt;
             _state = WALK;
@@ -72,6 +84,7 @@ void Player::update(float dt)
         _dead = true;
     else
     {
+        bool run = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift);
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
         {
             _speed.slow(50*dt);
@@ -81,11 +94,11 @@ void Player::update(float dt)
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
                 _speed.slow(50*dt);
             else
-                _speed.move(-50*dt,0);
+                _speed.move(-(run?100:50)*dt,0);
         }
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
         {
-            _speed.move(50*dt,0);
+            _speed.move((run?100:50)*dt,0);
         }
         else
             _speed.slow(50*dt);
@@ -99,6 +112,16 @@ void Player::update(float dt)
 void Player::jump()
 {
     std::cout << "Boing!\n";
+}
+
+void Player::run()
+{
+    _speed.setXMax(RUN_MAX);
+}
+
+void Player::walk()
+{
+    _speed.setXMax(WALK_MAX);
 }
 
 }

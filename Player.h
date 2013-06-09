@@ -14,6 +14,8 @@ public:
     Player(const char* name, const char* fileSprite, const char* filePosition, int x = 0, int y = 0);
     virtual void update(float dt);
     virtual void jump();
+    virtual void run();
+    virtual void walk();
 };
 
 }

@@ -13,10 +13,9 @@ template < typename T >
 class SpeedVector2
 {
 private:
-    T _x, _y;
+    T _x, _y, _xMax, _yMax;
     bool verifMax();
 public:
-    T _xMax, _yMax;
     SpeedVector2(T x = 0, T y = 0, T xMax = -1, T yMax = -1);
     bool move(T x, T y);
     bool move(const sf::Vector2<T> &vector);
@@ -24,8 +23,14 @@ public:
     sf::Vector2<T> getVector2() { return sf::Vector2<T>(_x,_y); }
     bool isMoving() { return _x != 0 || _y != 0; }
     int getDirectionX() { return SGN(_x); }
+    int getSpeedX() { return ABS(_x); }
     T getX() { return _x; }
     T getY() { return _y; }
+    T getXMax() { return _xMax; }
+    T getYMax() { return _yMax; }
+    void setXMax(T xMax);
+    void setYMax(T yMax);
+    void setMax(T xMax, T yMax);
 };
 
 template <typename T>
@@ -77,6 +82,28 @@ void SpeedVector2<T>::slow(T x)
         else
             _x -= SGN(_x)*x;
     }
+}
+
+template <typename T>
+void SpeedVector2<T>::setXMax(T xMax)
+{
+    _xMax = xMax;
+    verifMax();
+}
+
+template <typename T>
+void SpeedVector2<T>::setYMax(T yMax)
+{
+    _yMax = yMax;
+    verifMax();
+}
+
+template <typename T>
+void SpeedVector2<T>::setMax(T xMax, T yMax)
+{
+    _xMax = xMax;
+    _yMax = yMax;
+    verifMax();
 }
 
 }

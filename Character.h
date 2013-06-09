@@ -52,6 +52,8 @@ public:
 
     virtual void update(float dt) = 0;
     virtual void jump() = 0;
+    virtual void run() = 0;
+    virtual void walk() = 0;
 
     virtual bool hasMoved() { return _speed.isMoving(); }
 

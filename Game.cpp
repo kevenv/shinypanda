@@ -57,12 +57,25 @@ void Game::resume()
 void Game::handleEvents(Engine* engine)
 {
 	sf::Event event;
-    if (engine->getWindow()->pollEvent(event))
+    while (engine->getWindow()->pollEvent(event))
     {
-        if (event.type == sf::Event::Closed) {
-            engine->getWindow()->close();
-			engine->quit();
-		}
+        switch(event.type)
+        {
+            case sf::Event::Closed:
+                engine->getWindow()->close();
+                engine->quit();
+                break;
+            case sf::Event::KeyPressed:
+                if(event.key.code == sf::Keyboard::LShift || event.key.code == sf::Keyboard::LShift)
+                    _player.run();
+                break;
+            case sf::Event::KeyReleased:
+                if(event.key.code == sf::Keyboard::LShift || event.key.code == sf::Keyboard::LShift)
+                    _player.walk();
+                break;
+            default:
+                break;
+        }
     }
 }
 
