@@ -1,35 +1,129 @@
+/**
+    @file SpeedVector2.h
+    @author Vincent Girard <vin100_jrare@hotmail.com>
+    @version 1.0
+
+    @section LICENSE
+
+
+
+    @section DESCRIPTION
+
+    This file is the header/source of a class template representing a Vector with a maximum speed.
+*/
 #ifndef SPE_SPEED_VECTOR_2_H
 #define SPE_SPEED_VECTOR_2_H
 
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics.hpp> //For the graphics
 
-#define ABS(x) ((x) < 0 ? -(x) : (x))
-#define SGN(x) ((x) < 0 ? -1 : ((x) > 0 ? 1 : 0))
+#define ABS(x) ((x) < 0 ? -(x) : (x)) //Absolute value function
+#define SGN(x) ((x) < 0 ? -1 : ((x) > 0 ? 1 : 0)) //Sign function
 
 namespace spe
 {
 
+/**
+    @class SpeedVector2 SpeedVector2.h "SpeedVector2.h"
+    @brief A vector.
+
+    This is a template class which represents a two-dimensional vector with the possibility of having a maximum absolute value for x and/or y.
+*/
 template < typename T >
 class SpeedVector2
 {
 private:
-    T _x, _y, _xMax, _yMax;
+    T _x, _y; ///< Coordinates of the vector.
+    T _xMax, _yMax; ///< Maximum absolute values of x and y. If the value is negative, it means there is no maximum value.
+    /**
+    Verify if the values of x and y are within the maximal values. If not, change the value for the maximum value of the same sign.
+
+    @return True if the values are within range, false otherwise.
+    */
     bool verifMax();
 public:
+    /**
+    Main constructor of the class.
+
+    @param[in] x,y Initiale coordinates of the vector.
+    @param[in] xMax,yMax Maximum absolute values of coordinates the vector.
+    */
     SpeedVector2(T x = 0, T y = 0, T xMax = -1, T yMax = -1);
+    /**
+    Move the vector by a given offset then calls verifMax().
+
+    @param[in] x,y Offsets.
+    */
     bool move(T x, T y);
+    /**
+    Move the vector by a given offset then calls verifMax().
+
+    @param[in] vector Offset.
+    */
     bool move(const sf::Vector2<T> &vector);
+    /**
+    Reduce the absolute value of x by a given offset.
+    The value given must be positive or the function has no effect.
+    If the value is higher than x's absolute value, then x take the value 0.
+
+    @param[in] x Offset.
+    */
     void slow(T x);
+    /**
+    Return a Vector2<T> object with the same coordinates as this vector.
+
+    This function is mainly used for compatibility with the graphics engine.
+
+    @return The associated Vector2<T> object.
+    */
     sf::Vector2<T> getVector2() { return sf::Vector2<T>(_x,_y); }
+    /**
+    Verify if the coordinates of the vector are not the origin.
+
+    @return False if both coordinates are 0, true otherwise.
+    */
     bool isMoving() { return _x != 0 || _y != 0; }
+    /**
+    Get the direction of x.
+
+    The possible values are: -1, 0 and 1.
+
+    @return The sign of x.
+    */
     int getDirectionX() { return SGN(_x); }
+    /**
+    Get the absolute value of x.
+
+    @return The absolute value of x.
+    */
     int getSpeedX() { return ABS(_x); }
     T getX() { return _x; }
     T getY() { return _y; }
     T getXMax() { return _xMax; }
     T getYMax() { return _yMax; }
+    /**
+    Set the new value of xMax then call verifMax().
+
+    A strictly negative value means no maximum value for x.
+
+    @param[in] xMax The new value of xMax.
+    */
     void setXMax(T xMax);
+    /**
+    Set the new value of yMax then call verifMax().
+
+    A strictly negative value means no maximum value for y.
+
+    @param[in] yMax The new value of yMax.
+    */
     void setYMax(T yMax);
+    /**
+    Set the new value of xMax and yMax then call verifMax().
+
+    A strictly negative value means no maximum value for x/y.
+
+    @param[in] xMax The new value of xMax.
+    @param[in] yMax The new value of yMax.
+    */
     void setMax(T xMax, T yMax);
 };
 

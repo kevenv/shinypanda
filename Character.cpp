@@ -1,19 +1,31 @@
+/**
+    @file Character.cpp
+    @author Vincent Girard <vin100_jrare@hotmail.com>
+    @version 1.0
 
+    @section LICENSE
+
+
+
+    @section DESCRIPTION
+
+    This file is the source of a class representing a character.
+*/
 #include "Character.h"
 #include "Log.h"
 #include "SpeedVector2.h"
 
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <fstream>
+#include <SFML/Graphics.hpp> //For the graphics
+#include <iostream> //For cout tests
+#include <fstream> //For reading files
 
-#define ABS(x) ((x) < 0 ? -(x) : (x))
+#define ABS(x) ((x) < 0 ? -(x) : (x)) //Absolute value function
 
 namespace spe
 {
 
-Character::Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, SpeedVector2<float> speed, int x, int y)
-            : _speed(speed), _name(name), _state(STAND), _direction(1), _animationTime(0), _dead(false)
+Character::Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, int x, int y)
+            : _speed(SpeedVector2<float>()), _name(name), _state(STAND), _direction(1), _animationTime(0), _dead(false)
 {
     readPosition(filePosition, filePositionVersion);
     if(!_sprites.loadFromFile(fileSprite))
@@ -22,8 +34,8 @@ Character::Character(const char* name, const char* fileSprite, const char* fileP
     }
     _sprite.setTexture(_sprites);
     _sprite.setPosition(x,y);
-    _actualOffset = getSpriteRect();
-    _sprite.move(sf::Vector2f(-_offsets[_actualOffset].x,-_spriteRects[_actualOffset].height));
+    _currentOffset = getSpriteRect();
+    _sprite.move(sf::Vector2f(-_offsets[_currentOffset].x,-_spriteRects[_currentOffset].height));
     refreshSprite();
 }
 
@@ -68,15 +80,16 @@ void Character::readPosition(const char* file, const int fileVersion)
 
 void Character::refreshSprite()
 {
-    int lastOffset = _actualOffset;
-    _actualOffset = getSpriteRect();
-    sf::IntRect* rect = &_spriteRects[_actualOffset];
-    if(_direction < 0)
+    int lastOffset = _currentOffset;
+    _currentOffset = getSpriteRect();
+    sf::IntRect* rect = &_spriteRects[_currentOffset];
+    if(_direction < 0) // If the direction if left, do a reflection to the rectangle.
         rect = new sf::IntRect(rect->left+rect->width, rect->top, -rect->width, rect->height);
     _sprite.setTextureRect(*rect);
-    _sprite.move(sf::Vector2f(_direction*(_offsets[lastOffset].x - _offsets[_actualOffset].x) + (_direction < 0 ? _spriteRects[lastOffset].width + rect->width : 0), _spriteRects[lastOffset].height - rect->height));
+    // If right: +lastXOffset-currentXOffset, if left: -lastXOffset+lastWidth+currentXOffset-currentWidth.
+    _sprite.move(sf::Vector2f(_direction*(_offsets[lastOffset].x - _offsets[_currentOffset].x) + (_direction < 0 ? _spriteRects[lastOffset].width + rect->width : 0), _spriteRects[lastOffset].height - rect->height));
     if(_direction < 0)
-        delete rect;
+        delete rect; // Delete the new rectangle we made.
 }
 
 int Character::getSpriteRect()
@@ -86,7 +99,7 @@ int Character::getSpriteRect()
     {
         case DEAD:
         case DUCK:
-        case JUMP: //TODO JUMP
+        case JUMP: // TODO (vincent#1#): JUMP
             return _states[_state][0] + (time/2 >= _states[_state][1] ? _states[_state][1]-1 : time/2);
         case STAND:
         case WALK:
@@ -99,7 +112,8 @@ int Character::getSpriteRect()
 
 void Character::switchDirection()
 {
-    _sprite.move(sf::Vector2f(_direction*(2*_offsets[_actualOffset].x-_spriteRects[_actualOffset].width),0));
+    //If changing for right: +width-2xOffset, if changing left: +2xOffset-width
+    _sprite.move(sf::Vector2f(_direction*(2*_offsets[_currentOffset].x-_spriteRects[_currentOffset].width),0));
     _direction *= -1;
 }
 
@@ -108,14 +122,15 @@ const char* Character::getName()
     return _name;
 }
 
-sf::Sprite Character::getSprite()
+sf::Sprite& Character::getSprite()
 {
     return _sprite;
 }
 
 sf::Vector2f Character::getPosition()
 {
-    return _sprite.getPosition() + sf::Vector2f(_direction < 0 ? _spriteRects[_actualOffset].width - _offsets[_actualOffset].x : _offsets[_actualOffset].x, _spriteRects[_actualOffset].height);
+    // If right: +width-xOffset, if left: +xOffset
+    return _sprite.getPosition() + sf::Vector2f(_direction < 0 ? _spriteRects[_currentOffset].width - _offsets[_currentOffset].x : _offsets[_currentOffset].x, _spriteRects[_currentOffset].height);
 }
 
 Character::~Character()
