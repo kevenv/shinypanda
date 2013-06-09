@@ -19,11 +19,10 @@ Camera::Camera(int w, int h, sf::Rect<int> worldLimits, int x, int y)
 
 void Camera::follow(Character& character)
 {
-	sf::Vector2f pos = character.getSprite().getPosition();
-	sf::IntRect size = character.getSprite().getTextureRect();
+	sf::Vector2f pos = character.getPosition();
 
-	float x = pos.x + size.width/2;
-	float y = pos.y + size.height/2;
+	float x = pos.x;
+	float y = pos.y;
 
 	//L T W H
 
@@ -76,7 +75,7 @@ void Camera::follow(Character& character, float dt)
 
 	float camX = _view.getCenter().x;
 	float camY = _view.getCenter().y;
-	
+
 	//std::cout << x << "," << y << "| " << camX << "," << camY << std::endl;
 
 	//std::cout << _speed.x << std::endl;

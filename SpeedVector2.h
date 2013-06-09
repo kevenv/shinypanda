@@ -24,6 +24,8 @@ public:
     sf::Vector2<T> getVector2() { return sf::Vector2<T>(_x,_y); }
     bool isMoving() { return _x != 0 || _y != 0; }
     int getDirectionX() { return SGN(_x); }
+    T getX() { return _x; }
+    T getY() { return _y; }
 };
 
 template <typename T>

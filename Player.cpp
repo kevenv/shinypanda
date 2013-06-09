@@ -15,11 +15,6 @@ Player::Player(const char* name, const char* fileSprite, const char* filePositio
 
 }
 
-void Player::refreshSprite()
-{
-    _sprite.setTextureRect(_spriteRects[_states[_state][0] + (int)(20*_animationTime)%_states[_state][1]]);
-}
-
 void Player::refreshAnimation(float dt)
 {
     if(_speed.getDirectionX() != 0)
