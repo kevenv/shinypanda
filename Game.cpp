@@ -70,7 +70,7 @@ void Game::update(Engine* engine, float dt)
 {
 	_fps = (int)1/dt;
 	_player.update(dt);
-	_camera.follow(_player, dt);
+	_camera.follow(_player);
 }
 
 void Game::render(Engine* engine)
