@@ -21,7 +21,7 @@ namespace spe
 
 /**
     @class Player Player.h "Player.h"
-    @brief The character of the player.
+    @brief The player.
 
     This class represents the player. It inherites of Character.
 */
