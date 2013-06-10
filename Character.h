@@ -51,7 +51,7 @@ protected:
     SpeedVector2<float> _speed; ///< Current momentum of the character.
     const char* _name; ///< Name of the character.
     CHARACTER_STATE _state; ///< Current state of the character.
-    int _states[NB_CHARACTER_STATES][2]; /**< Statix array containing information about the states.
+    int _states[NB_CHARACTER_STATES][2]; /**< \brief Statix array containing information about the states.
                                         For each states, the first int is the first rect of the state and the second int is the number of rects.*/
     int _direction; ///< The direction of the character. -1: left, 1: right.
     float _animationTime; ///< Current time of the animation.

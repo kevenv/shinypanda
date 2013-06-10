@@ -28,10 +28,10 @@ class Object
 protected:
     bool _collidable; ///< Whether the object if tangible or not. If false, we can pass through it.
     bool _transparent; ///< Wheter the object is transparent or not. If true, we don't draw it.
-    bool _inReal; ///< This variable do nothing if _collidable is false and _transparent is true.
-                    ///< Whether the object exist in the Real World or not.
-    bool _inDream; ///< This variable do nothing if _collidable is false and _transparent is true.
-                    ///< Whether the object exist in the Dream World or not.
+    bool _inReal; /**< \brief Whether the object exist in the Real World or not.
+                    This variable does nothing if _collidable is false and _transparent is true. */
+    bool _inDream; /**< \brief Whether the object exist in the Dream World or not.
+                    This variable does nothing if _collidable is false and _transparent is true. */
 public:
     /**
     Main constructor of the class.
