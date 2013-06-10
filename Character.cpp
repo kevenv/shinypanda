@@ -28,9 +28,9 @@ Character::Character(const char* name, const char* fileSprite, const char* fileP
             : _speed(SpeedVector2<float>()), _name(name), _state(STAND), _direction(1), _animationTime(0), _dead(false)
 {
     readPosition(filePosition, filePositionVersion);
-    if(!_sprites.loadFromFile(fileSprite))
+    if(!_sprites.loadFromFile(fileSprite)) // If it can't load the file.
     {
-        Log(ERROR) << "Unable to load image file for " << _name  << ".";
+        Log(ERROR) << "Unable to load sprite sheet for " << _name  << ".";
     }
     _sprite.setTexture(_sprites);
     _sprite.setPosition(x,y);
@@ -43,7 +43,7 @@ void Character::readPosition(const char* file, const int fileVersion)
 {
     std::ifstream  inf (file);
 
-    if (!inf)
+    if (!inf) // If it can't load the file.
     {
         Log(ERROR) << "Unable to load position file for " << _name << ".";
     }

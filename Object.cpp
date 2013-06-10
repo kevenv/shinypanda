@@ -13,14 +13,23 @@
 */
 
 #include "Object.h"
+#include "Log.h"
 
 namespace spe
 {
 
-Object::Object(bool inDream, bool inReal, bool transparent, bool collidable)
-    : _collidable(collidable), _transparent(transparent), _inReal(inReal), _inDream(inDream)
+Object::Object(const char* name, const char* fileName, int x, int y, bool inDream, bool inReal, bool transparent, bool collidable)
+    : _name(name), _collidable(collidable), _transparent(transparent), _inReal(inReal), _inDream(inDream)
 {
-
+    if (fileName != NULL && *fileName == '\0') // If the name is not empty
+    {
+        if(!_sprites.loadFromFile(fileName)) // If it can't load the file.
+        {
+            Log(ERROR) << "Can't load the sprite sheet for " << _name << ".";
+        }
+        _sprite.setTexture(_sprites);
+    }
+    _sprite.setPosition(x,y);
 }
 
 }

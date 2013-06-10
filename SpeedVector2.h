@@ -32,12 +32,13 @@ template < typename T >
 class SpeedVector2
 {
 private:
-    T _x; ///< X coordinates of the vector.
-    T _y; ///< Y coordinates ofthe vector
+    T _x; ///< X coordinate of the vector.
+    T _y; ///< Y coordinate ofthe vector
     T _xMax; ///< Maximum absolute value of x. If the value is negative, it means there is no maximum value.
     T _yMax; ///< Maximum absolute value of y. If the value is negative, it means there is no maximum value.
     /**
-    Verify if the values of x and y are within the maximal values. If not, change the value for the maximum value of the same sign.
+    Verify if the values of x and y are within the maximal values.
+    If not, change the value for the maximum value of the same sign.
 
     @return True if the values are within range, false otherwise.
     */
@@ -54,12 +55,14 @@ public:
     Move the vector by a given offset then calls verifMax().
 
     @param[in] x,y Offsets.
+    @return True if the new coordinates were within range, false otherwise.
     */
     bool move(T x, T y);
     /**
     Move the vector by a given offset then calls verifMax().
 
     @param[in] vector Offset.
+    @return True if the new coordinates were within range, false otherwise.
     */
     bool move(const sf::Vector2<T> &vector);
     /**
@@ -98,9 +101,33 @@ public:
     @return The absolute value of x.
     */
     int getSpeedX() { return ABS(_x); }
+    /**
+    Get the x coordinate of the vector.
+
+    @return the value of x.
+    */
     T getX() { return _x; }
+    /**
+    Get the y coordinate of the vector.
+
+    @return the value of y.
+    */
     T getY() { return _y; }
+    /**
+    Get the maximum value of the x coordinate of the vector.
+
+    If the value is negative, it means there are no maximum value for x.
+
+    @return the maximum value of x.
+    */
     T getXMax() { return _xMax; }
+    /**
+    Get the maximum value of the y coordinate of the vector.
+
+    If the value is negative, it means there are no maximum value for x.
+
+    @return the maximum value of y.
+    */
     T getYMax() { return _yMax; }
     /**
     Set the new value of xMax then call verifMax().
