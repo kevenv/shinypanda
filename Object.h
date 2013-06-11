@@ -50,7 +50,7 @@ public:
     @param[in] transparent If the is transparent.
     @param[in] collidable If the object can't be passed through.
     */
-    Object(const char* name, const char* fileName, int x, int y, bool inDream = true, bool inReal = true, bool transparent = false, bool collidable = true);
+    Object(const char* name, const char* fileName, int x = 0, int y = 0, bool inDream = true, bool inReal = true, bool transparent = false, bool collidable = true);
     /**
     Verify whether a coordinate is considered "inside" the object.
 

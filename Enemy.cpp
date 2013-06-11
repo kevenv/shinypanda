@@ -18,7 +18,7 @@
 namespace spe
 {
 
-Enemy::Enemy(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, int x, int y)
+Enemy::Enemy(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, int x, int y, bool inDream, bool inReal)
                                 : Character(name, fileSprite, filePosition, filePositionVersion, x, y)
 {
 

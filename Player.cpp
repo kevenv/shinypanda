@@ -25,8 +25,8 @@
 namespace spe
 {
 
-Player::Player(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, int x, int y)
-            : Character(name, fileSprite, filePosition, filePositionVersion, x, y)
+Player::Player(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, int x, int y, bool inDream, bool inReal)
+            : Character(name, fileSprite, filePosition, filePositionVersion, x, y, inDream, inReal)
 {
     walk();
 }
@@ -135,6 +135,11 @@ void Player::run()
 void Player::walk()
 {
     _speed.setXMax(WALK_MAX);
+}
+
+bool Player::isColliding(int x, int y)
+{
+    return false;// TODO (vincent#1#): Decide what to do with this...
 }
 
 }

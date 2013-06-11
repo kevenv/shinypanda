@@ -12,6 +12,7 @@
     This file is the source of a class representing a character.
 */
 #include "Character.h"
+#include "Object.h"
 #include "Log.h"
 #include "SpeedVector2.h"
 
@@ -24,16 +25,10 @@
 namespace spe
 {
 
-Character::Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, int x, int y)
-            : _speed(SpeedVector2<float>()), _name(name), _state(STAND), _direction(1), _animationTime(0), _dead(false)
+Character::Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, int x, int y, bool inDream, bool inReal)
+            : Object(name, fileSprite, x, y, inDream, inReal), _speed(SpeedVector2<float>()), _state(STAND), _direction(1), _animationTime(0), _dead(false)
 {
     readPosition(filePosition, filePositionVersion);
-    if(!_sprites.loadFromFile(fileSprite)) // If it can't load the file.
-    {
-        Log(ERROR) << "Unable to load sprite sheet for " << _name  << ".";
-    }
-    _sprite.setTexture(_sprites);
-    _sprite.setPosition(x,y);
     _currentOffset = getSpriteRect();
     _sprite.move(sf::Vector2f(-_offsets[_currentOffset].x,-_spriteRects[_currentOffset].height));
     refreshSprite();
@@ -115,16 +110,6 @@ void Character::switchDirection()
     //If changing for right: +width-2xOffset, if changing left: +2xOffset-width
     _sprite.move(sf::Vector2f(_direction*(2*_offsets[_currentOffset].x-_spriteRects[_currentOffset].width),0));
     _direction *= -1;
-}
-
-const char* Character::getName()
-{
-    return _name;
-}
-
-sf::Sprite& Character::getSprite()
-{
-    return _sprite;
 }
 
 sf::Vector2f Character::getPosition()

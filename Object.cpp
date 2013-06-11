@@ -21,7 +21,7 @@ namespace spe
 Object::Object(const char* name, const char* fileName, int x, int y, bool inDream, bool inReal, bool transparent, bool collidable)
     : _name(name), _collidable(collidable), _transparent(transparent), _inReal(inReal), _inDream(inDream)
 {
-    if (fileName != NULL && *fileName == '\0') // If the name is not empty
+    if (fileName != NULL && *fileName != '\0') // If the name is not empty
     {
         if(!_sprites.loadFromFile(fileName)) // If it can't load the file.
         {

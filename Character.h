@@ -15,6 +15,7 @@
 #define SPE_CHARACTER_H
 
 #include "SpeedVector2.h"
+#include "Object.h"
 
 #include <SFML/Graphics.hpp> //For the graphics
 
@@ -42,14 +43,12 @@ const int NB_CHARACTER_STATES = 7; ///< Number of states possibles.
     @brief A character.
 
     This is an abstract class which represents a character moving on the map, like the player or an ennemy.
+    It inherites Object.
 */
-class Character
+class Character : public Object
 {
 protected:
-    sf::Texture _sprites; ///< Texture containing all the possible sprites of the character.
-    sf::Sprite _sprite; ///< Sprite of the character.
     SpeedVector2<float> _speed; ///< Current momentum of the character.
-    const char* _name; ///< Name of the character.
     CHARACTER_STATE _state; ///< Current state of the character.
     int _states[NB_CHARACTER_STATES][2]; /**< \brief Statix array containing information about the states.
                                         For each states, the first int is the first rect of the state and the second int is the number of rects.*/
@@ -100,8 +99,9 @@ public:
     @param[in] filePosition Path of the file containing the infos of the sprites.
     @param[in] filePositionVersion Last version of the positionf file.
     @param[in] x,y Initial position of the character.
+    @param[in] inDream,inReal If the object is in the Dream/Real World or not.
     */
-    Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, int x = 0, int y = 0);
+    Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, int x = 0, int y = 0, bool inDream = true, bool inReal = true);
     /**
     Destructor.
 
@@ -149,20 +149,6 @@ public:
     @return Position of the center, in pixels.
     */
     virtual sf::Vector2f getPosition();
-    /**
-    Get the name of the character.
-
-    The name of the character is given at initialization to the constructor and never changes.
-
-    @return Name of the character.
-    */
-    virtual const char* getName();
-    /**
-    Get the current sprite of the character.
-
-    @return the current sprite.
-    */
-    virtual sf::Sprite& getSprite();
 };
 
 }

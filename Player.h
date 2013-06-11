@@ -38,12 +38,14 @@ public:
     @param[in] filePosition Path of the file containing the infos of the sprites.
     @param[in] filePositionVersion Last version of the positionf file.
     @param[in] x,y Initial position of the character.
+    @param[in] inDream,inReal If the object is in the Dream/Real World or not.
     */
-    Player(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, int x = 0, int y = 0);
+    Player(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, int x = 0, int y = 0, bool inDream = true, bool inReal = true);
     virtual void update(float dt);
     virtual void jump();
     virtual void run();
     virtual void walk();
+    virtual bool isColliding(int x, int y);
 };
 
 }
