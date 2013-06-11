@@ -49,7 +49,7 @@ void Game::resume()
 void Game::handleEvents(Engine* engine)
 {
 	sf::Event event = engine->getEvent();
-    
+
     switch(event.type)
     {
 	case sf::Event::LostFocus:
@@ -66,8 +66,6 @@ void Game::handleEvents(Engine* engine)
     case sf::Event::KeyReleased:
         if(event.key.code == sf::Keyboard::LShift || event.key.code == sf::Keyboard::LShift)
             _player.walk();
-        break;
-    default:
         break;
 	}
 }
