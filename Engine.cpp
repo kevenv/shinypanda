@@ -34,6 +34,7 @@ Engine::Engine(int argc, char* argv[])
 
 	_window.setVerticalSyncEnabled(true);
 	//_window.setFramerateLimit(fpsLimit);
+	_running = true;
 }
 
 Engine::~Engine()
