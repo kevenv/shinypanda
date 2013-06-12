@@ -18,8 +18,8 @@
 namespace spe
 {
 
-Object::Object(const char* name, const char* fileName, int x, int y, bool inDream, bool inReal, bool transparent, bool collidable)
-    : _name(name), _collidable(collidable), _transparent(transparent), _inReal(inReal), _inDream(inDream)
+Object::Object(const char* name, const char* fileName, bool direction, int x, int y, bool inDream, bool inReal, bool transparent, bool collidable)
+    : _name(name), _collidable(collidable), _transparent(transparent), _inReal(inReal), _inDream(inDream), _initialDirection(direction)
 {
     if (fileName != NULL && *fileName != '\0') // If the name is not empty
     {

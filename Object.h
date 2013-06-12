@@ -35,6 +35,7 @@ protected:
                     This variable does nothing if _collidable is false and _transparent is true. */
     bool _inDream; /**< \brief Whether the object exist in the Dream World or not.
                     This variable does nothing if _collidable is false and _transparent is true. */
+    bool _initialDirection; ///< Direction the sprite is facing in the file. True = right, false = left.
     sf::Texture _sprites; ///< The textures where our sprite is. This variable is useless if _transparent is true.
     sf::Sprite _sprite; ///< The sprite of our object.
 public:
@@ -45,12 +46,13 @@ public:
 
     @param[in] name Name of the object.
     @param[in] fileName Path of the file containing the sprite(s).
+    @param[in] direction Direction the sprite is facing in the file. true = right, false = left.
     @param[in] x,y Position of the object.
     @param[in] inDream,inReal If the object is in the Dream/Real World or not.
     @param[in] transparent If the is transparent.
     @param[in] collidable If the object can't be passed through.
     */
-    Object(const char* name, const char* fileName, int x = 0, int y = 0, bool inDream = true, bool inReal = true, bool transparent = false, bool collidable = true);
+    Object(const char* name, const char* fileName, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true, bool transparent = false, bool collidable = true);
     /**
     Verify whether a coordinate is considered "inside" the object.
 

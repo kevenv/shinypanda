@@ -1,5 +1,5 @@
 /**
-    @file Player.h
+    @file Panda.h
     @author Vincent Girard <vin100_jrare@hotmail.com>
     @version 1.0
 
@@ -9,23 +9,23 @@
 
     @section DESCRIPTION
 
-    This file is the header of a class representing the player.
+    This file is the header of a class representing an enemy panda.
 */
-#ifndef SPE_PLAYER_H
-#define SPE_PLAYER_H
+#ifndef SPE_PANDA_H
+#define SPE_PANDA_H
 
-#include "Character.h"
+#include "Enemy.h"
 
 namespace spe
 {
 
 /**
-    @class Player Player.h "Player.h"
-    @brief The player.
+    @class Panda Panda.h "Panda.h"
+    @brief A panda.
 
-    This class represents the player. It inherites of Character.
+    This class represents a panda. It inherites of Enemy.
 */
-class Player : public Character
+class Panda : public Enemy
 {
 protected:
     virtual void refreshAnimation(float dt);
@@ -33,15 +33,15 @@ public:
     /**
     Main constructor for the class.
 
-    @param[in] name Name of the player.
+    @param[in] name Name of the panda.
     @param[in] fileSprite Path of the file containing the sprites.
     @param[in] filePosition Path of the file containing the infos of the sprites.
     @param[in] filePositionVersion Last version of the positionf file.
     @param[in] direction Direction of the sprite in the file. True = right, false = left.
-    @param[in] x,y Initial position of the player.
+    @param[in] x,y Initial position of the panda.
     @param[in] inDream,inReal If the object is in the Dream/Real World or not.
     */
-    Player(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true);
+    Panda(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true);
     virtual void update(float dt);
     virtual void jump();
     virtual void run();

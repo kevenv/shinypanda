@@ -74,6 +74,11 @@ public:
     */
     void slow(T x);
     /**
+    Set the x coordinate to its maximum value, with the same sign x had.
+    If there is no maximum value for x, the function has no effect.
+    */
+    void maxSpeedX();
+    /**
     Return a Vector2<T> object with the same coordinates as this vector.
 
     This function is mainly used for compatibility with the graphics engine.
@@ -204,6 +209,15 @@ void SpeedVector2<T>::slow(T x)
             _x = 0;
         else
             _x -= SGN(_x)*x;
+    }
+}
+
+template <typename T>
+void SpeedVector2<T>::maxSpeedX()
+{
+    if (_xMax > 0 && ABS(_x) != _xMax)
+    {
+        _x = SGN(_x)*_xMax;
     }
 }
 

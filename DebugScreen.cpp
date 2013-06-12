@@ -44,6 +44,8 @@ void DebugScreen::handleEvents(Engine* engine)
 			_active = !_active;
 		}
 		break;
+	default:
+        break;
     }
 }
 
