@@ -162,6 +162,12 @@ const Log& operator<<(const Log& log, std::string& str)
 	return log;
 }
 
+const Log& operator<<(const Log& log, const std::string& str)
+{
+	Log::_buffer << str;
+	return log;
+}
+
 const Log& operator<<(const Log& log, std::ostream& (*endl)(std::ostream&))
 {
 	Log::_newLine = false;

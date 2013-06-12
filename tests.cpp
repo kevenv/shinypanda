@@ -1,10 +1,23 @@
-#include "Log.h"
+#include "tests.h"
 
-using namespace spe;
+#include "Log.h"
+#include "Config.h"
+
+namespace spe
+{
+
+void startTests()
+{
+    //test_log();
+    //test_config();
+}
 
 void test_log()
 {
-	Log::init("test.log", true);
+    std::string logPath = "";//TEST_FOLDER_PATH;
+    logPath += "test/test.log";
+
+	Log::init(logPath.c_str(), true);
 
 	Log() << "int " << 23 << " test";
 	Log() << "long " << 1e32 << " test";
@@ -32,4 +45,19 @@ void test_log()
 	Log() << "test3";
 
 	Log::close();
+}
+
+void test_config()
+{
+    Config cfg;
+    bool success = cfg.parse("shinypanda.cfg");
+    if(success) {
+        Log() << "Config file parsed successfully";
+    }
+    //cfg.keyExists("engine", "fps");
+
+	//std::string str = cfg.getValue<std::string>("engine", "assetsPath");
+	//double n = cfg.getValue<double>("engine", "fps");
+}
+
 }
