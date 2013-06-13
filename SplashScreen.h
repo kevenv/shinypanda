@@ -1,6 +1,10 @@
 #ifndef SPE_SPLASH_SCREEN
 #define SPE_SPLASH_SCREEN
 
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include "GameState.h"
+
 namespace spe
 {
 
