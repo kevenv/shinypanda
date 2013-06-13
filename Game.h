@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Camera.h"
 #include "Panda.h"
+#include "World.h"
 #include <SFML/Graphics.hpp>
 
 namespace spe
@@ -33,6 +34,7 @@ private:
     Player _player;
     Panda _panda;
 	Camera _camera;
+	World _world;
 
 	sf::RectangleShape _square;
 	sf::Texture _img;
