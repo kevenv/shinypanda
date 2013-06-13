@@ -5,6 +5,7 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include "DebugScreen.h"
+#include "Config.h"
 
 namespace spe
 {
@@ -34,6 +35,7 @@ public:
 private:
 	sf::RenderWindow _window;
 	sf::Event _event;
+	Config _config;
 
 	std::stack<GameState*> _states;
 	DebugScreen _debugScreen;

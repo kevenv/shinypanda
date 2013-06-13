@@ -1,5 +1,7 @@
 #include "tests.h"
 
+#include <iostream>
+#include <sstream>
 #include "Log.h"
 #include "Config.h"
 
@@ -50,14 +52,46 @@ void test_log()
 void test_config()
 {
     Config cfg;
-    bool success = cfg.parse("shinypanda.cfg");
+    bool success = cfg.parse("test.cfg");
     if(success) {
         Log() << "Config file parsed successfully";
-    }
-    //cfg.keyExists("engine", "fps");
 
-	//std::string str = cfg.getValue<std::string>("engine", "assetsPath");
-	//double n = cfg.getValue<double>("engine", "fps");
+        std::cout << cfg.isKeyExists("engine.fps") << std::endl;
+
+        int fps = cfg.getValue<int>("engine.fps");
+        std::cout << fps << std::endl;
+
+        bool fullscreen = cfg.getValue<bool>("engine.fullscreen");
+        std::cout << fullscreen << std::endl;
+
+        std::string assetPath = cfg.getValue<std::string>("map.assetPath");
+        std::cout << assetPath << std::endl;
+
+        float depth = cfg.getValue<float>("map.depth");
+        std::cout << depth << std::endl;
+
+        std::string rawMap = cfg.getArray("map.map");
+        std::cout << rawMap << std::endl;
+
+        int x = cfg.getValue<int>("map.x");
+        std::cout << x << std::endl;
+
+        int y = cfg.getValue<int>("map.y");
+        std::cout << y << std::endl;
+
+        std::stringstream sstream;
+        sstream << rawMap;
+        char crap;
+        int map[y][x];
+        for(int j = 0; j < y; j++) {
+            for(int i = 0; i < x; i++) {
+               sstream >> map[j][i];
+               std::cout << map[j][i] << " ";
+            }
+            sstream >> crap;
+            std::cout << std::endl;
+        }
+    }
 }
 
 }

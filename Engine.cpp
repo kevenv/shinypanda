@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "SplashScreen.h"
 #include "Log.h"
+#include "Config.h"
 #include <stack>
 #include <string>
 #include <sstream>
@@ -23,18 +24,32 @@ Engine::Engine(int argc, char* argv[])
 	Log() << windowTitle;
 	//parseArgs(argc, argv);
 	//load config
-	//init SFML
-	int windowWidth = 800;
-	int windowHeight = 600;
+	char* configFilePath = "shinypanda.cfg";
+	if(_config.parse(configFilePath)) {
+        Log() << "Config: file '" << configFilePath << "' parsed successfully" << std::endl;
+        //init SFMLs
+        int windowWidth = _config.getValue<int>("engine.window.width");
+        int windowHeight = _config.getValue<int>("engine.window.height");
 
-	sf::Uint32 windowOptions = 0;
-	int fpsLimit = 5;
+        sf::Uint32 windowOptions = 0;
+        int fpsLimit = _config.getValue<int>("engine.fps");
+        bool vsyncEnable = _config.getValue<bool>("engine.vsync");
+        _window.create(sf::VideoMode(windowWidth, windowHeight), windowTitle);//, windowOptions);
 
-	_window.create(sf::VideoMode(windowWidth, windowHeight), windowTitle);//, windowOptions);
+        if(vsyncEnable) {
+            _window.setVerticalSyncEnabled(true);
+        }
+        else {
+            _window.setFramerateLimit(fpsLimit);
+        }
+        _running = true;
 
-	_window.setVerticalSyncEnabled(true);
-	//_window.setFramerateLimit(fpsLimit);
-	_running = true;
+        Log() << "window = " << windowWidth << "x" << windowHeight << std::endl;
+        Log() << "FPS = " << fpsLimit << " vsync = " << vsyncEnable << std::endl;
+	}
+	else {
+        _running = false;
+	}
 }
 
 Engine::~Engine()
