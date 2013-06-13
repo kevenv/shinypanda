@@ -3,6 +3,9 @@
 #include "Engine.h"
 #include "Game.h"
 
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio/Music.hpp>
+
 namespace spe
 {
 
@@ -42,7 +45,7 @@ void SplashScreen::resume()
 void SplashScreen::handleEvents(Engine* engine)
 {
 	sf::Event event = engine->getEvent();
-    
+
     if (event.type == sf::Event::Closed) {
         engine->changeState(new Game(engine));
 	}
