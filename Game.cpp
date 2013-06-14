@@ -34,8 +34,8 @@ Game::~Game()
 
 void Game::init()
 {
-    _world.load("test.level");
-    int tileSize = 100;
+    _world.load("test.world");
+    int tileSize = 64;
     _camera.setWorldLimits(sf::Rect<int>(0,0,_world.getWorldSizeX()*tileSize, _world.getWorldSzieY()*tileSize));
 }
 
@@ -88,10 +88,10 @@ void Game::render(Engine* engine)
 {
 	sf::RenderWindow* window = engine->getWindow();
 
-	window->setView(_camera.getView());
+	//window->setView(_camera.getView());
 
 	//window->draw(_square);
-	_world.render(engine);
+	window->draw(_world);
 	window->draw(_player.getSprite());
 	window->draw(_panda.getSprite());
 }

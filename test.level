@@ -7,7 +7,7 @@
 
 [level]
 version = 1.0.0
-spritesheet = @/textures/
+tilesetFilePath = tileset.png
 
 [mapReal]
 x = 10

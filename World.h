@@ -1,38 +1,36 @@
 #ifndef SPE_WORLD_H
 #define SPE_WORLD_H
 
-#include "Config.h"
 #include <SFML/Graphics.hpp>
+#include <vector>
+#include "Level.h"
 
 namespace spe
 {
 
-class Engine;
-
-class World
+class World : public sf::Drawable
 {
 public:
     World();
     ~World();
 
     bool load(const char* filePath);
+    bool loadLevel(const char* filePath);
+    //void changeLevel(int levelId);
 
-    void render(Engine* engine);
-    void renderTile(sf::RenderWindow* window, int x, int y, int tileID);
+    inline int getWorldSizeX() const { return getCurrentLevel().getMapSizeX(); }
+    inline int getWorldSzieY() const { return getCurrentLevel().getMapSizeY(); }
 
-    inline int getWorldSizeX() const { return _mapSizeX; }
-    inline int getWorldSzieY() const { return _mapSizeY; }
+    //switch between dimension (real/dream)
+    //inline void setDimension(enum DIMENSION dimension) { getCurrentLevel()->setDimension(dimension); }
 
 private:
-    Config _config;
-    int** _map;
-    int _mapSizeX;
-    int _mapSizeY;
+    std::vector<Level*> _levels;
+    int _currentLevelId;
 
-    int _tileSize;
+    inline const Level& getCurrentLevel() const { return *_levels[_currentLevelId]; }
 
-    sf::RectangleShape _tiles[3];
-    //sf::Texture _textures[3];
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
 
 }
