@@ -49,7 +49,7 @@ private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
     bool loadLevelFile(const char* filePath);
-    void setVertices(sf::VertexArray vertices, int** map, int sizeX, int sizeY);
+    void setVertices(sf::VertexArray& vertices, int** map, int sizeX, int sizeY);
     void setMap(int** map, int sizeX, int sizeY, std::string& rawMap);
 };
 

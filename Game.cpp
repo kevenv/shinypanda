@@ -19,13 +19,6 @@ _player(Player("Player", "sprites.png", "sprites.txt", 2, true, engine->getWindo
 _panda(Panda("Panda", "panda.jpg", "panda.txt", 1, false, engine->getWindowSize().x*3/4, engine->getWindowSize().y/2)),
 _camera(engine->getWindowSize().x, engine->getWindowSize().y, sf::Rect<int>(0,0,1920,1080))
 {
-	if(!_img.loadFromFile("test.png")) {
-		Log(ERROR) << "Can't load image 'test.png'";
-	}
-
-	_square.setSize(sf::Vector2f(1920,1080));
-	_square.setTexture(&_img);
-	_square.setPosition(0,0);
 }
 
 Game::~Game()
@@ -88,9 +81,8 @@ void Game::render(Engine* engine)
 {
 	sf::RenderWindow* window = engine->getWindow();
 
-	//window->setView(_camera.getView());
+	window->setView(_camera.getView());
 
-	//window->draw(_square);
 	window->draw(_world);
 	window->draw(_player.getSprite());
 	window->draw(_panda.getSprite());

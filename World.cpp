@@ -51,7 +51,7 @@ bool World::loadLevel(const char* filePath)
 
 void World::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    target.draw(getCurrentLevel());
+    target.draw(getCurrentLevel(),states);
 }
 
 }

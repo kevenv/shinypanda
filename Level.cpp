@@ -106,11 +106,11 @@ void Level::setMap(int** map, int sizeX, int sizeY, std::string& rawMap)
     }
 }
 
-void Level::setVertices(sf::VertexArray vertices, int** map, int sizeX, int sizeY)
+void Level::setVertices(sf::VertexArray& vertices, int** map, int sizeX, int sizeY)
 {
         // on redimensionne le tableau de vertex pour qu'il puisse contenir tout le niveau
     vertices.setPrimitiveType(sf::Quads);
-    vertices.resize(4);//sizeX * sizeY * 4);
+    vertices.resize(sizeX * sizeY * 4);
 
     // on remplit le tableau de vertex, avec un quad par tuile
     for (int i = 0; i < sizeX; ++i) {
@@ -123,20 +123,10 @@ void Level::setVertices(sf::VertexArray vertices, int** map, int sizeX, int size
             int tv = tileNumber / (_tileset.getSize().x / _tileSize);
 
             // on récupère un pointeur vers le quad à définir dans le tableau de vertex
-            sf::Vertex* quad = &vertices[0/*(i + j * sizeX) * 4*/];
-
-            quad[0].position =sf::Vector2f(0,0);
-            quad[1].position =sf::Vector2f(64,0);
-            quad[2].position =sf::Vector2f(64,64);
-            quad[3].position =sf::Vector2f(0,64);
-
-            quad[0].texCoords = sf::Vector2f(0,64);
-            quad[1].texCoords = sf::Vector2f(64,64);
-            quad[2].texCoords = sf::Vector2f(64,128);
-            quad[3].texCoords = sf::Vector2f(0,128);
+            sf::Vertex* quad = &vertices[(i + j * sizeX) * 4];
 
             // on définit ses quatre coins
-            /*quad[0].position = sf::Vector2f(i * _tileSize, j * _tileSize);
+            quad[0].position = sf::Vector2f(i * _tileSize, j * _tileSize);
             quad[1].position = sf::Vector2f((i + 1) * _tileSize, j * _tileSize);
             quad[2].position = sf::Vector2f((i + 1) * _tileSize, (j + 1) * _tileSize);
             quad[3].position = sf::Vector2f(i * _tileSize, (j + 1) * _tileSize);
@@ -145,7 +135,7 @@ void Level::setVertices(sf::VertexArray vertices, int** map, int sizeX, int size
             quad[0].texCoords = sf::Vector2f(tu * _tileSize, tv * _tileSize);
             quad[1].texCoords = sf::Vector2f((tu + 1) * _tileSize, tv * _tileSize);
             quad[2].texCoords = sf::Vector2f((tu + 1) * _tileSize, (tv + 1) * _tileSize);
-            quad[3].texCoords = sf::Vector2f(tu * _tileSize, (tv + 1) * _tileSize);*/
+            quad[3].texCoords = sf::Vector2f(tu * _tileSize, (tv + 1) * _tileSize);
         }
     }
 }
