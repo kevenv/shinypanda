@@ -50,7 +50,7 @@ private:
 
     bool loadLevelFile(const char* filePath);
     void setVertices(sf::VertexArray& vertices, int** map, int sizeX, int sizeY);
-    void setMap(int** map, int sizeX, int sizeY, std::string& rawMap);
+    void setMap(int*** map, int sizeX, int sizeY, std::string& rawMap);
 };
 
 }

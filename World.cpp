@@ -14,7 +14,7 @@ World::World()
 
 World::~World()
 {
-    for(int i = 0; i < _levels.size(); i++) {
+    for(unsigned int i = 0; i < _levels.size(); i++) {
         delete _levels[i];
     }
 }
@@ -29,6 +29,8 @@ bool World::load(const char* filePath)
     }*/
 
     loadLevel("test.level");
+
+    return true;
 }
 
 bool World::loadLevel(const char* filePath)

@@ -81,6 +81,8 @@ void SplashScreen::update(Engine* engine, float dt)
 void SplashScreen::render(Engine* engine)
 {
 	sf::RenderWindow* window = engine->getWindow();
+	window->clear(sf::Color::Black);
+
 	window->draw(_square);
 }
 

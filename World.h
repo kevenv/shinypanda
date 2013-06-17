@@ -19,7 +19,7 @@ public:
     //void changeLevel(int levelId);
 
     inline int getWorldSizeX() const { return getCurrentLevel().getMapSizeX(); }
-    inline int getWorldSzieY() const { return getCurrentLevel().getMapSizeY(); }
+    inline int getWorldSizeY() const { return getCurrentLevel().getMapSizeY(); }
 
     //switch between dimension (real/dream)
     //inline void setDimension(enum DIMENSION dimension) { getCurrentLevel()->setDimension(dimension); }

@@ -29,9 +29,9 @@ Level::~Level()
         delete[] _mapReal[i];
     delete[] _mapReal;
 
-    /*for(int i = 0; i < _mapDreamSizeY; i++)
+    for(int i = 0; i < _mapDreamSizeY; i++)
         delete[] _mapDream[i];
-    delete[] _mapDream;*/
+    delete[] _mapDream;
 }
 
 bool Level::load(const char* filePath)
@@ -42,13 +42,13 @@ bool Level::load(const char* filePath)
     }
 
     //load tileset
-    if(!_tileset.loadFromFile(_tilesetFilePath)) {
+     if(!_tileset.loadFromFile(_tilesetFilePath)) {
         return false;
     }
 
     //set vertices
     setVertices(_verticesMapReal, _mapReal, _mapRealSizeX, _mapRealSizeY);
-    //setVertices(_verticesMapDream, _mapDream, _mapDreamSizeX, _mapDreamSizeY);
+    setVertices(_verticesMapDream, _mapDream, _mapDreamSizeX, _mapDreamSizeY);
 
     return true;
 }
@@ -82,24 +82,34 @@ bool Level::loadLevelFile(const char* filePath)
     _mapDreamSizeY = _levelFile.getValue<int>("mapDream.y");
     std::cout << _mapDreamSizeY << std::endl;
 
-    setMap(_mapReal, _mapRealSizeX, _mapRealSizeY, rawMapReal);
-    //setMap(_mapDream, _mapDreamSizeX, _mapDreamSizeY, rawMapDream);
+    setMap(&_mapReal, _mapRealSizeX, _mapRealSizeY, rawMapReal);
+    setMap(&_mapDream, _mapDreamSizeX, _mapDreamSizeY, rawMapDream);
+
+    if(!_mapReal) {
+        std::cout << "caca r" << std::endl;
+    }
+
+    if(!_mapDream) {
+        std::cout << "caca d" << std::endl;
+    }
+
+    return true;
 }
 
-void Level::setMap(int** map, int sizeX, int sizeY, std::string& rawMap)
+void Level::setMap(int*** map, int sizeX, int sizeY, std::string& rawMap)
 {
     std::stringstream sstream;
     sstream << rawMap;
     char crap;
 
-    _mapReal = new int*[sizeY];
+    *map = new int*[sizeY];
     for(int i = 0; i < sizeY ; i++)
-        _mapReal[i] = new int[sizeX];
+        (*map)[i] = new int[sizeX];
 
     for(int j = 0; j < sizeY; j++) {
         for(int i = 0; i < sizeX; i++) {
-           sstream >> _mapReal[j][i];
-           std::cout << _mapReal[j][i] << " ";
+           sstream >> (*map)[j][i];
+           std::cout << (*map)[j][i] << " ";
         }
         sstream >> crap;
         std::cout << std::endl;
@@ -108,15 +118,17 @@ void Level::setMap(int** map, int sizeX, int sizeY, std::string& rawMap)
 
 void Level::setVertices(sf::VertexArray& vertices, int** map, int sizeX, int sizeY)
 {
-        // on redimensionne le tableau de vertex pour qu'il puisse contenir tout le niveau
+    // on redimensionne le tableau de vertex pour qu'il puisse contenir tout le niveau
     vertices.setPrimitiveType(sf::Quads);
     vertices.resize(sizeX * sizeY * 4);
 
     // on remplit le tableau de vertex, avec un quad par tuile
-    for (int i = 0; i < sizeX; ++i) {
+     for (int i = 0; i < sizeX; ++i) {
         for (int j = 0; j < sizeY; ++j) {
             // on récupère le numéro de tuile courant
             int tileNumber = map[j][i];
+
+            if(tileNumber == 35) continue; //skip tiles without texture
 
             // on en déduit sa position dans la texture du tileset
             int tu = tileNumber % (_tileset.getSize().x / _tileSize);
@@ -144,6 +156,7 @@ void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     states.transform *= getTransform();
     states.texture = &_tileset;
+    target.clear(sf::Color(215,215,215));
     target.draw(_currentDimension == REAL ? _verticesMapReal : _verticesMapDream, states);
 }
 

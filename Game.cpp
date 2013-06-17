@@ -17,7 +17,7 @@ Game::Game(Engine* engine)
 :
 _player(Player("Player", "sprites.png", "sprites.txt", 2, true, engine->getWindowSize().x/2, engine->getWindowSize().y/2)),
 _panda(Panda("Panda", "panda.jpg", "panda.txt", 1, false, engine->getWindowSize().x*3/4, engine->getWindowSize().y/2)),
-_camera(engine->getWindowSize().x, engine->getWindowSize().y, sf::Rect<int>(0,0,1920,1080))
+_camera(engine->getWindowSize().x, engine->getWindowSize().y, sf::Rect<int>(0,0,0,0))
 {
 }
 
@@ -29,7 +29,7 @@ void Game::init()
 {
     _world.load("test.world");
     int tileSize = 64;
-    _camera.setWorldLimits(sf::Rect<int>(0,0,_world.getWorldSizeX()*tileSize, _world.getWorldSzieY()*tileSize));
+    _camera.setWorldLimits(sf::Rect<int>(0,0,_world.getWorldSizeX()*tileSize, _world.getWorldSizeY()*tileSize));
 }
 
 void Game::clear()
@@ -65,8 +65,6 @@ void Game::handleEvents(Engine* engine)
         if(event.key.code == sf::Keyboard::LShift || event.key.code == sf::Keyboard::LShift)
             _player.walk();
         break;
-    default:
-        break;
 	}
 }
 
@@ -74,7 +72,7 @@ void Game::update(Engine* engine, float dt)
 {
 	_player.update(dt);
 	_panda.update(dt);
-	_camera.follow(_player);
+	_camera.follow(_player, dt);
 }
 
 void Game::render(Engine* engine)

@@ -24,7 +24,7 @@ Engine::Engine(int argc, char* argv[])
 	Log() << windowTitle;
 	//parseArgs(argc, argv);
 	//load config
-	char* configFilePath = "shinypanda.cfg";
+	char configFilePath[] = "shinypanda.cfg";
 	if(_config.parse(configFilePath)) {
         Log() << "Config: file '" << configFilePath << "' parsed successfully" << std::endl;
         //init SFMLs
@@ -69,8 +69,6 @@ int Engine::run()
 
 		_states.top()->update(this, elapsedTime);
 		_debugScreen.update(this, elapsedTime);
-
-		_window.clear(sf::Color::Black);
 
 		_states.top()->render(this);
 		_debugScreen.render(this);

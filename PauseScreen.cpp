@@ -35,7 +35,7 @@ void PauseScreen::clear()
 void PauseScreen::handleEvents(Engine* engine)
 {
 	sf::Event event = engine->getEvent();
-    
+
     if(event.type == sf::Event::GainedFocus) {
 		engine->popState();
 	}
@@ -53,14 +53,17 @@ void PauseScreen::update(Engine* engine, float dt)
 		_transparency += 3;
 		downMode = false;
 	}
-	
+
 	_text.setColor(sf::Color(255,255,255,_transparency));
 }
 
 void PauseScreen::render(Engine* engine)
 {
-	engine->getWindow()->setView(engine->getWindow()->getDefaultView());
-	engine->getWindow()->draw(_text);
+    sf::RenderWindow* window = engine->getWindow();
+	window->setView(window->getDefaultView());
+	window->clear(sf::Color::Black);
+
+	window->draw(_text);
 }
 
 }

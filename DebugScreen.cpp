@@ -18,7 +18,7 @@ DebugScreen::DebugScreen()
 	_fpsText.setColor(sf::Color::Red);
 	_fpsText.setFont(_font);
 
-	_active = false;
+	_active = true;
 }
 
 DebugScreen::~DebugScreen()
@@ -44,8 +44,6 @@ void DebugScreen::handleEvents(Engine* engine)
 			_active = !_active;
 		}
 		break;
-	default:
-        break;
     }
 }
 

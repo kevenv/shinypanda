@@ -186,7 +186,7 @@ bool Config::lineHasKey(const std::string& line)
 
 bool Config::lineHasValue(const std::string& line)
 {
-    for(int i = line.find('=') + 1; i < line.length(); i++) {
+    for(unsigned int i = line.find('=') + 1; i < line.length(); i++) {
         if(line[i] != ' ') {
             return true;
         }
