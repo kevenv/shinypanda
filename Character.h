@@ -15,7 +15,7 @@
 #define SPE_CHARACTER_H
 
 #include "SpeedVector2.h"
-#include "Object.h"
+#include "MovingObject.h"
 
 #include <SFML/Graphics.hpp> //For the graphics
 
@@ -43,16 +43,14 @@ const int NB_CHARACTER_STATES = 7; ///< Number of states possibles.
     @brief A character.
 
     This is an abstract class which represents a character moving on the map, like the player or an ennemy.
-    It inherites Object.
+    It inherites MovingObject.
 */
-class Character : public Object
+class Character : public MovingObject
 {
 protected:
-    SpeedVector2<float> _speed; ///< Current momentum of the character.
     CHARACTER_STATE _state; ///< Current state of the character.
     int _states[NB_CHARACTER_STATES][2]; /**< \brief Statix array containing information about the states.
                                         For each states, the first int is the first rect of the state and the second int is the number of rects.*/
-    int _direction; ///< The direction of the character. -1: left, 1: right.
     float _animationTime; ///< Current time of the animation.
     bool _dead; ///< If the character is dead.
     int _currentOffset; ///< Index of current offset.
@@ -116,12 +114,6 @@ public:
     void switchDeath() { _dead = !_dead;}
 
     /**
-    Check all possible change of status and move the character if needed.
-
-    @param[in] dt Time elapsed since the last update.
-    */
-    virtual void update(float dt) = 0;
-    /**
     Make the character jump.
     */
     virtual void jump() = 0;
@@ -134,21 +126,6 @@ public:
     */
     virtual void walk() = 0;
 
-    /**
-    Verify if the speed of the last update was non-null.
-
-    @return True if the character has moved, false otherwise.
-    */
-    virtual bool hasMoved() { return _speed.isMoving(); }
-
-    /**
-    Get the position of the center of the character.
-
-    The center is calculated for a fixed point of the character to make sur the animation is fluid.
-    It may be different from the position of the center of the sprite rectangle.
-
-    @return Position of the center, in pixels.
-    */
     virtual sf::Vector2f getPosition();
 };
 

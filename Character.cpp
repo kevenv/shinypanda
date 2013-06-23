@@ -12,7 +12,7 @@
     This file is the source of a class representing a character.
 */
 #include "Character.h"
-#include "Object.h"
+#include "MovingObject.h"
 #include "Log.h"
 #include "SpeedVector2.h"
 
@@ -26,7 +26,7 @@ namespace spe
 {
 
 Character::Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x, int y, bool inDream, bool inReal)
-            : Object(name, fileSprite, direction, x, y, inDream, inReal), _speed(SpeedVector2<float>()), _state(STAND), _direction(direction ? 1 : -1), _animationTime(0), _dead(false)
+            : MovingObject(name, fileSprite, direction, x, y, inDream, inReal), _state(STAND), _animationTime(0), _dead(false)
 {
     readPosition(filePosition, filePositionVersion);
     _currentOffset = getSpriteRect();

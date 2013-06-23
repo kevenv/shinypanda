@@ -23,13 +23,13 @@ namespace spe
     @class Object Object.h "Object.h"
     @brief An object in the map.
 
-    This is an abstract class that represents all the possible objects in a map (except characters).
+    This is an abstract class that represents all the possible objects in a map.
 */
 class Object
 {
 protected:
     const char* _name; ///< Name of the object.
-    bool _collidable; ///< Whether the object if tangible or not. If false, we can pass through it.
+    bool _solid; ///< Whether the object if tangible or not. If false, we can pass through it.
     bool _transparent; ///< Wheter the object is transparent or not. If true, we don't draw it.
     bool _inReal; /**< \brief Whether the object exist in the Real World or not.
                     This variable does nothing if _collidable is false and _transparent is true. */
@@ -50,13 +50,13 @@ public:
     @param[in] x,y Position of the object.
     @param[in] inDream,inReal If the object is in the Dream/Real World or not.
     @param[in] transparent If the is transparent.
-    @param[in] collidable If the object can't be passed through.
+    @param[in] solid If the object can't be passed through.
     */
-    Object(const char* name, const char* fileName, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true, bool transparent = false, bool collidable = true);
+    Object(const char* name, const char* fileName, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true, bool transparent = false, bool solid = true);
     /**
     Verify whether a coordinate is considered "inside" the object.
 
-    This function doesn't take into account whether the object is collidable or not.
+    This function doesn't take into account whether the object is solid or not.
 
     @param[in] x,y The coordinate to verify.
     @return True if the coordinate is inside the object.
@@ -64,11 +64,11 @@ public:
     virtual bool isColliding(int x, int y) = 0;
 
     /**
-    Tells whether the object is collidable or not.
+    Tells whether the object is solid or not.
 
-    @return True if the object is collidable, false otherwise.
+    @return True if the object is solid, false otherwise.
     */
-    bool isCollidable() { return _collidable; }
+    bool isSolid() { return _solid; }
     /**
     Tells whether the object is transparent or not.
 
