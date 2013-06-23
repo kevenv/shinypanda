@@ -39,7 +39,7 @@ protected:
     int _direction; ///< The direction of the object. -1: left, 1: right.
     int _nbCldPoints; ///< The number of collision points.
     sf::Vector2i* _cldPoints; ///< Dynamic array of collision points.
-    std::vector<Object> _collided; ///< Dynamic array of all the Object already collided this frame.
+    std::vector<MovingObject*> _collided; ///< Dynamic array of all the Object already collided this frame.
 public:
     /**
     Main constructor of the class.
