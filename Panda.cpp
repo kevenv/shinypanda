@@ -50,7 +50,7 @@ void Panda::refreshAnimation(float dt)
     refreshSprite();
 }
 
-void Panda::update(float dt)
+void Panda::updateStatus(float dt)
 {
     sf::Vector2f position = _sprite.getPosition();
     if(position.x < 500)

@@ -24,5 +24,11 @@ MovingObject::MovingObject(const char* name, const char* fileName, bool directio
 
 }
 
+void MovingObject::update(float dt)
+{
+    _collided.clear();
+    updateStatus(dt);
+}
+
 }
 

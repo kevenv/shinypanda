@@ -15,6 +15,7 @@
 #include "Character.h"
 #include "Log.h"
 #include "SpeedVector2.h"
+#include "IDs.h"
 
 #include <iostream> //For cout tests
 #include <SFML/Graphics.hpp> //For the graphics
@@ -87,7 +88,7 @@ void Player::refreshAnimation(float dt)
     refreshSprite();
 }
 
-void Player::update(float dt)
+void Player::updateStatus(float dt)
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::L))
         _dead = false;
@@ -120,6 +121,12 @@ void Player::update(float dt)
     }
     _sprite.move(_speed.getVector2());
     refreshAnimation(dt);
+}
+
+void Player::collide(Object& object)
+{
+    if (object.getID()%ENEMY == 0)
+        kill();
 }
 
 void Player::jump()

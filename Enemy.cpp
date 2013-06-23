@@ -29,8 +29,7 @@ Enemy::Enemy(const char* name, const char* fileSprite, const char* filePosition,
 
 void Enemy::collide(Object& object)
 {
-    if(object.getID()%PLAYER == 0)
-        static_cast<Player*>(&object)->kill();
+
 }
 
 }

@@ -43,7 +43,7 @@ public:
     @param[in] inDream,inReal If the object is in the Dream/Real World or not.
     */
     Panda(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true);
-    virtual void update(float dt);
+    virtual void updateStatus(float dt);
     virtual void jump();
     virtual void run();
     virtual void walk();

@@ -57,11 +57,17 @@ public:
     MovingObject(const char* name, const char* fileName, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true, bool transparent = false, bool solid = true);
 
     /**
+    Update the object for the next frame.
+    */
+    void update(float dt);
+
+    /**
     Check all possible change of status and move the object if needed.
+    It is called by update.
 
     @param[in] dt Time elapsed since the last update.
     */
-    virtual void update(float dt) = 0;
+    virtual void updateStatus(float dt) = 0;
     /**
     Add dt to the time of the animation and refresh it. Usually called by update.
 
