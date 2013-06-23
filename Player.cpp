@@ -38,7 +38,7 @@ void Player::refreshAnimation(float dt)
         if(_state != DEAD)
         {
             _animationTime = dt;
-            _state = DEAD;
+            changeState(DEAD);
         }
         else
             _animationTime += dt;
@@ -48,7 +48,7 @@ void Player::refreshAnimation(float dt)
         if(_state != DUCK)
         {
             _animationTime = dt;
-            _state = DUCK;
+            changeState(DUCK);
         }
         else
             _animationTime += dt;
@@ -60,14 +60,14 @@ void Player::refreshAnimation(float dt)
             if(_state != RUN)
             {
                 _animationTime = dt;
-                _state = RUN;
+                changeState(RUN);
             }
             else _animationTime += dt;
         }
         else if(_state != WALK)
         {
             _animationTime = dt;
-            _state = WALK;
+            changeState(WALK);
         }
         else
             _animationTime += dt;
@@ -79,7 +79,7 @@ void Player::refreshAnimation(float dt)
         if(_state != STAND)
         {
             _animationTime = dt;
-            _state = STAND;
+            changeState(STAND);
         }
         else
             _animationTime += dt;

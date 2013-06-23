@@ -15,9 +15,11 @@
 #define SPE_MOVING_OBJECT_H
 
 #include "Object.h"
+#include "IDs.h"
 
 #include "SpeedVector2.h"
 
+#include <vector>
 #include <SFML/Graphics.hpp>
 
 namespace spe
@@ -35,6 +37,9 @@ class MovingObject : public Object
 protected:
     SpeedVector2<float> _speed; ///< Current momentum of the object.
     int _direction; ///< The direction of the object. -1: left, 1: right.
+    int _nbCldPoints; ///< The number of collision points.
+    sf::Vector2i* _cldPoints; ///< Dynamic array of collision points.
+    std::vector<Object> _collided; ///< Dynamic array of all the Object already collided this frame.
 public:
     /**
     Main constructor of the class.
@@ -57,6 +62,20 @@ public:
     @param[in] dt Time elapsed since the last update.
     */
     virtual void update(float dt) = 0;
+    /**
+    Add dt to the time of the animation and refresh it. Usually called by update.
+
+    @param[in] dt Time elapsed since the last refresh.
+    */
+    virtual void refreshAnimation(float dt) = 0;
+    /**
+    Refresh the sprite with the current status. Usually called by refreshAnimation.
+    */
+    virtual void refreshSprite() = 0;
+    /**
+    Change the direction of the object.
+    */
+    virtual void switchDirection() = 0;
 
     /**
     Verify if the speed of the last update was non-null.
@@ -66,14 +85,32 @@ public:
     virtual bool hasMoved() { return _speed.isMoving(); }
 
     /**
-    Get the position of the center of the object.
+    Get the position of the object's hot spot.
 
-    The center is calculated for a fixed point of the object to make sure the animation is fluid.
+    The hot spot is a fixed point of the object. It is used for collision and to make the animation fluid.
     It may be different from the position of the center of the sprite rectangle.
 
-    @return Position of the center, in pixels.
+    @return Position of the object, in pixels.
     */
     virtual sf::Vector2f getPosition() = 0;
+
+    /**
+    Get the size of the dynamic array containing the collision points.
+
+    @return the number of collision points.
+    */
+    int getNbCldPoints() { return _nbCldPoints; }
+
+    /**
+    Get a dynamic array containing the collision points.
+
+    To get the size of this array, use the function getNbCldPoints().
+
+    @return The collision points.
+    */
+    sf::Vector2i* getCldPoints() { return _cldPoints; }
+
+    virtual int getID() { return MOVING_OBJECT * Object::getID(); }
 };
 
 }

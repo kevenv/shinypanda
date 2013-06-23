@@ -14,6 +14,9 @@
 
 #include "Enemy.h"
 #include "Character.h"
+#include "Object.h"
+#include "IDs.h"
+#include "Player.h"
 
 namespace spe
 {
@@ -22,6 +25,12 @@ Enemy::Enemy(const char* name, const char* fileSprite, const char* filePosition,
                                 : Character(name, fileSprite, filePosition, filePositionVersion, direction, x, y, inDream, inReal)
 {
 
+}
+
+void Enemy::collide(Object& object)
+{
+    if(object.getID()%PLAYER == 0)
+        static_cast<Player*>(&object)->kill();
 }
 
 }

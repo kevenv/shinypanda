@@ -15,6 +15,8 @@
 #define SPE_ENEMY_H
 
 #include "Character.h"
+#include "Object.h"
+#include "IDs.h"
 
 namespace spe
 {
@@ -40,6 +42,10 @@ public:
     @param[in] inDream,inReal If the object is in the Dream/Real World or not.
     */
     Enemy(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true);
+
+    virtual void collide(Object& object);
+
+    virtual int getID() { return ENEMY * Character::getID(); }
 };
 
 }

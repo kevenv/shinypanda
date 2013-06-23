@@ -15,6 +15,7 @@
 #define SPE_PANDA_H
 
 #include "Enemy.h"
+#include "IDs.h"
 
 namespace spe
 {
@@ -47,6 +48,7 @@ public:
     virtual void run();
     virtual void walk();
     virtual bool isColliding(int x, int y);
+    virtual int getID() { return PANDA * Enemy::getID(); }
 };
 
 }

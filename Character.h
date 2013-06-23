@@ -16,6 +16,7 @@
 
 #include "SpeedVector2.h"
 #include "MovingObject.h"
+#include "IDs.h"
 
 #include <SFML/Graphics.hpp> //For the graphics
 
@@ -56,19 +57,10 @@ protected:
     int _currentOffset; ///< Index of current offset.
     sf::IntRect* _spriteRects; ///< Dynamic array of the sprite rectangles.
     sf::Vector2i* _offsets; ///< Dynamic array of offsets.
-    /**
-    Add dt to the time of the animation and refresh it. Usually called by update.
+    int _lCldSide; ///< the distance between the left side of the collision box and the hot spot. It is usually negative.
+    int _rCldSide; ///< the distance between the right side of the collision box and the hot spot.
 
-    @param[in] dt Time elapsed since the last refresh.
-    */
-    virtual void refreshAnimation(float dt) = 0;
-    /**
-    Refresh the sprite with the current status. Usually called by refreshAnimation.
-    */
     virtual void refreshSprite();
-    /**
-    Change the direction of the Character.
-    */
     virtual void switchDirection();
     /**
     Get the index of the sprite IntRect associated with the current status.
@@ -76,6 +68,11 @@ protected:
     @return The index of the current sprite Rect.
     */
     virtual int getSpriteRect();
+
+    /**
+    Change the state the character is in.
+    */
+    void changeState(CHARACTER_STATE state);
 
 private:
     /**
@@ -109,9 +106,9 @@ public:
     ~Character();
 
     /**
-    Change the status of the character's death.
+    Kill the character.
     */
-    void switchDeath() { _dead = !_dead;}
+    void kill() { _dead = true;}
 
     /**
     Make the character jump.
@@ -127,6 +124,8 @@ public:
     virtual void walk() = 0;
 
     virtual sf::Vector2f getPosition();
+
+    virtual int getID() { return CHARACTER * MovingObject::getID(); }
 };
 
 }

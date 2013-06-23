@@ -15,6 +15,8 @@
 #define SPE_PLAYER_H
 
 #include "Character.h"
+#include "Object.h"
+#include "IDs.h"
 
 namespace spe
 {
@@ -47,6 +49,8 @@ public:
     virtual void run();
     virtual void walk();
     virtual bool isColliding(int x, int y);
+    virtual void collide(Object& object) {}
+    virtual int getID() { return PLAYER * Character::getID(); }
 };
 
 }

@@ -36,7 +36,7 @@ Character::Character(const char* name, const char* fileSprite, const char* fileP
 
 void Character::readPosition(const char* file, const int fileVersion)
 {
-    std::ifstream  inf (file);
+    std::ifstream inf (file);
 
     if (!inf) // If it can't load the file.
     {
@@ -50,6 +50,8 @@ void Character::readPosition(const char* file, const int fileVersion)
     {
         Log(ERROR) << "Position file for " << _name << " is out of date.";
     }
+
+    inf >> _lCldSide >> _rCldSide;
 
     int n;
     inf >> n;
@@ -71,6 +73,11 @@ void Character::readPosition(const char* file, const int fileVersion)
             inf >> _states[i][j];
 
 	inf.close();
+}
+
+void Character::changeState(CHARACTER_STATE state)
+{
+    _state = state;
 }
 
 void Character::refreshSprite()

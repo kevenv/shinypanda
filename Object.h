@@ -14,6 +14,8 @@
 #ifndef SPE_OBJECT_H
 #define SPE_OBJECT_H
 
+#include "IDs.h"
+
 #include <SFML/Graphics.hpp>
 
 namespace spe
@@ -64,6 +66,13 @@ public:
     virtual bool isColliding(int x, int y) = 0;
 
     /**
+    Perform the reactions of our object associated with the collision.
+
+    This function doesn't move any object, even if overlapsing.
+    */
+    virtual void collide(Object& object) = 0;
+
+    /**
     Tells whether the object is solid or not.
 
     @return True if the object is solid, false otherwise.
@@ -101,6 +110,14 @@ public:
     @return the sprite of the object.
     */
     sf::Sprite getSprite() { return _sprite; }
+
+    /**
+    This function is there for when you want to verify if an object inherits a certain class.
+    It should return the ID associated with that class, multiplied with the ID of the class it inherites.
+
+    Every class inheriting MUST redefine this method, even if already redefined.
+    */
+    virtual int getID() { return 1; }
 };
 
 }
