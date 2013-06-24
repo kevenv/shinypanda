@@ -14,7 +14,7 @@ public:
 
 	void follow(Character& character);
 	void follow(Character& character, float dt);
-	void scroll(Character& character, int& targetX, int& targetY);
+	void scroll(int x, int y, int& targetX, int& targetY);
 
     inline void setCenter(int x, int y) { _view.setCenter(x, y); }
     inline void setWindowSize(int w, int h) { _view.setSize(sf::Vector2f(w,h)); }

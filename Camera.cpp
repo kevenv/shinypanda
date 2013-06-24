@@ -21,49 +21,55 @@ void Camera::follow(Character& character)
 {
     int x = 0;
     int y = 0;
-    scroll(character, x, y);
+    sf::Vector2f pos = character.getPosition();
+
+    scroll(pos.x, pos.y, x, y);
 	_view.setCenter(x, y);
 }
 
 void Camera::follow(Character& character, float dt)
 {
-    sf::Vector2f pos = character.getPosition();
-    int x, y;
-
-	scroll(character, x, y);
-
 	float camX = _view.getCenter().x;
 	float camY = _view.getCenter().y;
 
     //lerp : V(t) = A + (B-A) * t
-    camX = camX + (pos.x - camX) * _speed.x*dt;
-    camY = camY + (pos.y - camY) * _speed.y*dt;
+    sf::Vector2f pos = character.getPosition();
+    int x, y;
+    int v = 200;
+    x = camX;
+    y = camY;
+    x += v*dt;
 
-    _view.setCenter((int)camX, (int)camY);
+    std::cout << x << std::endl;
+
+    //x = (int)( camX + (pos.x - camX) * _speed.x*dt );
+    //y = (int)( camY + (pos.y - camY) * _speed.y*dt );
+
+    //scroll(x, y, x, y);
+    _view.setCenter(x, y);
 }
 
-void Camera::scroll(Character& character, int& targetX, int& targetY)
+void Camera::scroll(int x, int y, int& targetX, int& targetY)
 {
-    sf::Vector2f pos = character.getPosition();
-	targetX = pos.x;
-	targetY = pos.y;
+    targetX = x;
+    targetY = y;
 
-	//L T W H
+    //L T W H
 
 	//	 T
 	// L  W
 	//   H
-	if(targetX < _worldLimits.left) {
+	if(x < _worldLimits.left) {
 		targetX = _worldLimits.left;
 	}
-	else if(targetX > _worldLimits.width) {
+	else if(x > _worldLimits.width) {
 		targetX = _worldLimits.width;
 	}
 
-	if(targetY < _worldLimits.top) {
+	if(y < _worldLimits.top) {
 		targetY = _worldLimits.top;
 	}
-	else if(targetY > _worldLimits.height) {
+	else if(y > _worldLimits.height) {
 		targetY = _worldLimits.height;
 	}
 }
