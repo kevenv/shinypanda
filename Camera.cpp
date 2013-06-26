@@ -35,17 +35,17 @@ void Camera::follow(Character& character, float dt)
     //lerp : V(t) = A + (B-A) * t
     sf::Vector2f pos = character.getPosition();
     int x, y;
-    int v = 200;
-    x = camX;
-    y = camY;
-    x += v*dt;
+    //int v = 200;
+    //x = camX;
+    //y = camY;
+    //x += v*dt;
 
-    std::cout << x << std::endl;
+    //std::cout << x << std::endl;
 
-    //x = (int)( camX + (pos.x - camX) * _speed.x*dt );
-    //y = (int)( camY + (pos.y - camY) * _speed.y*dt );
+    x = (int)( camX + (pos.x - camX) * _speed.x*dt );
+    y = (int)( camY + (pos.y - camY) * _speed.y*dt );
 
-    //scroll(x, y, x, y);
+    scroll(x, y, x, y);
     _view.setCenter(x, y);
 }
 
