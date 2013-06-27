@@ -72,6 +72,7 @@ void Game::update(Engine* engine, float dt)
 {
 	_player.update(dt);
 	_panda.update(dt);
+	//_world.getCurrentLevel().update();
 	_camera.follow(_player, dt);
 }
 

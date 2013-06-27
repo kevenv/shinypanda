@@ -10,6 +10,7 @@ void startTests();
 
 void test_log();
 void test_config();
+void test_tmx();
 
 }
 

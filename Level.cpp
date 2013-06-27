@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include "tinyxml2.h"
 
 namespace spe
 {
@@ -55,35 +56,40 @@ bool Level::load(const char* filePath)
 
 bool Level::loadLevelFile(const char* filePath)
 {
-    if(!_levelFile.parse(filePath)) {
-        return false;
+    std::string path = filePath;
+    if(path.find(".tmx") != std::string::npos) {
+        loadTMXFile(filePath);
     }
+    else if(path.find(".level") != std::string::npos) {
+        if(!_levelFile.parse(filePath)) {
+            return false;
+        }
+        //load map properties
+        _tilesetFilePath = _levelFile.getValue<std::string>("level.tilesetFilePath");
 
-    //load map properties
-    _tilesetFilePath = _levelFile.getValue<std::string>("level.tilesetFilePath");
+        //load real map
+        std::string rawMapReal = _levelFile.getArray("mapReal.mapReal");
+        std::cout << rawMapReal << std::endl;
 
-    //load real map
-    std::string rawMapReal = _levelFile.getArray("mapReal.mapReal");
-    std::cout << rawMapReal << std::endl;
+        _mapRealSizeX = _levelFile.getValue<int>("mapReal.x");
+        std::cout << _mapRealSizeX << std::endl;
 
-    _mapRealSizeX = _levelFile.getValue<int>("mapReal.x");
-    std::cout << _mapRealSizeX << std::endl;
+        _mapRealSizeY = _levelFile.getValue<int>("mapReal.y");
+        std::cout << _mapRealSizeY << std::endl;
 
-    _mapRealSizeY = _levelFile.getValue<int>("mapReal.y");
-    std::cout << _mapRealSizeY << std::endl;
+        //load dream map
+        std::string rawMapDream = _levelFile.getArray("mapDream.mapDream");
+        std::cout << rawMapDream << std::endl;
 
-    //load dream map
-    std::string rawMapDream = _levelFile.getArray("mapDream.mapDream");
-    std::cout << rawMapDream << std::endl;
+        _mapDreamSizeX = _levelFile.getValue<int>("mapDream.x");
+        std::cout << _mapDreamSizeX << std::endl;
 
-    _mapDreamSizeX = _levelFile.getValue<int>("mapDream.x");
-    std::cout << _mapDreamSizeX << std::endl;
+        _mapDreamSizeY = _levelFile.getValue<int>("mapDream.y");
+        std::cout << _mapDreamSizeY << std::endl;
 
-    _mapDreamSizeY = _levelFile.getValue<int>("mapDream.y");
-    std::cout << _mapDreamSizeY << std::endl;
-
-    setMap(&_mapReal, _mapRealSizeX, _mapRealSizeY, rawMapReal);
-    setMap(&_mapDream, _mapDreamSizeX, _mapDreamSizeY, rawMapDream);
+        setMap(&_mapReal, _mapRealSizeX, _mapRealSizeY, rawMapReal);
+        setMap(&_mapDream, _mapDreamSizeX, _mapDreamSizeY, rawMapDream);
+    }
 
     if(!_mapReal) {
         std::cout << "caca r" << std::endl;
@@ -94,6 +100,51 @@ bool Level::loadLevelFile(const char* filePath)
     }
 
     return true;
+}
+
+bool Level::loadTMXFile(const char* filePath)
+{
+        //load tmx
+    tinyxml2::XMLDocument doc;
+    doc.LoadFile("test.tmx");
+    tinyxml2::XMLElement* mapElement = doc.FirstChildElement("map");
+
+    //load tileset infos
+    _tilesetFilePath = "tileset.png";
+    tinyxml2::XMLElement* tilesetElement = mapElement->FirstChildElement("tileset");
+    const tinyxml2::XMLAttribute* tilesizeAttr = tilesetElement->FirstAttribute()->Next()->Next();
+    int tilesize = tilesizeAttr->IntValue();
+    std::cout << "tilesize= "<< tilesize << std::endl;
+
+    //load map layers
+    tinyxml2::XMLElement* fgLayerElement = mapElement->FirstChildElement("layer")->NextSiblingElement("layer");
+    for(int i = 0; i < 1; i++) {
+        const char* fgLayerName = fgLayerElement->FirstAttribute()->Value();
+        int fgX = fgLayerElement->FirstAttribute()->Next()->IntValue();
+        int fgY = fgLayerElement->FirstAttribute()->Next()->Next()->IntValue();
+        std::cout << "fg name= " << fgLayerName << std::endl;
+        std::cout << fgX << "," << fgY << std::endl;
+        //load map
+        _mapRealSizeX = fgX;
+        _mapRealSizeY = fgY;
+        _mapReal = new int*[fgY];
+        for(int i = 0; i < fgY ; i++)
+            _mapReal[i] = new int[fgX];
+        tinyxml2::XMLElement* fgData = fgLayerElement->FirstChildElement("data");
+        tinyxml2::XMLElement* tile = fgData->FirstChildElement("tile");
+        for(int y = 0; y < fgY; y++) {
+            for(int x = 0; x < fgX; x++) {
+                std::cout << tile->FirstAttribute()->IntValue() << " ";
+                _mapReal[y][x] = tile->FirstAttribute()->IntValue() - 1;
+                tile = tile->NextSiblingElement("tile");
+            }
+
+            std::cout << std::endl;
+        }
+        fgLayerElement = fgLayerElement->NextSiblingElement("layer");
+
+        std::cout << std::endl;
+    }
 }
 
 void Level::setMap(int*** map, int sizeX, int sizeY, std::string& rawMap)

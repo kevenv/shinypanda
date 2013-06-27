@@ -28,7 +28,7 @@ bool World::load(const char* filePath)
         return false;
     }*/
 
-    loadLevel("test.level");
+    loadLevel("test.tmx");
 
     return true;
 }
