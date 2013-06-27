@@ -20,16 +20,13 @@ public:
 
     inline int getWorldSizeX() const { return getCurrentLevel().getMapSizeX(); }
     inline int getWorldSizeY() const { return getCurrentLevel().getMapSizeY(); }
-
+    inline Level& getCurrentLevel() const { return *_levels[_currentLevelId]; }
     //switch between dimension (real/dream)
     //inline void setDimension(enum DIMENSION dimension) { getCurrentLevel()->setDimension(dimension); }
 
 private:
     std::vector<Level*> _levels;
     int _currentLevelId;
-
-    inline const Level& getCurrentLevel() const { return *_levels[_currentLevelId]; }
-
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
 

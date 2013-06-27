@@ -16,7 +16,7 @@ public:
 	SplashScreen();
 	~SplashScreen();
 
-	void init();
+	void init(Engine* engine);
 	void clear();
 
 	void pause();

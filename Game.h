@@ -2,16 +2,14 @@
 #define SPE_GAME_H
 
 #include "GameState.h"
-
-#include "Player.h"
 #include "Camera.h"
-#include "Panda.h"
 #include "World.h"
 
 namespace spe
 {
 
 class Engine;
+class Player;
 
 class Game : public GameState
 {
@@ -19,7 +17,7 @@ public:
 	Game(Engine* engine);
 	~Game();
 
-	void init();
+	void init(Engine* engine);
 	void clear();
 
 	void pause();
@@ -30,10 +28,9 @@ public:
 	void render(Engine* engine);
 
 private:
-    Player _player;
-    Panda _panda;
+    World _world;
 	Camera _camera;
-	World _world;
+	Player* _player;
 };
 
 }

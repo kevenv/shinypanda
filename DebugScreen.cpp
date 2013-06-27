@@ -25,7 +25,7 @@ DebugScreen::~DebugScreen()
 {
 }
 
-void DebugScreen::init()
+void DebugScreen::init(Engine* engine)
 {
 }
 

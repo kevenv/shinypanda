@@ -23,7 +23,7 @@ PauseScreen::~PauseScreen()
 {
 }
 
-void PauseScreen::init()
+void PauseScreen::init(Engine* engine)
 {
 
 }

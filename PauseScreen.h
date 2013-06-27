@@ -15,7 +15,7 @@ public:
 	PauseScreen(Engine*const engine);
 	~PauseScreen();
 
-	void init();
+	void init(Engine* engine);
 	void clear();
 
 	void pause() {}

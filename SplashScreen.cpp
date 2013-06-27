@@ -26,7 +26,7 @@ SplashScreen::~SplashScreen()
 {
 }
 
-void SplashScreen::init()
+void SplashScreen::init(Engine* engine)
 {
 }
 

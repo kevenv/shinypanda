@@ -15,7 +15,7 @@ public:
 	DebugScreen();
 	~DebugScreen();
 
-	void init();
+	void init(Engine* engine);
 	void clear();
 
 	void pause() {}

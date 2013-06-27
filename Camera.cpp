@@ -1,12 +1,19 @@
 
 #include "Camera.h"
 
-#include "Character.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "Character.h"
 
 namespace spe
 {
+
+Camera::Camera():
+    _speed(0,0),
+    _worldLimits(0,0,0,0)
+{
+    _view.reset(sf::FloatRect(0, 0, 0, 0));
+}
 
 Camera::Camera(int w, int h, sf::Rect<int> worldLimits, int x, int y)
 :
@@ -29,19 +36,12 @@ void Camera::follow(Character& character)
 
 void Camera::follow(Character& character, float dt)
 {
-	float camX = _view.getCenter().x;
-	float camY = _view.getCenter().y;
+	const float camX = _view.getCenter().x;
+	const float camY = _view.getCenter().y;
 
     //lerp : V(t) = A + (B-A) * t
-    sf::Vector2f pos = character.getPosition();
+    const sf::Vector2f pos = character.getPosition();
     int x, y;
-    //int v = 200;
-    //x = camX;
-    //y = camY;
-    //x += v*dt;
-
-    //std::cout << x << std::endl;
-
     x = (int)( camX + (pos.x - camX) * _speed.x*dt );
     y = (int)( camY + (pos.y - camY) * _speed.y*dt );
 
@@ -49,7 +49,7 @@ void Camera::follow(Character& character, float dt)
     _view.setCenter(x, y);
 }
 
-void Camera::scroll(int x, int y, int& targetX, int& targetY)
+void Camera::scroll(int x, int y, int& targetX, int& targetY) const
 {
     targetX = x;
     targetY = y;
@@ -74,10 +74,10 @@ void Camera::scroll(int x, int y, int& targetX, int& targetY)
 	}
 }
 
-void Camera::setWorldLimits(sf::Rect<int> limits)
+void Camera::setWorldLimits(const sf::Rect<int>& limits)
 {
-	int windowX = _view.getSize().x;
-	int windowY = _view.getSize().y;
+	const int windowX = _view.getSize().x;
+	const int windowY = _view.getSize().y;
 
 	_worldLimits.left = limits.left + windowX/2;
 	_worldLimits.top = limits.top + windowY/2;

@@ -129,6 +129,7 @@ sf::Vector2f Character::getPosition()
 
 Character::~Character()
 {
+    delete[] _offsets;
     delete[] _spriteRects;
 }
 

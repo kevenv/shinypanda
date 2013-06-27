@@ -1,19 +1,19 @@
 
 #include "Engine.h"
 
+#include <stack>
+#include <string>
+#include <sstream>
 #include "GameState.h"
 #include "Game.h"
 #include "SplashScreen.h"
 #include "Log.h"
 #include "Config.h"
-#include <stack>
-#include <string>
-#include <sstream>
 
 namespace spe
 {
 
-std::string Engine::_version = "0.1.0";
+std::string Engine::_version = "0.2.0";
 
 Engine::Engine(int argc, char* argv[])
 {
@@ -58,8 +58,9 @@ Engine::~Engine()
 
 int Engine::run()
 {
-	_debugScreen.init();
-	changeState(new SplashScreen());
+	_debugScreen.init(this);
+	//changeState(new SplashScreen());
+	changeState(new Game(this));
 
 	sf::Clock clock;
 	float elapsedTime = 0;
@@ -118,7 +119,7 @@ void Engine::pushState(GameState* gameState)
 	}
 
 	_states.push(gameState);
-	_states.top()->init();
+	_states.top()->init(this);
 }
 
 void Engine::clear()

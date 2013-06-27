@@ -12,7 +12,7 @@ public:
 	GameState() { }
 	virtual ~GameState() { }
 
-	virtual void init() = 0;
+	virtual void init(Engine* engine) = 0;
 	virtual void clear() = 0;
 
 	virtual void pause() = 0;
