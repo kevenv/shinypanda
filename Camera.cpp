@@ -1,4 +1,16 @@
+/**
+    @file Camera.h
+    @author Keven Villeneuve <kev.v@hotmail.com>
+    @version 1.0
 
+    @section LICENSE
+
+
+
+    @section DESCRIPTION
+
+    Represent and control the game world's Camera.
+*/
 #include "Camera.h"
 
 #include <SFML/Graphics.hpp>
@@ -40,6 +52,7 @@ void Camera::follow(Character& character, float dt)
 	const float camY = _view.getCenter().y;
 
     //lerp : V(t) = A + (B-A) * t
+    //Linear Interpolation from Camera's center to Character's center
     const sf::Vector2f pos = character.getPosition();
     int x, y;
     x = (int)( camX + (pos.x - camX) * _speed.x*dt );
@@ -59,6 +72,7 @@ void Camera::scroll(int x, int y, int& targetX, int& targetY) const
 	//	 T
 	// L  W
 	//   H
+	//stop the scrolling when out of limits
 	if(x < _worldLimits.left) {
 		targetX = _worldLimits.left;
 	}

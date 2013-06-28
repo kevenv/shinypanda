@@ -239,9 +239,7 @@ void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(_currentDimension == REAL ? _mapReal._vertices[i] : _mapDream._vertices[i], states);
     //draw MovingObjects
     for(std::size_t i = 0; i < _movingObjectsPool.size(); i++) {
-        MovingObject* obj = _movingObjectsPool[i];
-        std::cout << obj->getName() << std::endl;
-        target.draw(obj->getSprite());
+        target.draw(_movingObjectsPool[i]->getSprite());
     }
 
     i = FOREGROUND;

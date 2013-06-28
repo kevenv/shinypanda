@@ -105,8 +105,8 @@ public:
 
     int getMapSizeX() const;
     int getMapSizeY() const;
-    inline struct Map& getCurrentMap() { return (_currentDimension == REAL) ? _mapReal : _mapDream; }
     inline struct Map& getMap(enum DIMENSION dimension) { return (dimension == REAL) ? _mapReal : _mapDream; }
+    inline struct Map& getCurrentMap() { return getMap(_currentDimension); }
     inline void setDimension(enum DIMENSION dimension) { _currentDimension = dimension; }
 
     void addMovingObject(MovingObject* movingObject);
