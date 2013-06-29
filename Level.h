@@ -6,6 +6,7 @@
 #include <vector>
 #include "Config.h"
 #include "tinyxml2.h"
+#include "Camera.h"
 
 #define SPE_NB_LAYERS 3
 
@@ -39,6 +40,7 @@ public:
         _x = x;
         _y = y;
         _tileId = tileId;
+		_active = true;
     }
 
 private:
@@ -46,6 +48,8 @@ private:
 
     int _x;
     int _y;
+	
+	bool _active;
 };
 
 class AnimatedTile : public Tile
@@ -57,9 +61,15 @@ private:
 
 };
 
-typedef struct Map;
-struct Map
+class Map
 {
+	friend Level;
+	
+public:
+    Map();
+    ~Map();
+	
+private:
     //This might look like some crazy shit but
     //it mean to be used like this: Tile* tile = _map[layerId][y][x];
     //then it makes sense
@@ -69,29 +79,6 @@ struct Map
     sf::VertexArray _vertices[SPE_NB_LAYERS];
     std::vector<MovingObject*> _movingObjects;
     std::vector<AnimatedTile*> _animatedTiles;
-
-    Map()
-    {
-        for(int i = 0; i < SPE_NB_LAYERS; i++) {
-            _map[i] = NULL;
-        }
-        _sizeX = -1;
-        _sizeY = -1;
-    }
-
-    ~Map()
-    {
-        //Some DELETE madness...
-        for(int layerId = 0; layerId < SPE_NB_LAYERS; layerId++) {
-            for(int y = 0; y < _sizeY; y++) {
-                for(int x = 0; x < _sizeX; x++) {
-                    delete _map[layerId][y][x]; //TODO: do not delete HERE ???
-                }
-                delete[] _map[layerId][y];
-            }
-            delete[] _map[layerId];
-        }
-    }
 };
 
 class Level: public sf::Drawable, public sf::Transformable
@@ -103,14 +90,19 @@ public:
     bool load(const char* filePath);
     void update(float dt);
 
-    int getMapSizeX() const;
-    int getMapSizeY() const;
+	inline int getMapSizeX() const { return (_currentMap->_sizeX); }
+	inline int getMapSizeY() const { return (_currentMap->_sizeY); }
+
     inline struct Map& getMap(enum DIMENSION dimension) { return (dimension == REAL) ? _mapReal : _mapDream; }
-    inline struct Map& getCurrentMap() { return getMap(_currentDimension); }
-    inline void setDimension(enum DIMENSION dimension) { _currentDimension = dimension; }
+    inline struct Map& getCurrentMap() { return *_currentMap; }
+    inline void setDimension(enum DIMENSION dimension)
+	{
+		_currentDimension = dimension;
+		_currentMap = _currentDimension == REAL ? &_mapReal : &_mapDream;
+	}
 
     void addMovingObject(MovingObject* movingObject);
-    std::vector<MovingObject*>& getMovingObjects() { return _movingObjectsPool; }
+    std::vector<MovingObject*>& getMovingObjects() { return _currentMap->_movingObjects; }
 
 private:
     Config _levelFile;
@@ -119,13 +111,16 @@ private:
     int _tileSize;
 
     std::vector<MovingObject*> _movingObjectsPool; //clear this one
+	std::vector<Tile*> _tilesPool; //clear this one
     std::vector<AnimatedTile*> _animatedTiles; //do not empty this one
-    //st::vector<Tile*> _tilesPool; //clear this one
 
-    struct Map _mapReal;
-    struct Map _mapDream;
+    Map _mapReal;
+    Map _mapDream;
 
     enum DIMENSION _currentDimension;
+	Map* _currentMap;
+	
+	Camera _parallaxCamera;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

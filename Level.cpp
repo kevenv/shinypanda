@@ -6,6 +6,7 @@
 #include <sstream>
 #include "tinyxml2.h"
 #include "MovingObject.h"
+#include "Camera.h"
 
 namespace spe
 {
@@ -14,6 +15,8 @@ Level::Level()
 {
     _tileSize = 64;
      _currentDimension = REAL;
+	 _currentMap = &_mapReal;
+	 //_parallaxCamera = _gameCamera;
 }
 
 Level::~Level()
@@ -23,6 +26,12 @@ Level::~Level()
         delete _movingObjectsPool[i];
     }
     //objects are now invalid
+	
+	//clear tilesPool
+	for(std::size_t i = 0; i < _tilesPool.size(); i++) {
+		delete _tilesPool[i];
+	}
+	//tiles are now invalid
 }
 
 bool Level::load(const char* filePath)
@@ -121,8 +130,11 @@ void Level::loadTMXLayer(tinyxml2::XMLElement** layerElement, int layerId, enum 
     tinyxml2::XMLElement* tileElement = dataElement->FirstChildElement("tile");
     for(int y = 0; y < currentDimension._sizeY; y++) {
         for(int x = 0; x < currentDimension._sizeX; x++) {
+			//create tile
             const int tileId = tileElement->FirstAttribute()->IntValue();
-            currentDimension._map[layerId][y][x] = new Tile(x, y, tileId);
+			Tile* tile = new Tile(x, y, tileId);
+            currentDimension._map[layerId][y][x] = tile;
+			_tilesPool.push_back(tile); //todo: HOW DO WE KNOW WICH OBJECT IS SHARED OR NOT???
             tileElement = tileElement->NextSiblingElement("tile");
         }
     }
@@ -232,42 +244,68 @@ void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
     states.transform *= getTransform();
     states.texture = &_tileset;
     target.clear(sf::Color(215,215,215));
-
-    unsigned int i = BACKGROUND;
-    target.draw(_currentDimension == REAL ? _mapReal._vertices[i] : _mapDream._vertices[i], states);
-    i = PLAYGROUND;
-    target.draw(_currentDimension == REAL ? _mapReal._vertices[i] : _mapDream._vertices[i], states);
+	
+	//save game camera
+	/*
+	for(int i = 0; i < _currentMap->_parallax.size(); i++) {
+		//set parallax camera
+		float speed = 0.5 _currentMap->_parallaxSpeed[i];
+		 _parallaxCamera.setSpeed(speed*_gameCamera.getSpeed());
+		target.setView(_parallaxCamera.getView());
+		
+		//build parallax layer using VertexArray
+		
+		//draw parallax
+		target.draw(_currentMap->_parallax[i], states);
+	}*/
+	
+    target.draw(_currentMap->_vertices[BACKGROUND], states);
+    target.draw(_currentMap->_vertices[PLAYGROUND], states);
     //draw MovingObjects
     for(std::size_t i = 0; i < _movingObjectsPool.size(); i++) {
-        target.draw(_movingObjectsPool[i]->getSprite());
+		target.draw(_currentMap->_movingObjects[i]->getSprite());
     }
-
-    i = FOREGROUND;
-    target.draw(_currentDimension == REAL ? _mapReal._vertices[i] : _mapDream._vertices[i], states);
+    target.draw(_currentMap->_vertices[FOREGROUND], states);
 }
 
 void Level::update(float dt)
 {
     for(std::size_t i = 0; i < _movingObjectsPool.size(); i++) {
-        _movingObjectsPool[i]->update(dt);
+        _currentMap->_movingObjects[i]->update(dt);
     }
-}
-
-int Level::getMapSizeX() const
-{
-    return (_currentDimension == REAL ? _mapReal._sizeX : _mapDream._sizeX);
-}
-
-int Level::getMapSizeY() const
-{
-    return (_currentDimension == REAL ? _mapReal._sizeY : _mapDream._sizeY);
+	
+	//_parallaxCamera.follow(_player, dt);
 }
 
 void Level::addMovingObject(MovingObject* movingObject)
 {
     if(movingObject) {
         _movingObjectsPool.push_back(movingObject);
+		_currentMap->_movingObjects.push_back(movingObject);
     }
+}
+
+Map::Map()
+{
+	_sizeX = -1;
+	_sizeY = -1;
+	
+	for(int i = 0; i < SPE_NB_LAYERS; i++) {
+		_map[i] = NULL;
+	}
+}
+
+Map::~Map()
+{
+	//Delete all layers
+	//Does not delete the actual Tiles, this is handled by the ~Level()
+	//Because another map could be using the same Tiles
+	for(int layerId = 0; layerId < SPE_NB_LAYERS; layerId++) {
+		for(int y = 0; y < _sizeY; y++) {
+			delete[] _map[layerId][y];
+		}
+		delete[] _map[layerId];
+	}
 }
 
 }

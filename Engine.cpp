@@ -31,10 +31,14 @@ Engine::Engine(int argc, char* argv[])
         int windowWidth = _config.getValue<int>("engine.window.width");
         int windowHeight = _config.getValue<int>("engine.window.height");
 
-        sf::Uint32 windowOptions = 0;
+        sf::Uint32 windowOptions = sf::Style::Default;
         int fpsLimit = _config.getValue<int>("engine.fps");
         bool vsyncEnable = _config.getValue<bool>("engine.vsync");
-        _window.create(sf::VideoMode(windowWidth, windowHeight), windowTitle);//, windowOptions);
+		bool fullscreen = _config.getValue<bool>("engine.fullscreen");
+		if(fullscreen) {
+			windowOptions = sf::Style::Fullscreen;
+		}
+        _window.create(sf::VideoMode(windowWidth, windowHeight), windowTitle, windowOptions);
 
         if(vsyncEnable) {
             _window.setVerticalSyncEnabled(true);

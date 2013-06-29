@@ -19,6 +19,7 @@ DebugScreen::DebugScreen()
 	_fpsText.setFont(_font);
 
 	_active = true;
+	_fps = 0;
 }
 
 DebugScreen::~DebugScreen()

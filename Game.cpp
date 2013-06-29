@@ -68,6 +68,8 @@ void Game::handleEvents(Engine* engine)
     case sf::Event::KeyPressed:
         if(event.key.code == sf::Keyboard::LShift || event.key.code == sf::Keyboard::LShift)
             _player->run();
+		else if(event.key.code == sf::Keyboard::Escape)
+			engine->quit();
         break;
     case sf::Event::KeyReleased:
         if(event.key.code == sf::Keyboard::LShift || event.key.code == sf::Keyboard::LShift)
