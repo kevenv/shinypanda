@@ -31,8 +31,8 @@ enum LAYER
 
 class Tile
 {
-    friend Map;
-    friend Level;
+    friend class Map;
+    friend class Level;
 
 public:
     Tile(int x, int y, int tileId)
