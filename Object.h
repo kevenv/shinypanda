@@ -55,6 +55,14 @@ public:
     @param[in] solid If the object can't be passed through.
     */
     Object(const char* name, const char* fileName, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true, bool transparent = false, bool solid = true);
+
+    /**
+    Destructor.
+
+    Free all ressources attached to the object.
+    */
+    virtual ~Object(){}
+
     /**
     Verify whether a coordinate is considered "inside" the object.
 
