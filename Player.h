@@ -17,6 +17,9 @@
 #include "Character.h"
 #include "Object.h"
 #include "IDs.h"
+#include "CollisionEvent.h"
+
+#include <vector>
 
 namespace spe
 {
@@ -48,8 +51,7 @@ public:
     virtual void jump();
     virtual void run();
     virtual void walk();
-    virtual bool isColliding(int x, int y);
-    virtual void collide(Object& object);
+    virtual void collide(std::vector<CollisionEvent*>& events, Object& object);
     virtual int getID() { return PLAYER * Character::getID(); }
 };
 

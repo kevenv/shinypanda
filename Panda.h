@@ -47,7 +47,6 @@ public:
     virtual void jump();
     virtual void run();
     virtual void walk();
-    virtual bool isColliding(int x, int y);
     virtual int getID() { return PANDA * Enemy::getID(); }
 };
 

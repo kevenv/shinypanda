@@ -15,6 +15,8 @@
 #include "MovingObject.h"
 #include "Object.h"
 
+#include <iostream>
+
 namespace spe
 {
 
@@ -27,7 +29,21 @@ MovingObject::MovingObject(const char* name, const char* fileName, bool directio
 void MovingObject::update(float dt)
 {
     _collided.clear();
-    updateStatus(dt);
+    refreshAnimation(dt);
+}
+
+bool MovingObject::isColliding(Object& object)
+{
+    for(int i = 0; i < _nbCldPoints; i++)
+        if(object.isColliding(_cldPoints[i]))
+            return true;
+    return false;
+}
+
+bool MovingObject::hasCollided(MovingObject& object)
+{
+    std::vector<MovingObject*>::iterator end = _collided.end();
+    return std::find(_collided.begin(), end, &object) != end;
 }
 
 }

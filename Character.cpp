@@ -28,10 +28,23 @@ namespace spe
 Character::Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x, int y, bool inDream, bool inReal)
             : MovingObject(name, fileSprite, direction, x, y, inDream, inReal), _state(STAND), _animationTime(0), _dead(false)
 {
+    // TODO (vincent#1#): Fill _cldPoints
+    //Test:
+    {
+        _nbCldPoints = 1;
+        _cldPoints = new sf::Vector2i[1];
+    }
     readPosition(filePosition, filePositionVersion);
     _currentOffset = getSpriteRect();
     _sprite.move(sf::Vector2f(-_offsets[_currentOffset].x,-_spriteRects[_currentOffset].height));
     refreshSprite();
+}
+
+Character::~Character()
+{
+    delete[] _offsets;
+    delete[] _spriteRects;
+    delete[] _cldPoints;
 }
 
 void Character::readPosition(const char* file, const int fileVersion)
@@ -93,6 +106,10 @@ void Character::refreshSprite()
     _sprite.move(sf::Vector2f(direction*(_offsets[lastOffset].x - _offsets[_currentOffset].x) + (direction < 0 ? _spriteRects[lastOffset].width + rect->width : 0), _spriteRects[lastOffset].height - rect->height));
     if(direction < 0)
         delete rect; // Delete the new rectangle we made.
+    //Test:
+    {
+        _cldPoints[0] = sf::Vector2i(getPosition());
+    }
 }
 
 int Character::getSpriteRect()
@@ -121,16 +138,16 @@ void Character::switchDirection()
     _direction *= -1;
 }
 
+bool Character::isColliding(int x, int y)
+{
+    sf::Vector2f hotSpot = getPosition();
+    return x >= hotSpot.x+_lCldSide && x <= hotSpot.x+_rCldSide && y <= hotSpot.y && y >= hotSpot.y-_spriteRects[_currentOffset].height;
+}
+
 sf::Vector2f Character::getPosition()
 {
     // If right: +width-xOffset, if left: +xOffset
     return _sprite.getPosition() + sf::Vector2f((_initialDirection == (_direction < 0)) ? _spriteRects[_currentOffset].width - _offsets[_currentOffset].x : _offsets[_currentOffset].x, _spriteRects[_currentOffset].height);
-}
-
-Character::~Character()
-{
-    delete[] _offsets;
-    delete[] _spriteRects;
 }
 
 }

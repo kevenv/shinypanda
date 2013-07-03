@@ -15,7 +15,9 @@
 #define SPE_OBJECT_H
 
 #include "IDs.h"
+#include "CollisionEvent.h"
 
+#include <vector>
 #include <SFML/Graphics.hpp>
 
 namespace spe
@@ -64,21 +66,36 @@ public:
     virtual ~Object(){}
 
     /**
-    Verify whether a coordinate is considered "inside" the object.
+    Verify whether a coordinates are considered "inside" the object.
 
     This function doesn't take into account whether the object is solid or not.
 
-    @param[in] x,y The coordinate to verify.
-    @return True if the coordinate is inside the object.
+    See also: isColliding(sf::Vector2i& vect).
+    @param[in] x,y The coordinates to verify.
+    @return True if the coordinates are inside the object.
     */
     virtual bool isColliding(int x, int y) = 0;
+    /**
+    Verify whether a coordinates are considered "inside" the object.
+
+    This function doesn't take into account whether the object is solid or not.
+
+    See also: isColliding(int x, int y).
+
+    @param[in] vect The coordinates to verify.
+    @return True if the coordinates are inside the object.
+    */
+    bool isColliding(sf::Vector2i& vect) { return isColliding(vect.x, vect.y); }
 
     /**
     Perform the reactions of our object associated with the collision.
 
     This function doesn't move any object, even if overlapsing.
+
+    @param[out] events The current array of event to add new events resulting of the collision.
+    @param[in] object The object colliding with our one.
     */
-    virtual void collide(Object& object) = 0;
+    virtual void collide(std::vector<CollisionEvent*>& events, Object& object) = 0;
 
     /**
     Tells whether the object is solid or not.

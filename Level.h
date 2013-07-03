@@ -48,7 +48,7 @@ private:
 
     int _x;
     int _y;
-	
+
 	bool _active;
 };
 
@@ -63,12 +63,12 @@ private:
 
 class Map
 {
-	friend Level;
-	
+	friend class Level;
+
 public:
     Map();
     ~Map();
-	
+
 private:
     //This might look like some crazy shit but
     //it mean to be used like this: Tile* tile = _map[layerId][y][x];
@@ -119,7 +119,7 @@ private:
 
     enum DIMENSION _currentDimension;
 	Map* _currentMap;
-	
+
 	Camera _parallaxCamera;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

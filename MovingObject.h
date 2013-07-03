@@ -63,7 +63,6 @@ public:
 
     /**
     Check all possible change of status and move the object if needed.
-    It is called by update.
 
     @param[in] dt Time elapsed since the last update.
     */
@@ -82,6 +81,16 @@ public:
     Change the direction of the object.
     */
     virtual void switchDirection() = 0;
+
+    virtual bool isColliding(Object& object);
+
+    /**
+    Verify if our object has already collided with this object in the current frame.
+
+    @param[in] object The object with which we verify.
+    @return True if a collision has already occured, false otherwise.
+    */
+    bool hasCollided(MovingObject& object);
 
     /**
     Verify if the speed of the last update was non-null.

@@ -60,7 +60,6 @@ void Panda::updateStatus(float dt)
     else
         _speed.maxSpeedX();
     _sprite.move(_speed.getVector2());
-    refreshAnimation(dt);
 }
 
 void Panda::jump()
@@ -76,11 +75,6 @@ void Panda::run()
 void Panda::walk()
 {
     _speed.setXMax(5);
-}
-
-bool Panda::isColliding(int x, int y)
-{
-    return _sprite.getTextureRect().contains(x,y);// TODO (vincent#1#): Really use the sprite?
 }
 
 }

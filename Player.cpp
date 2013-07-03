@@ -16,7 +16,9 @@
 #include "Log.h"
 #include "SpeedVector2.h"
 #include "IDs.h"
+#include "CollisionEvent.h"
 
+#include <vector>
 #include <iostream> //For cout tests
 #include <SFML/Graphics.hpp> //For the graphics
 
@@ -120,13 +122,11 @@ void Player::updateStatus(float dt)
             jump();
     }
     _sprite.move(_speed.getVector2());
-    refreshAnimation(dt);
 }
 
-void Player::collide(Object& object)
+void Player::collide(std::vector<CollisionEvent*>& events, Object& object)
 {
-    if (object.getID()%ENEMY == 0)
-        kill();
+
 }
 
 void Player::jump()
@@ -142,11 +142,6 @@ void Player::run()
 void Player::walk()
 {
     _speed.setXMax(WALK_MAX);
-}
-
-bool Player::isColliding(int x, int y)
-{
-    return false;// TODO (vincent#1#): Decide what to do with this...
 }
 
 }

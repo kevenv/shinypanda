@@ -1,13 +1,18 @@
 
 #include "Game.h"
-
-#include <SFML/Graphics.hpp>
 #include "Engine.h"
 #include "PauseScreen.h"
 #include "World.h"
 #include "Camera.h"
 #include "Player.h"
 #include "Panda.h"
+#include "MovingObject.h"
+#include "CollisionEvent.h"
+
+#include <SFML/Graphics.hpp>
+#include <iostream>
+
+#define MAX_ITERATION_COLLISION 3
 
 namespace spe
 {
@@ -19,6 +24,10 @@ Game::Game(Engine* engine)
 
 Game::~Game()
 {
+    for(std::size_t i = 0; i < _collisionEvents.size(); i++)
+    {
+        delete _collisionEvents[i];
+    }
 }
 
 void Game::init(Engine* engine)
@@ -80,8 +89,64 @@ void Game::handleEvents(Engine* engine)
 
 void Game::update(Engine* engine, float dt)
 {
+    moveObjects(dt);
+    handleCollision();
     _world.getCurrentLevel().update(dt);
 	_camera.follow(*_player, dt);
+}
+
+void Game::moveObjects(float dt)
+{
+    std::vector<MovingObject*> objects = _world.getCurrentLevel().getMovingObjects();
+    for(std::size_t i = 0; i < objects.size(); i++)
+    {
+        objects[i]->updateStatus(dt);
+    }
+}
+
+void Game::handleCollision()
+{
+    std::vector<MovingObject*> objects = _world.getCurrentLevel().getMovingObjects();
+    for(std::size_t i = 0; i < objects.size(); i++)
+    {
+        MovingObject* obj = objects[i];
+        if(obj->hasMoved())
+        {
+            bool moved = true;
+            for(int j = 0; moved && j < MAX_ITERATION_COLLISION; j++)
+            {
+                // TODO (vincent#1#): for(all tiles) verifyCollision;
+                for(std::size_t k = 0; k < objects.size(); k++)
+                {
+                    MovingObject* obj2 = objects[k];
+                    if(i != k && obj->isColliding(*obj2))
+                    {
+                        // TODO (vincent#1#): if(obj->needToMove()) obj->move();
+                        if(!obj->hasCollided(*obj2)) obj->collide(_collisionEvents, *obj2);
+                        if(!obj2->hasCollided(*obj)) obj2->collide(_collisionEvents, *obj);
+                    }
+                }
+            }
+        }
+    }
+    handleCollisionEvents();
+}
+
+void Game::handleCollisionEvents()
+{
+    for(std::size_t i = 0; i < _collisionEvents.size(); i++)
+    {
+        switch(_collisionEvents[i]->getType())
+        {
+        case KILL_PLAYER:
+            _player->kill();
+            break;
+        default:
+            break;
+        }
+        delete _collisionEvents[i];
+    }
+    _collisionEvents.clear();
 }
 
 void Game::render(Engine* engine)

@@ -18,11 +18,13 @@
 #include "Object.h"
 #include "IDs.h"
 
+#include <vector>
+
 namespace spe
 {
 
 /**
-    @class Ennemy Ennemy.h "Ennemy.h"
+    @class Enemy Enemy.h "Enemy.h"
     @brief An enemy.
 
     This is an abstract class representing an enemy. It inherites of Character.
@@ -43,7 +45,7 @@ public:
     */
     Enemy(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true);
 
-    virtual void collide(Object& object);
+    virtual void collide(std::vector<CollisionEvent*>& events, Object& object);
 
     virtual int getID() { return ENEMY * Character::getID(); }
 };

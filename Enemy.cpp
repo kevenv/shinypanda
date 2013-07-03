@@ -17,6 +17,9 @@
 #include "Object.h"
 #include "IDs.h"
 #include "Player.h"
+#include "CollisionEvent.h"
+
+#include <vector>
 
 namespace spe
 {
@@ -27,9 +30,10 @@ Enemy::Enemy(const char* name, const char* fileSprite, const char* filePosition,
 
 }
 
-void Enemy::collide(Object& object)
+void Enemy::collide(std::vector<CollisionEvent*>& events, Object& object)
 {
-
+    if (object.getID()%PLAYER == 0)
+        events.push_back(new CollisionEvent(KILL_PLAYER)); // TODO (vincent#1#): Make it less ugly? ( *(new...) )
 }
 
 }

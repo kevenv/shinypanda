@@ -57,8 +57,8 @@ protected:
     int _currentOffset; ///< Index of current offset.
     sf::IntRect* _spriteRects; ///< Dynamic array of the sprite rectangles.
     sf::Vector2i* _offsets; ///< Dynamic array of offsets.
-    int _lCldSide; ///< the distance between the left side of the collision box and the hot spot. It is usually negative.
-    int _rCldSide; ///< the distance between the right side of the collision box and the hot spot.
+    int _lCldSide; ///< the distance between the left side of the collision box and the hot spot. A negative number meaning the side is to the left of the hot spot.
+    int _rCldSide; ///< the distance between the right side of the collision box and the hot spot. A negative number meaning the side is to the left of the hot spot.
 
     virtual void refreshSprite();
     virtual void switchDirection();
@@ -109,6 +109,8 @@ public:
     Kill the character.
     */
     void kill() { _dead = true;}
+
+    virtual bool isColliding(int x, int y);
 
     /**
     Make the character jump.
