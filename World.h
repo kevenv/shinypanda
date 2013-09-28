@@ -7,11 +7,12 @@
 
 namespace spe
 {
+class Camera;
 
 class World : public sf::Drawable
 {
 public:
-    World();
+    World(int windowSizeX, int windowSizeY);
     ~World();
 
     bool load(const char* filePath);
@@ -23,10 +24,15 @@ public:
     inline Level& getCurrentLevel() const { return *_levels[_currentLevelId]; }
     //switch between dimension (real/dream)
     //inline void setDimension(enum DIMENSION dimension) { getCurrentLevel()->setDimension(dimension); }
+	inline Camera* getCamera() { return getCurrentLevel().getCamera(); }
+	inline const sf::Vector2i& getWindowSize() const { return _windowSize; }
 
 private:
     std::vector<Level*> _levels;
     int _currentLevelId;
+
+	sf::Vector2i _windowSize;
+
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
 

@@ -146,10 +146,18 @@ public:
 	*/
 	inline const sf::Vector2f& getSpeed() const { return _speed; }
 
+	/**
+	Camera assignement operator
+	*/
+	Camera& operator=(const Camera& camera);
+
 private:
 	sf::View      _view; 		///< SFML view modified by the camera.
 	sf::Vector2f  _speed; 		///< Scrolling speed vector of the camera.
 	sf::Rect<int> _worldLimits; ///< Limits of the game world (level dimensions).
+
+	bool _stopScrollingX; ///< If true scrolling stop on x world limits
+	bool _stopScrollingY; ///< If true scrolling stop on y world limits
 
 	/**
 	Get the position to center the camera, taking into account the scrolling of the screen.

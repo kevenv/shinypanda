@@ -2,15 +2,17 @@
 #define SPE_GAME_H
 
 #include "GameState.h"
-#include "Camera.h"
 #include "World.h"
-#include "CollisionEvent.h"
+
+#include <vector>
 
 namespace spe
 {
 
 class Engine;
 class Player;
+class Camera;
+class CollisionEvent;
 
 class Game : public GameState
 {
@@ -29,8 +31,8 @@ public:
 	void render(Engine* engine);
 
 private:
-    World _world;
-	Camera _camera;
+    World* _world;
+	Camera* _camera;
 	Player* _player;
 	std::vector<CollisionEvent*> _collisionEvents; ///< A dynamic array containing all the events related to collisions in a frame.
 

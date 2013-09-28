@@ -15,6 +15,8 @@ namespace spe
 class MovingObject;
 class Map;
 class Level;
+class World;
+class Player;
 
 enum DIMENSION
 {
@@ -84,7 +86,7 @@ private:
 class Level: public sf::Drawable, public sf::Transformable
 {
 public:
-    Level();
+    Level(World* world);
     ~Level();
 
     bool load(const char* filePath);
@@ -100,6 +102,10 @@ public:
 		_currentDimension = dimension;
 		_currentMap = _currentDimension == REAL ? &_mapReal : &_mapDream;
 	}
+
+	inline Camera* getCamera() { return &_mainCamera; }
+
+	inline void setPlayer(Player* player) { _player = player; }
 
     void addMovingObject(MovingObject* movingObject);
     std::vector<MovingObject*>& getMovingObjects() { return _currentMap->_movingObjects; }
@@ -120,7 +126,11 @@ private:
     enum DIMENSION _currentDimension;
 	Map* _currentMap;
 
+	Camera _mainCamera;
 	Camera _parallaxCamera;
+
+	World* _world;
+	Player* _player;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

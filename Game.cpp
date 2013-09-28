@@ -11,6 +11,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <vector>
 
 #define MAX_ITERATION_COLLISION 3
 
@@ -18,6 +19,7 @@ namespace spe
 {
 
 Game::Game(Engine* engine)
+:	_world(NULL)
 {
     _player = NULL;
 }
@@ -26,27 +28,29 @@ Game::~Game()
 {
     for(std::size_t i = 0; i < _collisionEvents.size(); i++)
     {
-        delete _collisionEvents[i];
+        delete _collisionEvents[i]; //TODO: WTF WHERE IS THE "NEW" OF THIS???
     }
+
+	delete _world;
 }
 
 void Game::init(Engine* engine)
 {
     //init world
-    _world.load("test.world");
+	_world = new World(engine->getWindowSize().x, engine->getWindowSize().y);
+    _world->load("test.world");
     int tileSize = 64;
 
     //init moving objects
-    Level& level = _world.getCurrentLevel();
+    Level& level = _world->getCurrentLevel();
     _player = new Player("Player", "sprites.png", "sprites.txt", 2, true, engine->getWindowSize().x/2, engine->getWindowSize().y/2);
     level.addMovingObject(_player);
+	level.setPlayer(_player);
     Panda* _panda = new Panda("Panda", "panda.jpg", "panda.txt", 1, false, engine->getWindowSize().x*3/4, engine->getWindowSize().y/2);
     level.addMovingObject(_panda);
 
-    //init camera
-    _camera.setWindowSize(engine->getWindowSize().x, engine->getWindowSize().y);
-    _camera.setWorldLimits(sf::Rect<int>(0,0,_world.getWorldSizeX()*tileSize, _world.getWorldSizeY()*tileSize));
-    _camera.setSpeed(sf::Vector2f(5,5));
+	//init camera
+	_camera = _world->getCamera();
 }
 
 void Game::clear()
@@ -91,13 +95,13 @@ void Game::update(Engine* engine, float dt)
 {
     moveObjects(dt);
     handleCollision();
-    _world.getCurrentLevel().update(dt);
-	_camera.follow(*_player, dt);
+    _world->getCurrentLevel().update(dt);
+	_camera->follow(*_player, dt);
 }
 
 void Game::moveObjects(float dt)
 {
-    std::vector<MovingObject*> objects = _world.getCurrentLevel().getMovingObjects();
+    std::vector<MovingObject*> objects = _world->getCurrentLevel().getMovingObjects();
     for(std::size_t i = 0; i < objects.size(); i++)
     {
         objects[i]->updateStatus(dt);
@@ -106,7 +110,7 @@ void Game::moveObjects(float dt)
 
 void Game::handleCollision()
 {
-    std::vector<MovingObject*> objects = _world.getCurrentLevel().getMovingObjects();
+    std::vector<MovingObject*> objects = _world->getCurrentLevel().getMovingObjects();
     for(std::size_t i = 0; i < objects.size(); i++)
     {
         MovingObject* obj = objects[i];
@@ -153,8 +157,8 @@ void Game::render(Engine* engine)
 {
 	sf::RenderWindow* window = engine->getWindow();
 
-	window->setView(_camera.getView());
-	window->draw(_world);
+	window->setView(_camera->getView());
+	window->draw(*_world);
 }
 
 }

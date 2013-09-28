@@ -21,6 +21,8 @@ namespace spe
 {
 
 Camera::Camera():
+	_stopScrollingX(false),
+	_stopScrollingY(false),
     _speed(0,0),
     _worldLimits(0,0,0,0)
 {
@@ -34,6 +36,19 @@ Camera::Camera(int w, int h, sf::Rect<int> worldLimits, int x, int y)
 {
 	_view.reset(sf::FloatRect(x, y, w, h));
 	setWorldLimits(worldLimits);
+}
+
+Camera& Camera::operator=(const Camera& camera)
+{
+	sf::Vector2f center = camera.getCenter();
+	sf::Vector2f windowSize = camera.getWindowSize();
+
+	_view.reset(sf::FloatRect(center.x, center.y, windowSize.x, windowSize.y));
+
+	_speed = camera.getSpeed();
+	_worldLimits = camera.getWorldLimits();
+
+	return *this;
 }
 
 void Camera::follow(Character& character)
@@ -73,6 +88,7 @@ void Camera::scroll(int x, int y, int& targetX, int& targetY) const
 	// L  W
 	//   H
 	//stop the scrolling when out of limits
+	//if(!_stopScrollingX) return;
 	if(x < _worldLimits.left) {
 		targetX = _worldLimits.left;
 	}
@@ -80,6 +96,7 @@ void Camera::scroll(int x, int y, int& targetX, int& targetY) const
 		targetX = _worldLimits.width;
 	}
 
+	//if(!_stopScrollingY) return;
 	if(y < _worldLimits.top) {
 		targetY = _worldLimits.top;
 	}
@@ -93,10 +110,25 @@ void Camera::setWorldLimits(const sf::Rect<int>& limits)
 	const int windowX = _view.getSize().x;
 	const int windowY = _view.getSize().y;
 
-	_worldLimits.left = limits.left + windowX/2;
-	_worldLimits.top = limits.top + windowY/2;
-	_worldLimits.width = limits.width - windowX/2;
-	_worldLimits.height = limits.height - windowY/2;
+	/*if(limits.left == 0 && limits.width == 0) {
+		_stopScrollingX = true;
+		_worldLimits.left = 0;
+		_worldLimits.width = 0;
+	}
+	else {*/
+		_worldLimits.left = limits.left + windowX/2;
+		_worldLimits.width = limits.width - windowX/2;
+	//}
+
+	/*if(limits.top == 0 && limits.height == 0) {
+		_stopScrollingY = true;
+		_worldLimits.top = 0;
+		_worldLimits.height = 0;
+	}
+	else {*/
+		_worldLimits.top = limits.top + windowY/2;
+		_worldLimits.height = limits.height - windowY/2;
+	//}
 }
 
 }

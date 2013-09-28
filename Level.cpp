@@ -7,16 +7,19 @@
 #include "tinyxml2.h"
 #include "MovingObject.h"
 #include "Camera.h"
+#include "World.h"
+#include "Player.h"
 
 namespace spe
 {
 
-Level::Level()
+Level::Level(World* world)
+:	_world(world),
+	_player(NULL)
 {
-    _tileSize = 64;
-     _currentDimension = REAL;
-	 _currentMap = &_mapReal;
-	 //_parallaxCamera = _gameCamera;
+	_tileSize = 64;
+    _currentDimension = REAL;
+	_currentMap = &_mapReal;
 }
 
 Level::~Level()
@@ -52,6 +55,17 @@ bool Level::load(const char* filePath)
     }
     //setVertices(_mapReal._vertices, _mapReal._map, _mapReal._sizeX, _mapReal._sizeY);
     //setVertices(_mapDream._vertices, _mapDream._map, _mapDream._sizeX, _mapDream._sizeY);
+
+	//Load camera(s)
+	sf::Vector2i windowSize = _world->getWindowSize();
+	_mainCamera.setWindowSize(windowSize.x, windowSize.y);
+    _mainCamera.setWorldLimits(sf::Rect<int>(0,0, getMapSizeX()*_tileSize, getMapSizeY()*_tileSize));
+	const int cameraSpeed = 5;
+    _mainCamera.setSpeed(sf::Vector2f(cameraSpeed,cameraSpeed));
+
+	_parallaxCamera = _mainCamera;
+	_parallaxCamera.setSpeed(sf::Vector2f(cameraSpeed/2.0,cameraSpeed/2.0));
+	//_parallaxCamera.setWorldLimits(sf::Rect<int>(0,0,0,0));
 
     return true;
 }
@@ -258,8 +272,16 @@ void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		//draw parallax
 		target.draw(_currentMap->_parallax[i], states);
 	}*/
+
+	//set parallax camera
+	target.setView(_parallaxCamera.getView());
+	//draw parallax layer
+	target.draw(_currentMap->_vertices[BACKGROUND],states);
+
+	//set main camera
+	target.setView(_mainCamera.getView());
 	
-    target.draw(_currentMap->_vertices[BACKGROUND], states);
+    //target.draw(_currentMap->_vertices[BACKGROUND], states);
     target.draw(_currentMap->_vertices[PLAYGROUND], states);
     //draw MovingObjects
     for(std::size_t i = 0; i < _movingObjectsPool.size(); i++) {
@@ -274,7 +296,9 @@ void Level::update(float dt)
         _currentMap->_movingObjects[i]->update(dt);
     }
 	
-	//_parallaxCamera.follow(_player, dt);
+	_parallaxCamera.follow(*_player, dt);
+	//_parallaxCamera.follow(*_player);
+	//_parallaxCamera.setCenter(_player->getPosition().x, _player->getPosition().y);
 }
 
 void Level::addMovingObject(MovingObject* movingObject)

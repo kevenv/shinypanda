@@ -46,7 +46,8 @@ void Player::refreshAnimation(float dt)
         else
             _animationTime += dt;
     }
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	//TEMPORARY DISACTIVATED FOR DEBUGGING
+   /* else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
         if(_state != DUCK)
         {
@@ -55,7 +56,7 @@ void Player::refreshAnimation(float dt)
         }
         else
             _animationTime += dt;
-    }
+    }*/
     else if(_speed.getDirectionX() != 0)
     {
         if(_speed.getSpeedX() > WALK_MAX)
@@ -101,11 +102,12 @@ void Player::updateStatus(float dt)
     else
     {
         bool run = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift);
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		//TEMPORARY DISACTIVATED FOR DEBUGGING
+        /*if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
         {
             _speed.slow(50*dt);
         }
-        else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        else*/ if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
         {
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
                 _speed.slow(50*dt);
@@ -116,8 +118,15 @@ void Player::updateStatus(float dt)
         {
             _speed.move((run?100:50)*dt,0);
         }
+		//TEMPORARY ADDED FOR DEBUGGING
+		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+			_speed.move(0,-50*dt);
+		}
+		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+			_speed.move(0,50*dt);
+		}//
         else
-            _speed.slow(50*dt);
+            _speed.slow(50*dt,50*dt);
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
             jump();
     }
@@ -142,6 +151,7 @@ void Player::run()
 void Player::walk()
 {
     _speed.setXMax(WALK_MAX);
+	_speed.setYMax(WALK_MAX); //ADDED TEMPORARY FOR DEBUGGING
 }
 
 }

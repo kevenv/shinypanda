@@ -81,7 +81,7 @@ void test_config()
         int y = cfg.getValue<int>("map.y");
         std::cout << y << std::endl;
 
-        std::stringstream sstream;
+        /*std::stringstream sstream;
         sstream << rawMap;
         char crap;
         int map[y][x];
@@ -92,7 +92,7 @@ void test_config()
             }
             sstream >> crap;
             std::cout << std::endl;
-        }
+        }*/
     }
 }
 

@@ -6,7 +6,8 @@
 namespace spe
 {
 
-World::World()
+World::World(int windowSizeX, int windowSizeY)
+:	_windowSize(windowSizeX, windowSizeY)
 {
     //_levels.capacity();
     _currentLevelId = -1;
@@ -35,7 +36,7 @@ bool World::load(const char* filePath)
 
 bool World::loadLevel(const char* filePath)
 {
-    Level* level = new Level();
+    Level* level = new Level(this);
     if(!level) {
         return false;
     }
