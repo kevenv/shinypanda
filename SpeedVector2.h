@@ -72,7 +72,15 @@ public:
 
     @param[in] x Offset.
     */
-    void slow(T x, T y = 0);
+    void slowX(T x);
+    /**
+    Reduce the absolute value of y by a given offset.
+    The value given must be positive or the function has no effect.
+    If the value is higher than y's absolute value, then y take the value 0.
+
+    @param[in] y Offset.
+    */
+    void slowY(T y);
     /**
     Set the x coordinate to its maximum value, with the same sign x had.
     If there is no maximum value for x, the function has no effect.
@@ -201,7 +209,7 @@ bool SpeedVector2<T>::move(const sf::Vector2<T> &vector)
 }
 
 template <typename T>
-void SpeedVector2<T>::slow(T x, T y)
+void SpeedVector2<T>::slowX(T x)
 {
     if (x > 0)
     {
@@ -210,7 +218,11 @@ void SpeedVector2<T>::slow(T x, T y)
         else
             _x -= SGN(_x)*x;
     }
+}
 
+template <typename T>
+void SpeedVector2<T>::slowY(T y)
+{
 	if (y > 0)
     {
         if (ABS(y) >= ABS(_y))

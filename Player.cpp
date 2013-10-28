@@ -96,7 +96,7 @@ void Player::updateStatus(float dt)
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::L))
         _dead = false;
     else if(_dead)
-        _speed.slow(50*dt);
+        _speed.slowX(50*dt);
     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::K))
         _dead = true;
     else
@@ -105,12 +105,12 @@ void Player::updateStatus(float dt)
 		//TEMPORARY DISACTIVATED FOR DEBUGGING
         /*if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
         {
-            _speed.slow(50*dt);
+            _speed.slowX(50*dt);
         }
         else*/ if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
         {
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-                _speed.slow(50*dt);
+                _speed.slowX(50*dt);
             else
                 _speed.move(-(run?100:50)*dt,0);
         }
@@ -118,15 +118,23 @@ void Player::updateStatus(float dt)
         {
             _speed.move((run?100:50)*dt,0);
         }
-		//TEMPORARY ADDED FOR DEBUGGING
-		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-			_speed.move(0,-50*dt);
-		}
-		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-			_speed.move(0,50*dt);
-		}//
         else
-            _speed.slow(50*dt,50*dt);
+            _speed.slowX(50*dt);
+		//TEMPORARY ADDED FOR DEBUGGING
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		{
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+            {
+                _speed.slowY(50*dt);
+            } else
+                _speed.move(0,-50*dt);
+		}
+		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        {
+			_speed.move(0,50*dt);
+		}
+        else
+            _speed.slowY(50*dt);//
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
             jump();
     }
