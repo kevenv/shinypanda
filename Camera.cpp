@@ -68,7 +68,7 @@ void Camera::follow(Character& character)
 
 void Camera::follow(Character& character, float dt)
 {
-	bool cinematic = false;
+	bool cinematic = true;
 	if(cinematic) {
 		setSpeed(sf::Vector2f(5,5));
 		const float camX = _view.getCenter().x;
@@ -84,6 +84,7 @@ void Camera::follow(Character& character, float dt)
 		scroll(x, y, x, y);
 		_view.setCenter(x, y);
 	}else {
+		sf::Vector2f c = _view.getCenter();
 		if(character.getPosition().x > _view.getSize().x/2 && character.getPosition().x < _worldLimits.width) {
 			_view.move(character.getSpeed().getX()*_speed.x, 0);
 		}

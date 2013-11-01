@@ -65,6 +65,8 @@ bool Level::load(const char* filePath)
     _mainCamera.setSpeed(sf::Vector2f(cameraSpeed,cameraSpeed));
 
 	_parallaxView = _mainCamera.getView();
+	_parallaxView2 = _parallaxView;
+	_parallaxView3 = _parallaxView;
 	//_parallaxView.zoom(0.8);
 	//_parallaxView.setSpeed(sf::Vector2f(cameraSpeed/2.0,cameraSpeed/2.0));
 	//_parallaxCamera.setWorldLimits(sf::Rect<int>(0,0,0,0));
@@ -279,6 +281,12 @@ void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	//target.setView(_parallaxCamera.getView());
 	//draw parallax layer
 	//target.draw(_currentMap->_vertices[BACKGROUND],states);
+
+	target.setView(_parallaxView3);
+	target.draw(_currentMap->_vertices[BACKGROUND],states);
+
+	target.setView(_parallaxView2);
+	target.draw(_currentMap->_vertices[BACKGROUND],states);
 	
 	target.setView(_parallaxView);
 	target.draw(_currentMap->_vertices[BACKGROUND],states);
@@ -294,12 +302,20 @@ void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
     }
     target.draw(_currentMap->_vertices[FOREGROUND], states);
 }
-
+ 
 void Level::update(float dt)
 {
     for(std::size_t i = 0; i < _movingObjectsPool.size(); i++) {
         _currentMap->_movingObjects[i]->update(dt);
     }
+
+	float scale3 = 0.1;
+	sf::Vector2f vct3(_mainCamera.getView().getCenter().x * scale3, _mainCamera.getView().getCenter().y);
+	_parallaxView3.setCenter(vct3);
+
+	float scale2 = 0.3;
+	sf::Vector2f vct2(_mainCamera.getView().getCenter().x * scale2, _mainCamera.getView().getCenter().y);
+	_parallaxView2.setCenter(vct2);
 	
 	float scale = 0.5;
 	sf::Vector2f vct(_mainCamera.getView().getCenter().x * scale, _mainCamera.getView().getCenter().y);

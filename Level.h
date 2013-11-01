@@ -128,6 +128,8 @@ private:
 
 	Camera _mainCamera;
 	sf::View _parallaxView;
+	sf::View _parallaxView2;
+	sf::View _parallaxView3;
 
 	World* _world;
 	Player* _player;
