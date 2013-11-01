@@ -7,10 +7,10 @@ namespace spe
 {
 
 World::World(int windowSizeX, int windowSizeY)
-:	_windowSize(windowSizeX, windowSizeY)
+:	_windowSize(windowSizeX, windowSizeY),
+	_currentLevelId(-1)
 {
     //_levels.capacity();
-    _currentLevelId = -1;
 }
 
 World::~World()
@@ -54,7 +54,7 @@ bool World::loadLevel(const char* filePath)
 
 void World::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    target.draw(getCurrentLevel(),states);
+    target.draw(getCurrentLevel(), states);
 }
 
 }

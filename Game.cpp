@@ -1,5 +1,6 @@
 
 #include "Game.h"
+
 #include "Engine.h"
 #include "PauseScreen.h"
 #include "World.h"
@@ -19,19 +20,21 @@ namespace spe
 {
 
 Game::Game(Engine* engine)
-:	_world(NULL)
+:	_world(NULL),
+	_camera(NULL),
+	_player(NULL)
 {
-    _player = NULL;
 }
 
 Game::~Game()
 {
-    for(std::size_t i = 0; i < _collisionEvents.size(); i++)
-    {
+    for(std::size_t i = 0; i < _collisionEvents.size(); i++) {
         delete _collisionEvents[i]; //TODO: WTF WHERE IS THE "NEW" OF THIS???
     }
 
 	delete _world;
+	_camera = NULL;
+	_player = NULL;
 }
 
 void Game::init(Engine* engine)
@@ -39,7 +42,6 @@ void Game::init(Engine* engine)
     //init world
 	_world = new World(engine->getWindowSize().x, engine->getWindowSize().y);
     _world->load("test.world");
-    int tileSize = 64;
 
     //init moving objects
     Level& level = _world->getCurrentLevel();
@@ -67,15 +69,14 @@ void Game::resume()
 
 void Game::handleEvents(Engine* engine)
 {
-	sf::Event event = engine->getEvent();
+	const sf::Event& event = engine->getEvent();
 
-    switch(event.type)
-    {
+    switch(event.type) {
 	case sf::Event::LostFocus:
 		engine->pushState(new PauseScreen(engine));
 		break;
     case sf::Event::Closed:
-        engine->getWindow()->close();
+        engine->getWindow().close();
         engine->quit();
         break;
     case sf::Event::KeyPressed:
@@ -102,8 +103,7 @@ void Game::update(Engine* engine, float dt)
 void Game::moveObjects(float dt)
 {
     std::vector<MovingObject*> objects = _world->getCurrentLevel().getMovingObjects();
-    for(std::size_t i = 0; i < objects.size(); i++)
-    {
+    for(std::size_t i = 0; i < objects.size(); i++) {
         objects[i]->updateStatus(dt);
     }
 }
@@ -111,20 +111,15 @@ void Game::moveObjects(float dt)
 void Game::handleCollision()
 {
     std::vector<MovingObject*> objects = _world->getCurrentLevel().getMovingObjects();
-    for(std::size_t i = 0; i < objects.size(); i++)
-    {
+    for(std::size_t i = 0; i < objects.size(); i++) {
         MovingObject* obj = objects[i];
-        if(obj->hasMoved())
-        {
+        if(obj->hasMoved()) {
             bool moved = true;
-            for(int j = 0; moved && j < MAX_ITERATION_COLLISION; j++)
-            {
+            for(int j = 0; moved && j < MAX_ITERATION_COLLISION; j++) {
                 // TODO (vincent#1#): for(all tiles) verifyCollision;
-                for(std::size_t k = 0; k < objects.size(); k++)
-                {
+                for(std::size_t k = 0; k < objects.size(); k++) {
                     MovingObject* obj2 = objects[k];
-                    if(i != k && obj->isColliding(*obj2))
-                    {
+                    if(i != k && obj->isColliding(*obj2)) {
                         // TODO (vincent#1#): if(obj->needToMove()) obj->move();
                         if(!obj->hasCollided(*obj2)) obj->collide(_collisionEvents, *obj2);
                         if(!obj2->hasCollided(*obj)) obj2->collide(_collisionEvents, *obj);
@@ -138,10 +133,8 @@ void Game::handleCollision()
 
 void Game::handleCollisionEvents()
 {
-    for(std::size_t i = 0; i < _collisionEvents.size(); i++)
-    {
-        switch(_collisionEvents[i]->getType())
-        {
+    for(std::size_t i = 0; i < _collisionEvents.size(); i++) {
+        switch(_collisionEvents[i]->getType()) {
         case KILL_PLAYER:
             _player->kill();
             break;
@@ -155,10 +148,10 @@ void Game::handleCollisionEvents()
 
 void Game::render(Engine* engine)
 {
-	sf::RenderWindow* window = engine->getWindow();
+	sf::RenderWindow& window = engine->getWindow();
 
-	window->setView(_camera->getView());
-	window->draw(*_world);
+	window.setView(_camera->getView());
+	window.draw(*_world);
 }
 
 }

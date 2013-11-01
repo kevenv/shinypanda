@@ -90,8 +90,7 @@ int Engine::run()
 
 void Engine::handleEvents()
 {
-	while (_window.pollEvent(_event))
-    {
+	while (_window.pollEvent(_event)) {
 		_states.top()->handleEvents(this);
 		_debugScreen.handleEvents(this);
 	}

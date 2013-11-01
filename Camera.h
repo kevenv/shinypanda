@@ -50,8 +50,6 @@ public:
     */
 	Camera(int w, int h, sf::Rect<int> worldLimits, int x = 0, int y = 0);
 
-	void set(int w, int h, sf::Rect<int> worldLimits, int x = 0, int y = 0);
-
 	/**
 	Make the Camera follow a Character.
 	The camera instantly follow the character.
@@ -100,6 +98,7 @@ public:
 	*/
 	inline void setSpeed(const sf::Vector2f& speed) { _speed = speed; }
 
+	inline void setFollowMode(bool cinematicMode) { _followMode = cinematicMode; }
 
 	/**
 	View getter.
@@ -157,9 +156,7 @@ private:
 	sf::View      _view; 		///< SFML view modified by the camera.
 	sf::Vector2f  _speed; 		///< Scrolling speed vector of the camera.
 	sf::Rect<int> _worldLimits; ///< Limits of the game world (level dimensions).
-
-	bool _stopScrollingX; ///< If true scrolling stop on x world limits
-	bool _stopScrollingY; ///< If true scrolling stop on y world limits
+	bool _followMode;
 
 	/**
 	Get the position to center the camera, taking into account the scrolling of the screen.
@@ -170,6 +167,8 @@ private:
     @param[in] targetY 	adjusted y position to center camera and scroll screen.
     */
 	void scroll(int x, int y, int& targetX, int& targetY) const;
+	void followNormal(Character& character, float dt);
+	void followCinematic(Character& character, float dt);
 };
 
 }

@@ -56,20 +56,18 @@ bool Level::load(const char* filePath)
     //setVertices(_mapReal._vertices, _mapReal._map, _mapReal._sizeX, _mapReal._sizeY);
     //setVertices(_mapDream._vertices, _mapDream._map, _mapDream._sizeX, _mapDream._sizeY);
 
-	//Load camera(s)
+	//set camera
 	sf::Vector2i windowSize = _world->getWindowSize();
 	_mainCamera.setWindowSize(windowSize.x, windowSize.y);
     _mainCamera.setWorldLimits(sf::Rect<int>(0,0, getMapSizeX()*_tileSize, getMapSizeY()*_tileSize));
-	const float cameraSpeed = 0.8;
+	_mainCamera.setFollowMode(true);
 	_mainCamera.setCenter(windowSize.x/2, windowSize.y/2);
-    _mainCamera.setSpeed(sf::Vector2f(cameraSpeed,cameraSpeed));
+    _mainCamera.setSpeed(sf::Vector2f(5,5));
 
+	//set parallax layers
 	_parallaxView = _mainCamera.getView();
 	_parallaxView2 = _parallaxView;
 	_parallaxView3 = _parallaxView;
-	//_parallaxView.zoom(0.8);
-	//_parallaxView.setSpeed(sf::Vector2f(cameraSpeed/2.0,cameraSpeed/2.0));
-	//_parallaxCamera.setWorldLimits(sf::Rect<int>(0,0,0,0));
 
     return true;
 }
@@ -262,26 +260,8 @@ void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
     states.transform *= getTransform();
     states.texture = &_tileset;
     target.clear(sf::Color(215,215,215));
-	
-	//save game camera
-	/*
-	for(int i = 0; i < _currentMap->_parallax.size(); i++) {
-		//set parallax camera
-		float speed = 0.5 _currentMap->_parallaxSpeed[i];
-		 _parallaxCamera.setSpeed(speed*_gameCamera.getSpeed());
-		target.setView(_parallaxCamera.getView());
-		
-		//build parallax layer using VertexArray
-		
-		//draw parallax
-		target.draw(_currentMap->_parallax[i], states);
-	}*/
 
-	//set parallax camera
-	//target.setView(_parallaxCamera.getView());
-	//draw parallax layer
-	//target.draw(_currentMap->_vertices[BACKGROUND],states);
-
+	//draw parallax layers
 	target.setView(_parallaxView3);
 	target.draw(_currentMap->_vertices[BACKGROUND],states);
 
@@ -294,7 +274,8 @@ void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	//set main camera
 	target.setView(_mainCamera.getView());
 	
-    //target.draw(_currentMap->_vertices[BACKGROUND], states);
+	//draw tilemap layers
+    target.draw(_currentMap->_vertices[BACKGROUND], states);
     target.draw(_currentMap->_vertices[PLAYGROUND], states);
     //draw MovingObjects
     for(std::size_t i = 0; i < _movingObjectsPool.size(); i++) {
@@ -320,10 +301,6 @@ void Level::update(float dt)
 	float scale = 0.5;
 	sf::Vector2f vct(_mainCamera.getView().getCenter().x * scale, _mainCamera.getView().getCenter().y);
 	_parallaxView.setCenter(vct);
-
-	//_parallaxCamera.follow(*_player, dt);
-	//_parallaxCamera.follow(*_player);
-	//_parallaxCamera.setCenter(_player->getPosition().x, _player->getPosition().y);
 }
 
 void Level::addMovingObject(MovingObject* movingObject)

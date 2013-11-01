@@ -27,10 +27,11 @@ public:
 
 	void clear();
 
-	inline sf::RenderWindow* getWindow() { return &_window; }
-	inline const sf::Event& getEvent() { return _event; }
+	inline sf::RenderWindow& getWindow() { return _window; }
+	inline const sf::Event& getEvent() const { return _event; }
+	inline const Config& getConfig() const { return _config; }
 	inline void quit() { _running = false; }
-	inline const sf::Vector2u getWindowSize() const { return _window.getSize(); }
+	inline const sf::Vector2u& getWindowSize() const { return _window.getSize(); }
 
 private:
 	sf::RenderWindow _window;

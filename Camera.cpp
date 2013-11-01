@@ -13,34 +13,30 @@
 */
 #include "Camera.h"
 
+#include "Character.h"
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Character.h"
 
 namespace spe
 {
 
 Camera::Camera():
-	_stopScrollingX(false),
-	_stopScrollingY(false),
     _speed(0,0),
-    _worldLimits(0,0,0,0)
+    _worldLimits(0,0,0,0),
+	_view(sf::FloatRect(0, 0, 0, 0)),
+	_followMode(true)
 {
-    _view.reset(sf::FloatRect(0, 0, 0, 0));
 }
 
 Camera::Camera(int w, int h, sf::Rect<int> worldLimits, int x, int y)
 :
-	_speed(5,5),
-	_worldLimits(0,0,0,0)
+	_speed(1,1),
+	_worldLimits(0,0,0,0),
+	_view(sf::FloatRect(x, y, w, h)),
+	_followMode(true)
 {
-	_view.reset(sf::FloatRect(x, y, w, h));
 	setWorldLimits(worldLimits);
-}
-
-void Camera::set(int w, int h, sf::Rect<int> worldLimits, int x, int y)
-{
-	_view.reset(sf::FloatRect(x, y, w, h));
 }
 
 Camera& Camera::operator=(const Camera& camera)
@@ -52,6 +48,7 @@ Camera& Camera::operator=(const Camera& camera)
 
 	_speed = camera.getSpeed();
 	_worldLimits = camera.getWorldLimits();
+	_followMode = camera._followMode;
 
 	return *this;
 }
@@ -68,31 +65,39 @@ void Camera::follow(Character& character)
 
 void Camera::follow(Character& character, float dt)
 {
-	bool cinematic = true;
-	if(cinematic) {
-		setSpeed(sf::Vector2f(5,5));
-		const float camX = _view.getCenter().x;
-		const float camY = _view.getCenter().y;
-
-		//lerp : V(t) = A + (B-A) * t
-		//Linear Interpolation from Camera's center to Character's center
-		const sf::Vector2f pos = character.getPosition();
-		int x, y;
-		x = (int)( camX + (pos.x - camX) * _speed.x*dt );
-		y = (int)( camY + (pos.y - camY) * _speed.y*dt );
-
-		scroll(x, y, x, y);
-		_view.setCenter(x, y);
-	}else {
-		sf::Vector2f c = _view.getCenter();
-		if(character.getPosition().x > _view.getSize().x/2 && character.getPosition().x < _worldLimits.width) {
-			_view.move(character.getSpeed().getX()*_speed.x, 0);
-		}
-
-		if(character.getPosition().y > _view.getSize().y/2 && character.getPosition().y < _worldLimits.height) {
-			_view.move(0, character.getSpeed().getY()*_speed.y);
-		}
+	if(_followMode = true) {
+		followCinematic(character, dt);
 	}
+	else {
+		followNormal(character, dt);
+	}
+}
+
+void Camera::followNormal(Character& character, float dt)
+{
+	if(character.getPosition().x > _view.getSize().x/2 && character.getPosition().x < _worldLimits.width) {
+		_view.move(character.getSpeed().getX()*_speed.x, 0);
+	}
+
+	if(character.getPosition().y > _view.getSize().y/2 && character.getPosition().y < _worldLimits.height) {
+		_view.move(0, character.getSpeed().getY()*_speed.y);
+	}
+}
+
+void Camera::followCinematic(Character& character, float dt)
+{
+	const float camX = _view.getCenter().x;
+	const float camY = _view.getCenter().y;
+
+	//lerp : V(t) = A + (B-A) * t
+	//Linear Interpolation from Camera's center to Character's center
+	const sf::Vector2f pos = character.getPosition();
+	int x, y;
+	x = (int)( camX + (pos.x - camX) * _speed.x*dt );
+	y = (int)( camY + (pos.y - camY) * _speed.y*dt );
+
+	scroll(x, y, x, y);
+	_view.setCenter(x, y);
 }
 
 void Camera::scroll(int x, int y, int& targetX, int& targetY) const
@@ -106,7 +111,6 @@ void Camera::scroll(int x, int y, int& targetX, int& targetY) const
 	// L  W
 	//   H
 	//stop the scrolling when out of limits
-	//if(!_stopScrollingX) return;
 	if(x < _worldLimits.left) {
 		targetX = _worldLimits.left;
 	}
@@ -114,7 +118,6 @@ void Camera::scroll(int x, int y, int& targetX, int& targetY) const
 		targetX = _worldLimits.width;
 	}
 
-	//if(!_stopScrollingY) return;
 	if(y < _worldLimits.top) {
 		targetY = _worldLimits.top;
 	}
@@ -128,25 +131,10 @@ void Camera::setWorldLimits(const sf::Rect<int>& limits)
 	const int windowX = _view.getSize().x;
 	const int windowY = _view.getSize().y;
 
-	/*if(limits.left == 0 && limits.width == 0) {
-		_stopScrollingX = true;
-		_worldLimits.left = 0;
-		_worldLimits.width = 0;
-	}
-	else {*/
-		_worldLimits.left = limits.left + windowX/2;
-		_worldLimits.width = limits.width - windowX/2;
-	//}
-
-	/*if(limits.top == 0 && limits.height == 0) {
-		_stopScrollingY = true;
-		_worldLimits.top = 0;
-		_worldLimits.height = 0;
-	}
-	else {*/
-		_worldLimits.top = limits.top + windowY/2;
-		_worldLimits.height = limits.height - windowY/2;
-	//}
+	_worldLimits.left = limits.left + windowX/2;
+	_worldLimits.width = limits.width - windowX/2;
+	_worldLimits.top = limits.top + windowY/2;
+	_worldLimits.height = limits.height - windowY/2;
 }
 
 }

@@ -131,7 +131,7 @@ private:
 	sf::View _parallaxView2;
 	sf::View _parallaxView3;
 
-	World* _world;
+	World* _world;	//TODO: Weird, should use Config -> Singleton?
 	Player* _player;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

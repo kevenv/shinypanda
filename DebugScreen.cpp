@@ -56,14 +56,14 @@ void DebugScreen::update(Engine* engine, float dt)
 void DebugScreen::render(Engine* engine)
 {
 	if(_active) {
-		sf::RenderWindow* window = engine->getWindow();
-		window->setView(window->getDefaultView());
+		sf::RenderWindow& window = engine->getWindow();
+		window.setView(window.getDefaultView());
 
 		std::stringstream sstream;
 		sstream << _fps;
 		_fpsText.setString(sstream.str() + " FPS");
 
-		window->draw(_fpsText);
+		window.draw(_fpsText);
 	}
 }
 

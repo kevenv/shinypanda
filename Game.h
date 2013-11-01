@@ -2,7 +2,6 @@
 #define SPE_GAME_H
 
 #include "GameState.h"
-#include "World.h"
 
 #include <vector>
 
@@ -10,6 +9,7 @@ namespace spe
 {
 
 class Engine;
+class World;
 class Player;
 class Camera;
 class CollisionEvent;

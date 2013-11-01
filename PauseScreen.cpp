@@ -59,11 +59,11 @@ void PauseScreen::update(Engine* engine, float dt)
 
 void PauseScreen::render(Engine* engine)
 {
-    sf::RenderWindow* window = engine->getWindow();
-	window->setView(window->getDefaultView());
-	window->clear(sf::Color::Black);
+    sf::RenderWindow& window = engine->getWindow();
+	window.setView(window.getDefaultView());
+	window.clear(sf::Color::Black);
 
-	window->draw(_text);
+	window.draw(_text);
 }
 
 }

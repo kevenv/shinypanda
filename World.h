@@ -1,9 +1,10 @@
 #ifndef SPE_WORLD_H
 #define SPE_WORLD_H
 
+#include "Level.h"
+
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include "Level.h"
 
 namespace spe
 {
