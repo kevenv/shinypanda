@@ -50,6 +50,8 @@ public:
     */
 	Camera(int w, int h, sf::Rect<int> worldLimits, int x = 0, int y = 0);
 
+	void set(int w, int h, sf::Rect<int> worldLimits, int x = 0, int y = 0);
+
 	/**
 	Make the Camera follow a Character.
 	The camera instantly follow the character.

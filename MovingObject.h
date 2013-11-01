@@ -126,6 +126,8 @@ public:
     sf::Vector2i* getCldPoints() { return _cldPoints; }
 
     virtual int getID() { return MOVING_OBJECT * Object::getID(); }
+
+	SpeedVector2<float>& getSpeed() { return _speed; }
 };
 
 }

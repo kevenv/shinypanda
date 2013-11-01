@@ -127,7 +127,7 @@ private:
 	Map* _currentMap;
 
 	Camera _mainCamera;
-	Camera _parallaxCamera;
+	sf::View _parallaxView;
 
 	World* _world;
 	Player* _player;

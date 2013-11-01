@@ -60,11 +60,13 @@ bool Level::load(const char* filePath)
 	sf::Vector2i windowSize = _world->getWindowSize();
 	_mainCamera.setWindowSize(windowSize.x, windowSize.y);
     _mainCamera.setWorldLimits(sf::Rect<int>(0,0, getMapSizeX()*_tileSize, getMapSizeY()*_tileSize));
-	const int cameraSpeed = 5;
+	const float cameraSpeed = 0.8;
+	_mainCamera.setCenter(windowSize.x/2, windowSize.y/2);
     _mainCamera.setSpeed(sf::Vector2f(cameraSpeed,cameraSpeed));
 
-	_parallaxCamera = _mainCamera;
-	_parallaxCamera.setSpeed(sf::Vector2f(cameraSpeed/2.0,cameraSpeed/2.0));
+	_parallaxView = _mainCamera.getView();
+	//_parallaxView.zoom(0.8);
+	//_parallaxView.setSpeed(sf::Vector2f(cameraSpeed/2.0,cameraSpeed/2.0));
 	//_parallaxCamera.setWorldLimits(sf::Rect<int>(0,0,0,0));
 
     return true;
@@ -274,8 +276,11 @@ void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	}*/
 
 	//set parallax camera
-	target.setView(_parallaxCamera.getView());
+	//target.setView(_parallaxCamera.getView());
 	//draw parallax layer
+	//target.draw(_currentMap->_vertices[BACKGROUND],states);
+	
+	target.setView(_parallaxView);
 	target.draw(_currentMap->_vertices[BACKGROUND],states);
 
 	//set main camera
@@ -296,7 +301,11 @@ void Level::update(float dt)
         _currentMap->_movingObjects[i]->update(dt);
     }
 	
-	_parallaxCamera.follow(*_player, dt);
+	float scale = 0.5;
+	sf::Vector2f vct(_mainCamera.getView().getCenter().x * scale, _mainCamera.getView().getCenter().y);
+	_parallaxView.setCenter(vct);
+
+	//_parallaxCamera.follow(*_player, dt);
 	//_parallaxCamera.follow(*_player);
 	//_parallaxCamera.setCenter(_player->getPosition().x, _player->getPosition().y);
 }

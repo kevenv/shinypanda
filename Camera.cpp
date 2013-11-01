@@ -38,6 +38,11 @@ Camera::Camera(int w, int h, sf::Rect<int> worldLimits, int x, int y)
 	setWorldLimits(worldLimits);
 }
 
+void Camera::set(int w, int h, sf::Rect<int> worldLimits, int x, int y)
+{
+	_view.reset(sf::FloatRect(x, y, w, h));
+}
+
 Camera& Camera::operator=(const Camera& camera)
 {
 	sf::Vector2f center = camera.getCenter();
@@ -63,18 +68,30 @@ void Camera::follow(Character& character)
 
 void Camera::follow(Character& character, float dt)
 {
-	const float camX = _view.getCenter().x;
-	const float camY = _view.getCenter().y;
+	bool cinematic = false;
+	if(cinematic) {
+		setSpeed(sf::Vector2f(5,5));
+		const float camX = _view.getCenter().x;
+		const float camY = _view.getCenter().y;
 
-    //lerp : V(t) = A + (B-A) * t
-    //Linear Interpolation from Camera's center to Character's center
-    const sf::Vector2f pos = character.getPosition();
-    int x, y;
-    x = (int)( camX + (pos.x - camX) * _speed.x*dt );
-    y = (int)( camY + (pos.y - camY) * _speed.y*dt );
+		//lerp : V(t) = A + (B-A) * t
+		//Linear Interpolation from Camera's center to Character's center
+		const sf::Vector2f pos = character.getPosition();
+		int x, y;
+		x = (int)( camX + (pos.x - camX) * _speed.x*dt );
+		y = (int)( camY + (pos.y - camY) * _speed.y*dt );
 
-    scroll(x, y, x, y);
-    _view.setCenter(x, y);
+		scroll(x, y, x, y);
+		_view.setCenter(x, y);
+	}else {
+		if(character.getPosition().x > _view.getSize().x/2 && character.getPosition().x < _worldLimits.width) {
+			_view.move(character.getSpeed().getX()*_speed.x, 0);
+		}
+
+		if(character.getPosition().y > _view.getSize().y/2 && character.getPosition().y < _worldLimits.height) {
+			_view.move(0, character.getSpeed().getY()*_speed.y);
+		}
+	}
 }
 
 void Camera::scroll(int x, int y, int& targetX, int& targetY) const
