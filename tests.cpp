@@ -36,7 +36,7 @@ void test_log()
 	Log() << "test2" << std::endl;
 	Log() << "test3";
 
-	Log(DEBUG) << "DEBU GUB UBGEUB EBUE 1" << std::endl;
+	Log(DEBUG_) << "DEBU GUB UBGEUB EBUE 1" << std::endl;
 	Log(WARNING) << "DEBU GUB UBGEUB EBUE 2" << std::endl;
 	Log(ERROR) << "DEBU GUB UBGEUB EBUE 3";
 

@@ -95,7 +95,7 @@ void Log::writePadding()
 
 void Log::writeLog()
 {
-	if(Log::_logType != DEBUG || Log::_debugMode) {
+	if(Log::_logType != DEBUG_ || Log::_debugMode) {
 		*Log::_file << Log::_buffer.str();
 
 		if(Log::_printToConsole) {

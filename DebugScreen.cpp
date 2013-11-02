@@ -38,13 +38,10 @@ void DebugScreen::handleEvents(Engine* engine)
 {
 	sf::Event event = engine->getEvent();
 
-    switch(event.type)
-    {
-	case sf::Event::KeyPressed:
+    if(event.type == sf::Event::KeyPressed) {
 		if(event.key.code == sf::Keyboard::F3) {
 			_active = !_active;
 		}
-		break;
     }
 }
 

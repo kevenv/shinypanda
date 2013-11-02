@@ -37,7 +37,7 @@ namespace spe
 enum LOG_TYPE
 {
 	NO_TYPE = -1,
-	DEBUG,
+	DEBUG_,
 	INFO,
 	WARNING,
 	ERROR,

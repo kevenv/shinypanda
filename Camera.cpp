@@ -65,7 +65,7 @@ void Camera::follow(Character& character)
 
 void Camera::follow(Character& character, float dt)
 {
-	if(_followMode = true) {
+	if(_followMode == true) {
 		followCinematic(character, dt);
 	}
 	else {

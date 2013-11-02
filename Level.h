@@ -7,13 +7,11 @@
 #include "Config.h"
 #include "tinyxml2.h"
 #include "Camera.h"
-
-#define SPE_NB_LAYERS 3
+#include "Dimension.h"
 
 namespace spe
 {
 class MovingObject;
-class Map;
 class Level;
 class World;
 class Player;
@@ -45,8 +43,10 @@ public:
 		_active = true;
     }
 
+	int _tileId;
+
 private:
-    int _tileId;
+    
 
     int _x;
     int _y;
@@ -63,25 +63,6 @@ private:
 
 };
 
-class Map
-{
-	friend class Level;
-
-public:
-    Map();
-    ~Map();
-
-private:
-    //This might look like some crazy shit but
-    //it mean to be used like this: Tile* tile = _map[layerId][y][x];
-    //then it makes sense
-    Tile*** _map[SPE_NB_LAYERS];
-    int _sizeX;
-    int _sizeY;
-    sf::VertexArray _vertices[SPE_NB_LAYERS];
-    std::vector<MovingObject*> _movingObjects;
-    std::vector<AnimatedTile*> _animatedTiles;
-};
 
 class Level: public sf::Drawable, public sf::Transformable
 {
@@ -95,8 +76,8 @@ public:
 	inline int getMapSizeX() const { return (_currentMap->_sizeX); }
 	inline int getMapSizeY() const { return (_currentMap->_sizeY); }
 
-    inline struct Map& getMap(enum DIMENSION dimension) { return (dimension == REAL) ? _mapReal : _mapDream; }
-    inline struct Map& getCurrentMap() { return *_currentMap; }
+    inline struct Dimension& getMap(enum DIMENSION dimension) { return (dimension == REAL) ? _mapReal : _mapDream; }
+    inline struct Dimension& getCurrentMap() { return *_currentMap; }
     inline void setDimension(enum DIMENSION dimension)
 	{
 		_currentDimension = dimension;
@@ -120,16 +101,13 @@ private:
 	std::vector<Tile*> _tilesPool; //clear this one
     std::vector<AnimatedTile*> _animatedTiles; //do not empty this one
 
-    Map _mapReal;
-    Map _mapDream;
+    Dimension _mapReal;
+    Dimension _mapDream;
 
     enum DIMENSION _currentDimension;
-	Map* _currentMap;
+	Dimension* _currentMap;
 
 	Camera _mainCamera;
-	sf::View _parallaxView;
-	sf::View _parallaxView2;
-	sf::View _parallaxView3;
 
 	World* _world;	//TODO: Weird, should use Config -> Singleton?
 	Player* _player;
@@ -139,9 +117,6 @@ private:
     bool loadLevelFile(const char* filePath);
     bool loadTMXFile(const char* filePath);
     void loadTMXLayer(tinyxml2::XMLElement** layerElement, int layerId, enum DIMENSION dimension);
-    bool loadINIFile(const char* filePath);
-    void setVertices(sf::VertexArray& vertices, Tile*** map, int sizeX, int sizeY);
-    void setMap(int*** map, int sizeX, int sizeY, std::string& rawMap);
 };
 
 }
