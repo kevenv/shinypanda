@@ -14,6 +14,10 @@
 #ifndef SPE_MOVING_OBJECT_H
 #define SPE_MOVING_OBJECT_H
 
+#include "CollisionEvent.h"
+
+#include <vector>
+
 #include "Object.h"
 #include "IDs.h"
 
@@ -40,6 +44,10 @@ protected:
     int _nbCldPoints; ///< The number of collision points.
     sf::Vector2i* _cldPoints; ///< Dynamic array of collision points.
     std::vector<MovingObject*> _collided; ///< Dynamic array of all the Object already collided this frame.
+
+	bool _initialDirection; ///< Direction the sprite is facing in the file. True = right, false = left.
+    sf::Texture _sprites; ///< The textures where our sprite is. This variable is useless if _transparent is true.
+	sf::Sprite _sprite; ///< The sprite of our object.
 public:
     /**
     Main constructor of the class.
@@ -54,7 +62,7 @@ public:
     @param[in] transparent If the is transparent.
     @param[in] solid If the object can't be passed through.
     */
-    MovingObject(const char* name, const char* fileName, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true, bool transparent = false, bool solid = true);
+    MovingObject(const char* name, const char* fileName, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true, bool solid = true);
 
     /**
     Update the object for the next frame.
@@ -73,6 +81,12 @@ public:
     @param[in] dt Time elapsed since the last refresh.
     */
     virtual void refreshAnimation(float dt) = 0;
+	/**
+    Get the sprite associated with this object.
+
+    @return the sprite of the object.
+    */
+    sf::Sprite getSprite() { return _sprite; }
     /**
     Refresh the sprite with the current status. Usually called by refreshAnimation.
     */
@@ -82,7 +96,40 @@ public:
     */
     virtual void switchDirection() = 0;
 
-    virtual bool isColliding(Object& object);
+	    /**
+    Verify whether a coordinates are considered "inside" the object.
+
+    This function doesn't take into account whether the object is solid or not.
+
+    See also: isColliding(sf::Vector2i& vect).
+    @param[in] x,y The coordinates to verify.
+    @return True if the coordinates are inside the object.
+    */
+    virtual bool isColliding(int x, int y) = 0;
+    /**
+    Verify whether a coordinates are considered "inside" the object.
+
+    This function doesn't take into account whether the object is solid or not.
+
+    See also: isColliding(int x, int y).
+
+    @param[in] vect The coordinates to verify.
+    @return True if the coordinates are inside the object.
+    */
+    bool isColliding(sf::Vector2i& vect) { return isColliding(vect.x, vect.y); }
+
+    /**
+    Perform the reactions of our object associated with the collision.
+
+    This function doesn't move any object, even if overlapsing.
+
+    @param[out] events The current array of event to add new events resulting of the collision.
+    @param[in] object The object colliding with our one.
+    */
+    virtual void collide(std::vector<CollisionEvent*>& events, MovingObject& object) = 0;
+
+
+    virtual bool isColliding(MovingObject& object);
 
     /**
     Verify if our object has already collided with this object in the current frame.
@@ -125,7 +172,13 @@ public:
     */
     sf::Vector2i* getCldPoints() { return _cldPoints; }
 
-    virtual int getID() { return MOVING_OBJECT * Object::getID(); }
+	/**
+    This function is there for when you want to verify if an object inherits a certain class.
+    It should return the ID associated with that class, multiplied with the ID of the class it inherites.
+
+    Every class inheriting MUST redefine this method, even if already redefined.
+    */
+    virtual int getID() { return MOVING_OBJECT * 1; }
 
 	SpeedVector2<float>& getSpeed() { return _speed; }
 };

@@ -14,16 +14,25 @@
 
 #include "MovingObject.h"
 #include "Object.h"
+#include "Log.h"
 
 #include <iostream>
 
 namespace spe
 {
 
-MovingObject::MovingObject(const char* name, const char* fileName, bool direction, int x, int y, bool inDream, bool inReal, bool transparent, bool solid)
-    : Object(name, fileName, direction, x, y, inDream, inReal, transparent, solid), _speed(SpeedVector2<float>()), _direction(direction ? 1 : -1)
+MovingObject::MovingObject(const char* name, const char* fileName, bool direction, int x, int y, bool inDream, bool inReal, bool solid)
+    : Object(name, inDream, inReal, solid), _speed(SpeedVector2<float>()), _direction(direction ? 1 : -1), _initialDirection(direction)
 {
-
+	if (fileName != NULL && *fileName != '\0') // If the name is not empty
+	{
+		if(!_sprites.loadFromFile(fileName)) // If it can't load the file.
+		{
+			Log(ERROR) << "Can't load the sprite sheet for " << _name << ".";
+		}
+		_sprite.setTexture(_sprites);
+	}
+	_sprite.setPosition(x,y);
 }
 
 void MovingObject::update(float dt)
@@ -32,7 +41,7 @@ void MovingObject::update(float dt)
     refreshAnimation(dt);
 }
 
-bool MovingObject::isColliding(Object& object)
+bool MovingObject::isColliding(MovingObject& object)
 {
     for(int i = 0; i < _nbCldPoints; i++)
         if(object.isColliding(_cldPoints[i]))

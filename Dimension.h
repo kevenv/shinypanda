@@ -1,9 +1,7 @@
 #ifndef SPE_DIMENSION_H
 #define SPE_DIMENSION_H
 
-#include <SFML/Graphics.hpp>
 #include <vector>
-
 #include "TileMap.h"
 
 #define SPE_NB_LAYERS 3
@@ -11,14 +9,16 @@
 namespace spe
 {
 
-class Level;
+class World;
+class RenderSystem;
 class MovingObject;
 class AnimatedTile;
 class ParallaxLayer;
 
 class Dimension
 {
-	friend class Level;
+	friend class World;
+	friend class RenderSystem;
 
 public:
     Dimension();

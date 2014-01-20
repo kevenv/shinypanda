@@ -60,8 +60,8 @@ protected:
     int _lCldSide; ///< the distance between the left side of the collision box and the hot spot. A negative number meaning the side is to the left of the hot spot.
     int _rCldSide; ///< the distance between the right side of the collision box and the hot spot. A negative number meaning the side is to the left of the hot spot.
 
-    virtual void refreshSprite();
-    virtual void switchDirection();
+    virtual void refreshSprite() override;
+    virtual void switchDirection() override;
     /**
     Get the index of the sprite IntRect associated with the current status.
 
@@ -110,7 +110,7 @@ public:
     */
     void kill() { _dead = true;}
 
-    virtual bool isColliding(int x, int y);
+    virtual bool isColliding(int x, int y) override;
 
     /**
     Make the character jump.
@@ -125,9 +125,9 @@ public:
     */
     virtual void walk() = 0;
 
-    virtual sf::Vector2f getPosition();
+    virtual sf::Vector2f getPosition() override;
 
-    virtual int getID() { return CHARACTER * MovingObject::getID(); }
+    virtual int getID() override { return CHARACTER * MovingObject::getID(); }
 };
 
 }

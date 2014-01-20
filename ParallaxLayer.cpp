@@ -4,9 +4,11 @@
 namespace spe
 {
 
-ParallaxLayer::ParallaxLayer(float depth)
+ParallaxLayer::ParallaxLayer(float depth, int sizeX, int sizeY, tinyxml2::XMLElement** layerElement)
+:
+	_depth(depth / 10.0f)
 {
-	_depth = depth / 10.0;
+	_map.load(sizeX, sizeY, layerElement);
 }
 
 ParallaxLayer::~ParallaxLayer()

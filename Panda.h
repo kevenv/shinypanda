@@ -29,7 +29,7 @@ namespace spe
 class Panda : public Enemy
 {
 protected:
-    virtual void refreshAnimation(float dt);
+    virtual void refreshAnimation(float dt) override;
 public:
     /**
     Main constructor for the class.
@@ -43,11 +43,11 @@ public:
     @param[in] inDream,inReal If the object is in the Dream/Real World or not.
     */
     Panda(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true);
-    virtual void updateStatus(float dt);
-    virtual void jump();
-    virtual void run();
-    virtual void walk();
-    virtual int getID() { return PANDA * Enemy::getID(); }
+    virtual void updateStatus(float dt) override;
+    virtual void jump() override;
+    virtual void run() override;
+    virtual void walk() override;
+    virtual int getID() override { return PANDA * Enemy::getID(); }
 };
 
 }

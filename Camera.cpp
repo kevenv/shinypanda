@@ -128,8 +128,8 @@ void Camera::scroll(int x, int y, int& targetX, int& targetY) const
 
 void Camera::setWorldLimits(const sf::Rect<int>& limits)
 {
-	const int windowX = _view.getSize().x;
-	const int windowY = _view.getSize().y;
+	const int windowX = (int)_view.getSize().x;
+	const int windowY = (int)_view.getSize().y;
 
 	_worldLimits.left = limits.left + windowX/2;
 	_worldLimits.width = limits.width - windowX/2;

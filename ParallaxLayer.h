@@ -2,26 +2,27 @@
 #define SPE_PARALLAX_LAYER_H
 
 #include <SFML/Graphics.hpp>
-
+#include "tinyxml2.h"
 #include "TileMap.h"
 
 namespace spe
 {
 
-class ParallaxLayer {
+class ParallaxLayer
+{
 public:
-	ParallaxLayer(float depth);
+	ParallaxLayer(float depth, int sizeX, int sizeY, tinyxml2::XMLElement** layerElement);
 	~ParallaxLayer();
 
 	void update(const sf::View& cameraView);
-	void setView(const sf::View& cameraView) { _view = cameraView; }
+	inline void setView(const sf::View& cameraView) { _view = cameraView; }
 
-	TileMap& getTileMap() { return _map; }
-	const sf::View& getView() const { return _view; }
+	inline TileMap& getTileMap() { return _map; }
+	inline const sf::View& getView() const { return _view; }
 
 private:
 	TileMap _map;
-	sf::Texture _texture;
+	//sf::Texture _texture;
 
 	float _depth;
 	sf::View _view;

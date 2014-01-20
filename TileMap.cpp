@@ -4,8 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include "tinyxml2.h"
 
-#include "Level.h"
-
 namespace spe {
 
 TileMap::TileMap():
@@ -27,7 +25,7 @@ TileMap::~TileMap()
 	delete[] _map;
 }
 
-Tile* TileMap::operator()(int x, int y)
+StaticObject* TileMap::operator()(int x, int y)
 {
 	return _map[y][x]; //TODO: CHECK BOUNDS??
 }
@@ -38,10 +36,10 @@ void TileMap::load(int sizeX, int sizeY, tinyxml2::XMLElement** layerElement)
 	_sizeY = sizeY;
 
 	//alloc layer
-    _map = new Tile**[_sizeY];
+    _map = new StaticObject**[_sizeY];
 
     for(int i = 0; i < _sizeY ; i++) {
-        _map[i] = new Tile*[_sizeX];
+        _map[i] = new StaticObject*[_sizeX];
     }
 
     //load layer
@@ -51,7 +49,7 @@ void TileMap::load(int sizeX, int sizeY, tinyxml2::XMLElement** layerElement)
         for(int x = 0; x < _sizeX; x++) {
 			//create tile
             const int tileId = tileElement->FirstAttribute()->IntValue();
-			Tile* tile = new Tile(x, y, tileId);
+			StaticObject* tile = new StaticObject(x, y, tileId);
             _map[y][x] = tile;
 			//_tilesPool.push_back(tile); //todo: HOW DO WE KNOW WICH OBJECT IS SHARED OR NOT???
             tileElement = tileElement->NextSiblingElement("tile");

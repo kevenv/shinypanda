@@ -15,7 +15,7 @@
 #define SPE_ENEMY_H
 
 #include "Character.h"
-#include "Object.h"
+#include "MovingObject.h"
 #include "IDs.h"
 
 #include <vector>
@@ -45,9 +45,9 @@ public:
     */
     Enemy(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true);
 
-    virtual void collide(std::vector<CollisionEvent*>& events, Object& object);
+    virtual void collide(std::vector<CollisionEvent*>& events, MovingObject& object) override;
 
-    virtual int getID() { return ENEMY * Character::getID(); }
+    virtual int getID() override { return ENEMY * Character::getID(); }
 };
 
 }

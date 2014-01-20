@@ -141,7 +141,7 @@ void Player::updateStatus(float dt)
     _sprite.move(_speed.getVector2());
 }
 
-void Player::collide(std::vector<CollisionEvent*>& events, Object& object)
+void Player::collide(std::vector<CollisionEvent*>& events, MovingObject& object)
 {
 
 }

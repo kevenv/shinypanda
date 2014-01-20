@@ -6,53 +6,39 @@
 #include "World.h"
 #include "Camera.h"
 #include "Player.h"
-#include "Panda.h"
 #include "MovingObject.h"
-#include "CollisionEvent.h"
+#include "RenderSystem.h"
 
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <vector>
-
-#define MAX_ITERATION_COLLISION 3
+//#define MAX_ITERATION_COLLISION 3
 
 namespace spe
 {
 
 Game::Game(Engine* engine)
-:	_world(NULL),
-	_camera(NULL),
+:	_camera(NULL),
 	_player(NULL)
 {
 }
 
 Game::~Game()
 {
-    for(std::size_t i = 0; i < _collisionEvents.size(); i++) {
+    /*for(std::size_t i = 0; i < _collisionEvents.size(); i++) {
         delete _collisionEvents[i]; //TODO: WTF WHERE IS THE "NEW" OF THIS???
-    }
+    }*/
 
-	delete _world;
 	_camera = NULL;
 	_player = NULL;
 }
 
 void Game::init(Engine* engine)
 {
-    //init world
-	_world = new World(engine->getWindowSize().x, engine->getWindowSize().y);
-    _world->load("test.world");
+	_world.setWindowSize(engine->getWindowSize().x, engine->getWindowSize().y);
+    _world.load("test.tmx");
 
-    //init moving objects
-    Level& level = _world->getCurrentLevel();
-    _player = new Player("Player", "sprites.png", "sprites.txt", 2, true, engine->getWindowSize().x/2, engine->getWindowSize().y/2);
-    level.addMovingObject(_player);
-	level.setPlayer(_player);
-    Panda* _panda = new Panda("Panda", "panda.jpg", "panda.txt", 1, false, engine->getWindowSize().x*3/4, engine->getWindowSize().y/2);
-    level.addMovingObject(_panda);
+	_player = _world.getPlayer();
+	_camera = &_world.getCamera();
 
-	//init camera
-	_camera = _world->getCamera();
+	_renderSystem.init(engine->getWindow(), _world);
 }
 
 void Game::clear()
@@ -95,27 +81,27 @@ void Game::handleEvents(Engine* engine)
 void Game::update(Engine* engine, float dt)
 {
     moveObjects(dt);
-    handleCollision();
-    _world->getCurrentLevel().update(dt);
+    //handleCollision();
+    _world.update(dt);
 	_camera->follow(*_player, dt);
 }
 
 void Game::moveObjects(float dt)
 {
-    std::vector<MovingObject*> objects = _world->getCurrentLevel().getMovingObjects();
+    std::vector<MovingObject*> objects = _world.getMovingObjects();
     for(std::size_t i = 0; i < objects.size(); i++) {
         objects[i]->updateStatus(dt);
     }
 }
-
+/*
 void Game::handleCollision()
 {
     std::vector<MovingObject*> objects = _world->getCurrentLevel().getMovingObjects();
     for(std::size_t i = 0; i < objects.size(); i++) {
         MovingObject* obj = objects[i];
-        if(obj->hasMoved()) {
+        //if(obj->hasMoved()) {
             bool moved = true;
-            for(int j = 0; moved && j < MAX_ITERATION_COLLISION; j++) {
+            //for(int j = 0; moved && j < MAX_ITERATION_COLLISION; j++) {
                 // TODO (vincent#1#): for(all tiles) verifyCollision;
                 for(std::size_t k = 0; k < objects.size(); k++) {
                     MovingObject* obj2 = objects[k];
@@ -125,8 +111,8 @@ void Game::handleCollision()
                         if(!obj2->hasCollided(*obj)) obj2->collide(_collisionEvents, *obj);
                     }
                 }
-            }
-        }
+           // }
+       // }
     }
     handleCollisionEvents();
 }
@@ -144,14 +130,11 @@ void Game::handleCollisionEvents()
         delete _collisionEvents[i];
     }
     _collisionEvents.clear();
-}
+}*/
 
 void Game::render(Engine* engine)
 {
-	sf::RenderWindow& window = engine->getWindow();
-
-	window.setView(_camera->getView());
-	window.draw(*_world);
+	_renderSystem.render(_world);
 }
 
 }

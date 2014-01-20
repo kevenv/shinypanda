@@ -14,7 +14,7 @@
 
 #include "Enemy.h"
 #include "Character.h"
-#include "Object.h"
+#include "MovingObject.h"
 #include "IDs.h"
 #include "Player.h"
 #include "CollisionEvent.h"
@@ -30,7 +30,7 @@ Enemy::Enemy(const char* name, const char* fileSprite, const char* filePosition,
 
 }
 
-void Enemy::collide(std::vector<CollisionEvent*>& events, Object& object)
+void Enemy::collide(std::vector<CollisionEvent*>& events, MovingObject& object)
 {
     if (object.getID()%PLAYER == 0)
         events.push_back(new CollisionEvent(KILL_PLAYER)); // TODO (vincent#1#): Make it less ugly? ( *(new...) )

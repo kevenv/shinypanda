@@ -1,60 +1,168 @@
 
 #include "World.h"
 
-#include <SFML/Graphics.hpp>
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include "tinyxml2.h"
+#include "Config.h"
+#include "MovingObject.h"
+#include "Camera.h"
+#include "Player.h"
+#include "Panda.h"
+#include "ParallaxLayer.h"
+#include "Dimension.h"
+#include "RenderSystem.h"
 
 namespace spe
 {
 
-World::World(int windowSizeX, int windowSizeY)
-:	_windowSize(windowSizeX, windowSizeY),
-	_currentLevelId(-1)
+World::World()
+:
+	_player(NULL),
+	_tileSize(64),
+	_currentDimension(REAL),
+	_currentMap(&_mapReal)
 {
-    //_levels.capacity();
 }
 
 World::~World()
 {
-    for(unsigned int i = 0; i < _levels.size(); i++) {
-        delete _levels[i];
+    //clear movingObjectsPool
+    for(std::size_t i = 0; i < _movingObjectsPool.size(); i++) {
+        delete _movingObjectsPool[i];
     }
+    //objects are now invalid
+	
+	//clear tilesPool
+	for(std::size_t i = 0; i < _tilesPool.size(); i++) {
+		delete _tilesPool[i];
+	}
+	//tiles are now invalid
 }
 
 bool World::load(const char* filePath)
 {
-    /*if() {
-        return true;
-    }
-    else {
+    //load level file
+    if(!loadLevelFile(filePath)) {
         return false;
-    }*/
+    }
 
-    loadLevel("test.tmx");
+	//set camera
+	_mainCamera.setWindowSize(_windowSize.x, _windowSize.y);
+    _mainCamera.setWorldLimits(sf::Rect<int>(0, 0, getMapSizeX()*_tileSize, getMapSizeY()*_tileSize));
+	_mainCamera.setFollowMode(true);
+	_mainCamera.setCenter(_windowSize.x/2, _windowSize.y/2);
+    _mainCamera.setSpeed(sf::Vector2f(5,5));
+
+	//load objects
+	_player = new Player("Player", "sprites.png", "sprites.txt", 2, true, _windowSize.x/2, _windowSize.y/2);
+	addMovingObject(_player);
+	setPlayer(_player);
+	Panda* _panda = new Panda("Panda", "panda.jpg", "panda.txt", 1, false, _windowSize.x*3/4, _windowSize.y/2);
+	addMovingObject(_panda);
 
     return true;
 }
 
-bool World::loadLevel(const char* filePath)
+bool World::loadLevelFile(const char* filePath)
 {
-    Level* level = new Level(this);
-    if(!level) {
-        return false;
+	loadTMXFile(filePath);
+
+    if(!_mapReal._map) {
+        std::cout << "WARNING: Real Map hasn't been loaded!" << std::endl;
     }
 
-    if(level->load(filePath)) {
-        _levels.push_back(level);
-        _currentLevelId++;
-        return true;
+    if(!_mapDream._map) {
+        std::cout << "WARNING: Dream Map hasn't been loaded!" << std::endl;
     }
-    else {
-        delete level;
-        return false;
-    }
+
+    return true;
 }
 
-void World::draw(sf::RenderTarget& target, sf::RenderStates states) const
+/*
+    --- TEMPORARY FUNCTION ---
+*/
+bool World::loadTMXFile(const char* filePath)
 {
-    target.draw(getCurrentLevel(), states);
+    //load tmx
+    tinyxml2::XMLDocument doc;
+    doc.LoadFile(filePath);
+    tinyxml2::XMLElement* mapElement = doc.FirstChildElement("map");
+
+    //load tileset path
+    const tinyxml2::XMLElement* tilesetElement = mapElement->FirstChildElement("tileset");
+    const tinyxml2::XMLElement* tilesetPathElement = tilesetElement->FirstChildElement("image");
+    _tilesetFilePath = tilesetPathElement->FirstAttribute()->Value();
+
+    //load tileSize
+    const tinyxml2::XMLAttribute* tileSizeAttr = tilesetElement->FirstAttribute()->Next()->Next();
+    _tileSize = tileSizeAttr->IntValue();
+
+	//load parallax layers
+	tinyxml2::XMLElement* layerElement = mapElement->FirstChildElement("layer");
+	_mapReal._sizeX = layerElement->FirstAttribute()->Next()->IntValue();
+    _mapReal._sizeY = layerElement->FirstAttribute()->Next()->Next()->IntValue();
+	
+	for(int i = 0; i < 3; i++) {
+		//const int layerId = SPE_NB_LAYERS-i+3; //load map in reverse order (background to foreground)
+		ParallaxLayer* layer = new ParallaxLayer(i+1, _mapReal._sizeX, _mapReal._sizeY, &layerElement);//layerId);
+        _mapReal._parallaxLayers.push_back(layer);
+        layerElement = layerElement->NextSiblingElement("layer");
+    }
+	
+    //load map layers
+    for(int i = 0; i < SPE_NB_LAYERS; i++) {
+        const int layerId = SPE_NB_LAYERS-i-1; //load map in reverse order (background to foreground)
+        loadTMXLayer(&layerElement, layerId, REAL);
+        layerElement = layerElement->NextSiblingElement("layer");
+    }
+
+    return true;
+}
+
+/*
+    --- TEMPORARY FUNCTION ---
+*/
+void World::loadTMXLayer(tinyxml2::XMLElement** layerElement, int layerId, enum DIMENSION dimension)
+{
+    Dimension& currentDimension = getMap(dimension);
+
+    //Get layer dimensions
+    /*currentDimension._sizeX = (*layerElement)->FirstAttribute()->Next()->IntValue();
+    currentDimension._sizeY = (*layerElement)->FirstAttribute()->Next()->Next()->IntValue();*/
+	
+	currentDimension._map[layerId].load(currentDimension._sizeX, currentDimension._sizeY, layerElement);
+
+    //check if layer is correcly loaded
+    for(int y = 0; y < currentDimension._sizeY; y++) {
+        for(int x = 0; x < currentDimension._sizeX; x++) {
+            std::cout << currentDimension._map[layerId](x,y)->_tileId << "\t";
+        }
+        std::cout << std::endl;
+    }
+
+    std::cout << std::endl;
+}
+ 
+void World::update(float dt)
+{
+    for(std::size_t i = 0; i < _movingObjectsPool.size(); i++) {
+        _currentMap->_movingObjects[i]->update(dt);
+    }
+	
+	for(std::size_t i = 0; i < _currentMap->_parallaxLayers.size(); i++) {
+		_currentMap->_parallaxLayers[i]->update(_mainCamera.getView());
+	}
+}
+
+void World::addMovingObject(MovingObject* movingObject)
+{
+    if(movingObject) {
+        _movingObjectsPool.push_back(movingObject);
+		_currentMap->_movingObjects.push_back(movingObject);
+    }
 }
 
 }

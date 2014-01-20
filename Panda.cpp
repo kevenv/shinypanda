@@ -10,7 +10,7 @@ Panda::Panda(const char* name, const char* fileSprite, const char* filePosition,
             : Enemy(name, fileSprite, filePosition, filePositionVersion, direction, x, y, inDream, inReal)
 {
     walk();
-    _speed.move(0.1,0);
+    _speed.move(0.1f,0.0f);
 }
 
 void Panda::refreshAnimation(float dt)

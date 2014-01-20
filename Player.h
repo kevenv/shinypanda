@@ -15,7 +15,6 @@
 #define SPE_PLAYER_H
 
 #include "Character.h"
-#include "Object.h"
 #include "IDs.h"
 #include "CollisionEvent.h"
 
@@ -33,7 +32,7 @@ namespace spe
 class Player : public Character
 {
 protected:
-    virtual void refreshAnimation(float dt);
+    virtual void refreshAnimation(float dt) override;
 public:
     /**
     Main constructor for the class.
@@ -47,12 +46,12 @@ public:
     @param[in] inDream,inReal If the object is in the Dream/Real World or not.
     */
     Player(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true);
-    virtual void updateStatus(float dt);
-    virtual void jump();
-    virtual void run();
-    virtual void walk();
-    virtual void collide(std::vector<CollisionEvent*>& events, Object& object);
-    virtual int getID() { return PLAYER * Character::getID(); }
+    virtual void updateStatus(float dt) override;
+    virtual void jump() override;
+    virtual void run() override;
+    virtual void walk() override;
+    virtual void collide(std::vector<CollisionEvent*>& events, MovingObject& object) override;
+    virtual int getID() override { return PLAYER * Character::getID(); }
 };
 
 }

@@ -63,8 +63,8 @@ Engine::~Engine()
 int Engine::run()
 {
 	_debugScreen.init(this);
-	//changeState(new SplashScreen());
-	changeState(new Game(this));
+	changeState(new SplashScreen());
+	//changeState(new Game(this));
 
 	sf::Clock clock;
 	float elapsedTime = 0;

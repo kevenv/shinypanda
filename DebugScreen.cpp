@@ -47,7 +47,7 @@ void DebugScreen::handleEvents(Engine* engine)
 
 void DebugScreen::update(Engine* engine, float dt)
 {
-	_fps = (int)1/dt;
+	_fps = (int)(1/dt);
 }
 
 void DebugScreen::render(Engine* engine)
