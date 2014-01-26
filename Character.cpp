@@ -26,25 +26,35 @@ namespace spe
 {
 
 Character::Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x, int y, bool inDream, bool inReal)
-            : MovingObject(name, fileSprite, direction, x, y, inDream, inReal), _state(STAND), _animationTime(0), _dead(false)
+            : MovingObject(name, x, y, inDream, inReal), _state(STAND), _animationTime(0), _dead(false),
+			_direction(direction ? 1 : -1),
+			_initialDirection(direction)
+
 {
-    // TODO (vincent#1#): Fill _cldPoints
-    //Test:
-    {
-        _nbCldPoints = 1;
-        _cldPoints = new sf::Vector2i[1];
-    }
+	if (fileSprite != NULL && *fileSprite != '\0') // If the name is not empty
+	{
+		if(!_sprites.loadFromFile(fileSprite)) // If it can't load the file.
+		{
+			Log(ERROR) << "Can't load the sprite sheet for " << _name << ".";
+		}
+		_sprite.setTexture(_sprites);
+	}
+	_sprite.setPosition(x,y);
+
     readPosition(filePosition, filePositionVersion);
     _currentOffset = getSpriteRect();
     _sprite.move(sf::Vector2f(-_offsets[_currentOffset].x,-_spriteRects[_currentOffset].height));
     refreshSprite();
+
+	_collideBox.set(x,y,_sprite.getTextureRect().width, _sprite.getTextureRect().height);
+
+	_drawObject = &_sprite;
 }
 
 Character::~Character()
 {
     delete[] _offsets;
     delete[] _spriteRects;
-    delete[] _cldPoints;
 }
 
 void Character::readPosition(const char* file, const int fileVersion)
@@ -100,16 +110,14 @@ void Character::refreshSprite()
     _currentOffset = getSpriteRect();
     sf::IntRect* rect = &_spriteRects[_currentOffset];
     if(direction < 0) // If the direction if left, do a reflection to the rectangle.
-        rect = new sf::IntRect(rect->left+rect->width, rect->top, -rect->width, rect->height);
-    _sprite.setTextureRect(*rect);
+        rect = new sf::IntRect(rect->left+rect->width, rect->top, -rect->width, rect->height); //TODO: THE FUCK IS THAT SERIOUSLY???
+    _sprite.setTextureRect(*rect); //TODO: w & h might be negative to do texture reflection, cause problem with collisions & rendering
     // If right: +lastXOffset-currentXOffset, if left: -lastXOffset+lastWidth+currentXOffset-currentWidth.
-    _sprite.move(sf::Vector2f(direction*(_offsets[lastOffset].x - _offsets[_currentOffset].x) + (direction < 0 ? _spriteRects[lastOffset].width + rect->width : 0), _spriteRects[lastOffset].height - rect->height));
+	float dx = 0;//direction*(_offsets[lastOffset].x - _offsets[_currentOffset].x) + (direction < 0 ? _spriteRects[lastOffset].width + rect->width : 0);
+	float dy = 0;//_spriteRects[lastOffset].height - rect->height;
+    _sprite.move(sf::Vector2f(dx, dy));
     if(direction < 0)
         delete rect; // Delete the new rectangle we made.
-    //Test:
-    {
-        _cldPoints[0] = sf::Vector2i(getPosition());
-    }
 }
 
 int Character::getSpriteRect()
@@ -134,20 +142,27 @@ void Character::switchDirection()
 {
     int direction = _initialDirection ? _direction : -_direction;
     //If changing for right: +width-2xOffset, if changing left: +2xOffset-width
-    _sprite.move(sf::Vector2f(direction*(2*_offsets[_currentOffset].x-_spriteRects[_currentOffset].width),0));
+	float newX = direction*(2*_offsets[_currentOffset].x-_spriteRects[_currentOffset].width);
+
+    _sprite.move(sf::Vector2f(newX,0));
     _direction *= -1;
 }
 
-bool Character::isColliding(int x, int y)
+const sf::Vector2f& Character::getPosition() const
 {
-    sf::Vector2f hotSpot = getPosition();
-    return x >= hotSpot.x+_lCldSide && x <= hotSpot.x+_rCldSide && y <= hotSpot.y && y >= hotSpot.y-_spriteRects[_currentOffset].height;
+    // If right: +width-xOffset, if left: +xOffset TODO: position use for camera following, might be useless
+    //return _sprite.getPosition() + sf::Vector2f((_initialDirection == (_direction < 0)) ? _spriteRects[_currentOffset].width - _offsets[_currentOffset].x : _offsets[_currentOffset].x, _spriteRects[_currentOffset].height);
+	return _sprite.getPosition();
 }
 
-sf::Vector2f Character::getPosition()
+void Character::update(float dt)
 {
-    // If right: +width-xOffset, if left: +xOffset
-    return _sprite.getPosition() + sf::Vector2f((_initialDirection == (_direction < 0)) ? _spriteRects[_currentOffset].width - _offsets[_currentOffset].x : _offsets[_currentOffset].x, _spriteRects[_currentOffset].height);
+	refreshAnimation(dt);
+
+	int w = getWidth();
+	int h = getHeight();
+
+	_collideBox.set(_sprite.getPosition().x, _sprite.getPosition().y, w, h);
 }
 
 }

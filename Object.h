@@ -2,6 +2,8 @@
 #ifndef SPE_OBJECT_H
 #define SPE_OBJECT_H
 
+#include <vector>
+
 namespace spe
 {
 /**
@@ -19,9 +21,11 @@ protected:
                     This variable does nothing if _collidable is false and _transparent is true. */
     bool _inDream; /**< \brief Whether the object exist in the Dream World or not.
                     This variable does nothing if _collidable is false and _transparent is true. */
+	std::vector<const Object*> _currentlyCollidingObjects; //TODO: VERY inefficient, but good enough for now
+	int _nbCurrentlyCollidingObjects;
 
 public:
-	Object() {}
+	Object();
 
     /**
     Main constructor of the class.
@@ -44,19 +48,19 @@ public:
 
     @return True if the object is solid, false otherwise.
     */
-    inline bool isSolid() { return _solid; }
+    inline bool isSolid() const { return _solid; }
     /**
     Tells whether the object exists in the Real World.
 
     @return True if the object is in the Real World, false otherwise.
     */
-    inline bool isInReal() { return _inReal; }
+    inline bool isInReal() const { return _inReal; }
     /**
     Tells whether the object exists in the Dream World.
 
     @return True if the object is in the Dream World, false otherwise.
     */
-    inline bool isInDream() { return _inDream; }
+    inline bool isInDream() const { return _inDream; }
     /**
     Get the name of the object.
 
@@ -64,7 +68,15 @@ public:
 
     @return the name of the object.
     */
-    inline const char* getName() { return _name; }
+    inline const char* getName() const { return _name; }
+
+	bool isCurrentlyColliding(const Object* object) const;
+
+	inline bool isCurrentlyColliding() const { return _nbCurrentlyCollidingObjects > 0; }
+
+	void addCurrentlyColliding(const Object* object);
+
+	void removeCurrentlyColliding(const Object* object);
 };
 
 }

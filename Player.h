@@ -16,7 +16,6 @@
 
 #include "Character.h"
 #include "IDs.h"
-#include "CollisionEvent.h"
 
 #include <vector>
 
@@ -50,8 +49,6 @@ public:
     virtual void jump() override;
     virtual void run() override;
     virtual void walk() override;
-    virtual void collide(std::vector<CollisionEvent*>& events, MovingObject& object) override;
-    virtual int getID() override { return PLAYER * Character::getID(); }
 };
 
 }

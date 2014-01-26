@@ -40,8 +40,11 @@ public:
 	inline const std::string& getTileSetFilePath() const { return _tilesetFilePath; }
 
 	inline int getTileSize() const { return _tileSize; }
-	inline int getMapSizeX() const { return (_currentMap->_sizeX); }
-	inline int getMapSizeY() const { return (_currentMap->_sizeY); }
+	inline int getMapSizeX() const { return (_currentMap->getSizeX()); }
+	inline int getMapSizeY() const { return (_currentMap->getSizeY()); }
+
+	void positionToTileCoords(float posX, float posY, int& tileX, int& tileY) const;
+	int positionToTileCoords(float pos) const;
 
     inline Dimension& getMap(enum DIMENSION dimension) { return (dimension == REAL) ? _mapReal : _mapDream; }
 	inline const Dimension& getMap(enum DIMENSION dimension) const { return (dimension == REAL) ? _mapReal : _mapDream; }
@@ -56,10 +59,11 @@ public:
 	inline Camera& getCamera() { return _mainCamera; }
 	inline const Camera& getCamera() const { return _mainCamera; }
 	inline Player* getPlayer() { return _player; }
+	inline const Player* getPlayer() const { return _player; }
 	inline void setPlayer(Player* player) { _player = player; }
 
     void addMovingObject(MovingObject* movingObject);
-    std::vector<MovingObject*>& getMovingObjects() { return _currentMap->_movingObjects; }
+    const std::vector<MovingObject*>& getMovingObjects() { return _currentMap->getMovingObjects(); }
 
 private:
     Config _levelFile;

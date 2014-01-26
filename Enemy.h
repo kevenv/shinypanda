@@ -44,10 +44,6 @@ public:
     @param[in] inDream,inReal If the object is in the Dream/Real World or not.
     */
     Enemy(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true);
-
-    virtual void collide(std::vector<CollisionEvent*>& events, MovingObject& object) override;
-
-    virtual int getID() override { return ENEMY * Character::getID(); }
 };
 
 }

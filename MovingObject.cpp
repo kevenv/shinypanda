@@ -21,39 +21,18 @@
 namespace spe
 {
 
-MovingObject::MovingObject(const char* name, const char* fileName, bool direction, int x, int y, bool inDream, bool inReal, bool solid)
-    : Object(name, inDream, inReal, solid), _speed(SpeedVector2<float>()), _direction(direction ? 1 : -1), _initialDirection(direction)
+MovingObject::MovingObject(const char* name, int x, int y, bool inDream, bool inReal, bool solid)
+    : Object(name, inDream, inReal, solid), _speed(SpeedVector2<float>()),
+	_drawObject(nullptr)
 {
-	if (fileName != NULL && *fileName != '\0') // If the name is not empty
-	{
-		if(!_sprites.loadFromFile(fileName)) // If it can't load the file.
-		{
-			Log(ERROR) << "Can't load the sprite sheet for " << _name << ".";
-		}
-		_sprite.setTexture(_sprites);
-	}
-	_sprite.setPosition(x,y);
+	_collideBox.set(x, y, 0, 0);
 }
 
-void MovingObject::update(float dt)
+MovingObject::MovingObject(const char* name, int x, int y, int w, int h, bool inDream, bool inReal, bool solid)
+    : Object(name, inDream, inReal, solid), _speed(SpeedVector2<float>()),
+	_drawObject(nullptr)
 {
-    _collided.clear();
-    refreshAnimation(dt);
-}
-
-bool MovingObject::isColliding(MovingObject& object)
-{
-    for(int i = 0; i < _nbCldPoints; i++)
-        if(object.isColliding(_cldPoints[i]))
-            return true;
-    return false;
-}
-
-bool MovingObject::hasCollided(MovingObject& object)
-{
-    std::vector<MovingObject*>::iterator end = _collided.end();
-    return std::find(_collided.begin(), end, &object) != end;
+	_collideBox.set(x, y, w, h);
 }
 
 }
-

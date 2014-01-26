@@ -49,6 +49,12 @@ const int NB_CHARACTER_STATES = 7; ///< Number of states possibles.
 class Character : public MovingObject
 {
 protected:
+	int _direction; ///< The direction of the object. -1: left, 1: right.
+	bool _initialDirection; ///< Direction the sprite is facing in the file. True = right, false = left.
+
+	sf::Texture _sprites; ///< The textures where our sprite is. This variable is useless if _transparent is true.
+	sf::Sprite _sprite; ///< The sprite of our object.
+
     CHARACTER_STATE _state; ///< Current state of the character.
     int _states[NB_CHARACTER_STATES][2]; /**< \brief Statix array containing information about the states.
                                         For each states, the first int is the first rect of the state and the second int is the number of rects.*/
@@ -60,14 +66,49 @@ protected:
     int _lCldSide; ///< the distance between the left side of the collision box and the hot spot. A negative number meaning the side is to the left of the hot spot.
     int _rCldSide; ///< the distance between the right side of the collision box and the hot spot. A negative number meaning the side is to the left of the hot spot.
 
-    virtual void refreshSprite() override;
-    virtual void switchDirection() override;
+        /**
+    Add dt to the time of the animation and refresh it. Usually called by update.
+
+    @param[in] dt Time elapsed since the last refresh.
+    */
+    virtual void refreshAnimation(float dt) = 0;
+	/**
+    Get the sprite associated with this object.
+
+    @return the sprite of the object.
+    */
+    sf::Sprite getSprite() const { return _sprite; }
+    /**
+    Refresh the sprite with the current status. Usually called by refreshAnimation.
+    */
+    virtual void refreshSprite();
+    /**
+    Change the direction of the object.
+    */
+    virtual void switchDirection();
+
+	void update(float dt) override;
+
     /**
     Get the index of the sprite IntRect associated with the current status.
 
     @return The index of the current sprite Rect.
     */
     virtual int getSpriteRect();
+
+	virtual int getWidth() const override 
+	{
+		int w = _sprite.getTextureRect().width;	
+		w = w < 0 ? -w : w; //TODO: Quickfix, texture rect shouldnt be negative..
+		return w;
+	}
+
+	virtual int getHeight() const override
+	{
+		int h = _sprite.getTextureRect().height;
+		h = h < 0 ? -h : h;//TODO: Quickfix, texture rect shouldnt be negative..
+		return h;
+	}
 
     /**
     Change the state the character is in.
@@ -110,8 +151,6 @@ public:
     */
     void kill() { _dead = true;}
 
-    virtual bool isColliding(int x, int y) override;
-
     /**
     Make the character jump.
     */
@@ -125,9 +164,7 @@ public:
     */
     virtual void walk() = 0;
 
-    virtual sf::Vector2f getPosition() override;
-
-    virtual int getID() override { return CHARACTER * MovingObject::getID(); }
+    virtual const sf::Vector2f& getPosition() const override;
 };
 
 }

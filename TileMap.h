@@ -18,13 +18,17 @@ public:
 		_y = y;
 		_tileId = tileId;
 		_active = true;
+		_solid = _tileId == 0 ? false : true;
 	}
 
-	int _tileId;
+	inline int getGridX() const { return _x; }
+	inline int getGridY() const { return _y; }
+
+	inline int getTileId() const { return _tileId; }
+	inline void setTileId(int tileId) { _tileId = tileId; }
 
 private:
-
-
+	int _tileId;
 	int _x;
 	int _y;
 
@@ -48,9 +52,12 @@ public:
 
 	void load(int sizeX, int sizeY, tinyxml2::XMLElement** layerElement);
 	void setVertices(sf::Texture tileset, int tileSize, sf::Color color = sf::Color::White);
-	StaticObject* operator()(int x, int y);
+	const StaticObject* operator()(int x, int y) const;
 
 	const sf::VertexArray& getVertices() const { return _vertices; }
+	StaticObject*** getData() { return _map; }
+	inline int getSizeX() const { return _sizeX; }
+	inline int getSizeY() const { return _sizeY; }
 
 private:
 	StaticObject*** _map; //2D Array of Tile*

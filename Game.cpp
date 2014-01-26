@@ -8,8 +8,7 @@
 #include "Player.h"
 #include "MovingObject.h"
 #include "RenderSystem.h"
-
-//#define MAX_ITERATION_COLLISION 3
+#include "PhysicSystem.h"
 
 namespace spe
 {
@@ -22,10 +21,6 @@ Game::Game(Engine* engine)
 
 Game::~Game()
 {
-    /*for(std::size_t i = 0; i < _collisionEvents.size(); i++) {
-        delete _collisionEvents[i]; //TODO: WTF WHERE IS THE "NEW" OF THIS???
-    }*/
-
 	_camera = NULL;
 	_player = NULL;
 }
@@ -39,6 +34,7 @@ void Game::init(Engine* engine)
 	_camera = &_world.getCamera();
 
 	_renderSystem.init(engine->getWindow(), _world);
+	//_physicSystem.init();
 }
 
 void Game::clear()
@@ -70,6 +66,8 @@ void Game::handleEvents(Engine* engine)
             _player->run();
 		else if(event.key.code == sf::Keyboard::Escape)
 			engine->quit();
+		if(event.key.code == sf::Keyboard::Q)
+			_renderSystem.setDebugOverlayEnabled(!_renderSystem.getDebugOverlayEnabled());
         break;
     case sf::Event::KeyReleased:
         if(event.key.code == sf::Keyboard::LShift || event.key.code == sf::Keyboard::LShift)
@@ -80,57 +78,10 @@ void Game::handleEvents(Engine* engine)
 
 void Game::update(Engine* engine, float dt)
 {
-    moveObjects(dt);
-    //handleCollision();
+	_physicSystem.udpate(_world, dt);
     _world.update(dt);
 	_camera->follow(*_player, dt);
 }
-
-void Game::moveObjects(float dt)
-{
-    std::vector<MovingObject*> objects = _world.getMovingObjects();
-    for(std::size_t i = 0; i < objects.size(); i++) {
-        objects[i]->updateStatus(dt);
-    }
-}
-/*
-void Game::handleCollision()
-{
-    std::vector<MovingObject*> objects = _world->getCurrentLevel().getMovingObjects();
-    for(std::size_t i = 0; i < objects.size(); i++) {
-        MovingObject* obj = objects[i];
-        //if(obj->hasMoved()) {
-            bool moved = true;
-            //for(int j = 0; moved && j < MAX_ITERATION_COLLISION; j++) {
-                // TODO (vincent#1#): for(all tiles) verifyCollision;
-                for(std::size_t k = 0; k < objects.size(); k++) {
-                    MovingObject* obj2 = objects[k];
-                    if(i != k && obj->isColliding(*obj2)) {
-                        // TODO (vincent#1#): if(obj->needToMove()) obj->move();
-                        if(!obj->hasCollided(*obj2)) obj->collide(_collisionEvents, *obj2);
-                        if(!obj2->hasCollided(*obj)) obj2->collide(_collisionEvents, *obj);
-                    }
-                }
-           // }
-       // }
-    }
-    handleCollisionEvents();
-}
-
-void Game::handleCollisionEvents()
-{
-    for(std::size_t i = 0; i < _collisionEvents.size(); i++) {
-        switch(_collisionEvents[i]->getType()) {
-        case KILL_PLAYER:
-            _player->kill();
-            break;
-        default:
-            break;
-        }
-        delete _collisionEvents[i];
-    }
-    _collisionEvents.clear();
-}*/
 
 void Game::render(Engine* engine)
 {

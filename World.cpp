@@ -14,6 +14,7 @@
 #include "ParallaxLayer.h"
 #include "Dimension.h"
 #include "RenderSystem.h"
+#include "DebugDude.h"
 
 namespace spe
 {
@@ -60,8 +61,13 @@ bool World::load(const char* filePath)
 	_player = new Player("Player", "sprites.png", "sprites.txt", 2, true, _windowSize.x/2, _windowSize.y/2);
 	addMovingObject(_player);
 	setPlayer(_player);
-	Panda* _panda = new Panda("Panda", "panda.jpg", "panda.txt", 1, false, _windowSize.x*3/4, _windowSize.y/2);
-	addMovingObject(_panda);
+	Panda* panda = new Panda("Panda", "panda.jpg", "panda.txt", 1, false, _windowSize.x*3/4, _windowSize.y/2);
+	addMovingObject(panda);
+
+	DebugDude* dude = new DebugDude(0, 0, 50, 50, sf::Color::Magenta);
+	addMovingObject(dude);
+	dude = new DebugDude(100, 100, 10, 80, sf::Color::Cyan, false);
+	addMovingObject(dude);
 
     return true;
 }
@@ -70,11 +76,11 @@ bool World::loadLevelFile(const char* filePath)
 {
 	loadTMXFile(filePath);
 
-    if(!_mapReal._map) {
+    if(!_mapReal.getTileMaps()) {
         std::cout << "WARNING: Real Map hasn't been loaded!" << std::endl;
     }
 
-    if(!_mapDream._map) {
+    if(!_mapDream.getTileMaps()) {
         std::cout << "WARNING: Dream Map hasn't been loaded!" << std::endl;
     }
 
@@ -102,13 +108,13 @@ bool World::loadTMXFile(const char* filePath)
 
 	//load parallax layers
 	tinyxml2::XMLElement* layerElement = mapElement->FirstChildElement("layer");
-	_mapReal._sizeX = layerElement->FirstAttribute()->Next()->IntValue();
-    _mapReal._sizeY = layerElement->FirstAttribute()->Next()->Next()->IntValue();
+	_mapReal.setSizeX(layerElement->FirstAttribute()->Next()->IntValue());
+    _mapReal.setSizeY(layerElement->FirstAttribute()->Next()->Next()->IntValue());
 	
 	for(int i = 0; i < 3; i++) {
 		//const int layerId = SPE_NB_LAYERS-i+3; //load map in reverse order (background to foreground)
-		ParallaxLayer* layer = new ParallaxLayer(i+1, _mapReal._sizeX, _mapReal._sizeY, &layerElement);//layerId);
-        _mapReal._parallaxLayers.push_back(layer);
+		ParallaxLayer* layer = new ParallaxLayer(i+1, _mapReal.getSizeX(), _mapReal.getSizeY(), &layerElement);//layerId);
+        _mapReal.getParallaxLayers().push_back(layer);
         layerElement = layerElement->NextSiblingElement("layer");
     }
 	
@@ -133,12 +139,12 @@ void World::loadTMXLayer(tinyxml2::XMLElement** layerElement, int layerId, enum 
     /*currentDimension._sizeX = (*layerElement)->FirstAttribute()->Next()->IntValue();
     currentDimension._sizeY = (*layerElement)->FirstAttribute()->Next()->Next()->IntValue();*/
 	
-	currentDimension._map[layerId].load(currentDimension._sizeX, currentDimension._sizeY, layerElement);
+	currentDimension.getTileMaps()[layerId].load(currentDimension.getSizeX(), currentDimension.getSizeY(), layerElement);
 
     //check if layer is correcly loaded
-    for(int y = 0; y < currentDimension._sizeY; y++) {
-        for(int x = 0; x < currentDimension._sizeX; x++) {
-            std::cout << currentDimension._map[layerId](x,y)->_tileId << "\t";
+    for(int y = 0; y < currentDimension.getSizeY(); y++) {
+        for(int x = 0; x < currentDimension.getSizeX(); x++) {
+            std::cout << currentDimension.getTileMaps()[layerId](x,y)->getTileId() << "\t";
         }
         std::cout << std::endl;
     }
@@ -149,11 +155,11 @@ void World::loadTMXLayer(tinyxml2::XMLElement** layerElement, int layerId, enum 
 void World::update(float dt)
 {
     for(std::size_t i = 0; i < _movingObjectsPool.size(); i++) {
-        _currentMap->_movingObjects[i]->update(dt);
+        _currentMap->getMovingObjects()[i]->update(dt); //TODO: might want to move this into Renderer since its animation related
     }
 	
-	for(std::size_t i = 0; i < _currentMap->_parallaxLayers.size(); i++) {
-		_currentMap->_parallaxLayers[i]->update(_mainCamera.getView());
+	for(std::size_t i = 0; i < _currentMap->getParallaxLayers().size(); i++) {
+		_currentMap->getParallaxLayers()[i]->update(_mainCamera.getView());
 	}
 }
 
@@ -161,8 +167,19 @@ void World::addMovingObject(MovingObject* movingObject)
 {
     if(movingObject) {
         _movingObjectsPool.push_back(movingObject);
-		_currentMap->_movingObjects.push_back(movingObject);
+		_currentMap->getMovingObjects().push_back(movingObject);
     }
+}
+
+void World::positionToTileCoords(float posX, float posY, int& tileX, int& tileY) const
+{
+	tileX = posX / _tileSize;
+	tileY = posY / _tileSize;
+}
+
+int World::positionToTileCoords(float pos) const
+{
+	return pos / _tileSize;
 }
 
 }

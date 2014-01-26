@@ -16,7 +16,6 @@
 #include "Log.h"
 #include "SpeedVector2.h"
 #include "IDs.h"
-#include "CollisionEvent.h"
 
 #include <vector>
 #include <iostream> //For cout tests
@@ -139,11 +138,6 @@ void Player::updateStatus(float dt)
             jump();
     }
     _sprite.move(_speed.getVector2());
-}
-
-void Player::collide(std::vector<CollisionEvent*>& events, MovingObject& object)
-{
-
 }
 
 void Player::jump()

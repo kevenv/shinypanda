@@ -25,7 +25,7 @@ TileMap::~TileMap()
 	delete[] _map;
 }
 
-StaticObject* TileMap::operator()(int x, int y)
+const StaticObject* TileMap::operator()(int x, int y) const
 {
 	return _map[y][x]; //TODO: CHECK BOUNDS??
 }
@@ -67,7 +67,7 @@ void TileMap::setVertices(sf::Texture tileset, int tileSize, sf::Color color)
      for (int i = 0; i < _sizeX; ++i) {
         for (int j = 0; j < _sizeY; ++j) {
             // on récupère le numéro de tuile courant
-            int tileNumber = _map[j][i]->_tileId - 1; //In TMX, tileset id start at 1 (0 is reserved)
+            int tileNumber = _map[j][i]->getTileId() - 1; //In TMX, tileset id start at 1 (0 is reserved)
 
             if(tileNumber == 35) continue; //skip tiles without texture
 

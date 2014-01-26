@@ -47,7 +47,6 @@ public:
     virtual void jump() override;
     virtual void run() override;
     virtual void walk() override;
-    virtual int getID() override { return PANDA * Enemy::getID(); }
 };
 
 }
