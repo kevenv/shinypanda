@@ -12,6 +12,7 @@ namespace spe
 
     This is an abstract class that represents all the possible objects in a map.
 */
+
 class Object
 {
 protected:
@@ -21,7 +22,7 @@ protected:
                     This variable does nothing if _collidable is false and _transparent is true. */
     bool _inDream; /**< \brief Whether the object exist in the Dream World or not.
                     This variable does nothing if _collidable is false and _transparent is true. */
-	std::vector<const Object*> _currentlyCollidingObjects; //TODO: VERY inefficient, but good enough for now
+	std::vector<Object*> _currentlyCollidingObjects;//TODO: VERY inefficient, but good enough for now
 	int _nbCurrentlyCollidingObjects;
 
 public:
@@ -74,9 +75,11 @@ public:
 
 	inline bool isCurrentlyColliding() const { return _nbCurrentlyCollidingObjects > 0; }
 
-	void addCurrentlyColliding(const Object* object);
+	void addCurrentlyColliding(Object* object);
 
 	void removeCurrentlyColliding(const Object* object);
+
+	std::vector<Object*>& getCurrentlyCollidingObjects() { return _currentlyCollidingObjects; }
 };
 
 }

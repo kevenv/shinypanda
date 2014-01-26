@@ -28,14 +28,14 @@ Object::Object(const char* name, bool inDream, bool inReal, bool solid)
 
 bool Object::isCurrentlyColliding(const Object* object) const
 {
-	std::vector<const Object*>::const_iterator start = _currentlyCollidingObjects.begin();
-	std::vector<const Object*>::const_iterator end = _currentlyCollidingObjects.end();
-	std::vector<const Object*>::const_iterator it = std::find(start, end, object);
+	std::vector<Object*>::const_iterator start = _currentlyCollidingObjects.begin();
+	std::vector<Object*>::const_iterator end = _currentlyCollidingObjects.end();
+	std::vector<Object*>::const_iterator it = std::find(start, end, object);
 
 	return it != end;
 }
 
-void Object::addCurrentlyColliding(const Object* object)
+void Object::addCurrentlyColliding(Object* object)
 {
 	if(!isCurrentlyColliding(object)) {
 		_nbCurrentlyCollidingObjects++;
@@ -48,11 +48,13 @@ void Object::removeCurrentlyColliding(const Object* object)
 	if(_nbCurrentlyCollidingObjects > 0) {
 		_nbCurrentlyCollidingObjects--;
 
-		std::vector<const Object*>::const_iterator start = _currentlyCollidingObjects.begin();
-		std::vector<const Object*>::const_iterator end = _currentlyCollidingObjects.end();
-		std::vector<const Object*>::const_iterator it = std::find(start, end, object);
+		std::vector<Object*>::const_iterator start = _currentlyCollidingObjects.begin();
+		std::vector<Object*>::const_iterator end = _currentlyCollidingObjects.end();
+		std::vector<Object*>::const_iterator it = std::find(start, end, object);
 
-		_currentlyCollidingObjects.erase(it);
+		if(it != end) {
+			_currentlyCollidingObjects.erase(it);
+		}
 	}
 }
 

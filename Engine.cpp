@@ -13,7 +13,7 @@
 namespace spe
 {
 
-std::string Engine::_version = "0.2.0";
+std::string Engine::_version = "0.3.0";
 
 Engine::Engine(int argc, char* argv[])
 {
