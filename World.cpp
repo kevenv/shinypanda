@@ -64,7 +64,7 @@ bool World::load(const char* filePath)
 	Panda* panda = new Panda("Panda", "panda.jpg", "panda.txt", 1, false, _windowSize.x*3/4, _windowSize.y/2);
 	addMovingObject(panda);
 
-	DebugDude* dude = new DebugDude(0, 0, 50, 50, sf::Color::Magenta);
+	DebugDude* dude = new DebugDude(0, 0, 100, 100, sf::Color::Magenta);
 	addMovingObject(dude);
 	dude = new DebugDude(100, 100, 10, 80, sf::Color::Cyan, false);
 	addMovingObject(dude);
