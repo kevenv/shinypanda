@@ -15,7 +15,11 @@ private:
 public:
 	EngineException(const std::string& msg);
 
-	virtual const char* what() const;
+#ifdef __GNUC__
+    virtual const char* what() const  _GLIBCXX_USE_NOEXCEPT;
+#else
+    virtual const char* what() const;
+#endif
 };
 
 }

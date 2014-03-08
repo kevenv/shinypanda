@@ -37,7 +37,6 @@ public:
 
 	StaticObject*** getPlaygroundMap() { return _maps[PLAYGROUND].getData(); }
 
-	inline 
 	inline int getSizeX() const { return _sizeX; }
 	inline int getSizeY() const { return _sizeY; }
 	inline void setSizeX(int sizeX) { _sizeX = sizeX; }

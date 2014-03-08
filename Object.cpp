@@ -1,6 +1,7 @@
 
 #include "Object.h"
 #include <vector>
+#include <algorithm>
 
 namespace spe
 {
@@ -48,9 +49,9 @@ void Object::removeCurrentlyColliding(const Object* object)
 	if(_nbCurrentlyCollidingObjects > 0) {
 		_nbCurrentlyCollidingObjects--;
 
-		std::vector<Object*>::const_iterator start = _currentlyCollidingObjects.begin();
-		std::vector<Object*>::const_iterator end = _currentlyCollidingObjects.end();
-		std::vector<Object*>::const_iterator it = std::find(start, end, object);
+		std::vector<Object*>::iterator start = _currentlyCollidingObjects.begin();
+		std::vector<Object*>::iterator end = _currentlyCollidingObjects.end();
+		std::vector<Object*>::iterator it = std::find(start, end, object);
 
 		if(it != end) {
 			_currentlyCollidingObjects.erase(it);

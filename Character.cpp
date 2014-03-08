@@ -113,8 +113,8 @@ void Character::refreshSprite()
         rect = new sf::IntRect(rect->left+rect->width, rect->top, -rect->width, rect->height); //TODO: THE FUCK IS THAT SERIOUSLY???
     _sprite.setTextureRect(*rect); //TODO: w & h might be negative to do texture reflection, cause problem with collisions & rendering
     // If right: +lastXOffset-currentXOffset, if left: -lastXOffset+lastWidth+currentXOffset-currentWidth.
-	float dx = 0;//direction*(_offsets[lastOffset].x - _offsets[_currentOffset].x) + (direction < 0 ? _spriteRects[lastOffset].width + rect->width : 0);
-	float dy = 0;//_spriteRects[lastOffset].height - rect->height;
+	float dx = direction*(_offsets[lastOffset].x - _offsets[_currentOffset].x) + (direction < 0 ? _spriteRects[lastOffset].width + rect->width : 0);
+	float dy = _spriteRects[lastOffset].height - rect->height;
     _sprite.move(sf::Vector2f(dx, dy));
     if(direction < 0)
         delete rect; // Delete the new rectangle we made.

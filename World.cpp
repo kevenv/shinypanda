@@ -35,7 +35,7 @@ World::~World()
         delete _movingObjectsPool[i];
     }
     //objects are now invalid
-	
+
 	//clear tilesPool
 	for(std::size_t i = 0; i < _tilesPool.size(); i++) {
 		delete _tilesPool[i];
@@ -110,14 +110,14 @@ bool World::loadTMXFile(const char* filePath)
 	tinyxml2::XMLElement* layerElement = mapElement->FirstChildElement("layer");
 	_mapReal.setSizeX(layerElement->FirstAttribute()->Next()->IntValue());
     _mapReal.setSizeY(layerElement->FirstAttribute()->Next()->Next()->IntValue());
-	
+
 	for(int i = 0; i < 3; i++) {
 		//const int layerId = SPE_NB_LAYERS-i+3; //load map in reverse order (background to foreground)
 		ParallaxLayer* layer = new ParallaxLayer(i+1, _mapReal.getSizeX(), _mapReal.getSizeY(), &layerElement);//layerId);
         _mapReal.getParallaxLayers().push_back(layer);
         layerElement = layerElement->NextSiblingElement("layer");
     }
-	
+
     //load map layers
     for(int i = 0; i < SPE_NB_LAYERS; i++) {
         const int layerId = SPE_NB_LAYERS-i-1; //load map in reverse order (background to foreground)
@@ -138,7 +138,7 @@ void World::loadTMXLayer(tinyxml2::XMLElement** layerElement, int layerId, enum 
     //Get layer dimensions
     /*currentDimension._sizeX = (*layerElement)->FirstAttribute()->Next()->IntValue();
     currentDimension._sizeY = (*layerElement)->FirstAttribute()->Next()->Next()->IntValue();*/
-	
+
 	currentDimension.getTileMaps()[layerId].load(currentDimension.getSizeX(), currentDimension.getSizeY(), layerElement);
 
     //check if layer is correcly loaded
@@ -151,13 +151,13 @@ void World::loadTMXLayer(tinyxml2::XMLElement** layerElement, int layerId, enum 
 
     std::cout << std::endl;
 }
- 
+
 void World::update(float dt)
 {
     for(std::size_t i = 0; i < _movingObjectsPool.size(); i++) {
         _currentMap->getMovingObjects()[i]->update(dt); //TODO: might want to move this into Renderer since its animation related
     }
-	
+
 	for(std::size_t i = 0; i < _currentMap->getParallaxLayers().size(); i++) {
 		_currentMap->getParallaxLayers()[i]->update(_mainCamera.getView());
 	}
