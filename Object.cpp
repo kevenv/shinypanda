@@ -10,8 +10,7 @@ Object::Object()
 :	_name("unknown"),
 	_solid(false),
 	_inReal(true),
-	_inDream(true),
-	_nbCurrentlyCollidingObjects(0)
+	_inDream(true)
 {
 
 }
@@ -21,8 +20,7 @@ Object::Object(const char* name, bool inDream, bool inReal, bool solid)
 	_name(name),
 	_solid(solid),
 	_inReal(inReal),
-	_inDream(inDream),
-	_nbCurrentlyCollidingObjects(0)
+	_inDream(inDream)
 {
 
 }
@@ -39,16 +37,13 @@ bool Object::isCurrentlyColliding(const Object* object) const
 void Object::addCurrentlyColliding(Object* object)
 {
 	if(!isCurrentlyColliding(object)) {
-		_nbCurrentlyCollidingObjects++;
 		_currentlyCollidingObjects.push_back(object);
 	}
 }
 
 void Object::removeCurrentlyColliding(const Object* object)
 {
-	if(_nbCurrentlyCollidingObjects > 0) {
-		_nbCurrentlyCollidingObjects--;
-
+	if(_currentlyCollidingObjects.size() > 0) {
 		std::vector<Object*>::iterator start = _currentlyCollidingObjects.begin();
 		std::vector<Object*>::iterator end = _currentlyCollidingObjects.end();
 		std::vector<Object*>::iterator it = std::find(start, end, object);
@@ -57,6 +52,11 @@ void Object::removeCurrentlyColliding(const Object* object)
 			_currentlyCollidingObjects.erase(it);
 		}
 	}
+}
+
+void Object::clearCurrentlyColliding()
+{
+	_currentlyCollidingObjects.clear();
 }
 
 }

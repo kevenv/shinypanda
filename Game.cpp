@@ -78,7 +78,7 @@ void Game::handleEvents(Engine* engine)
 
 void Game::update(Engine* engine, float dt)
 {
-	_physicSystem.udpate(_world, dt);
+	_physicSystem.update(_world, dt);
     _world.update(dt);
 	_camera->follow(*_player, dt);
 }

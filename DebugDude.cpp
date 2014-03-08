@@ -15,8 +15,6 @@ DebugDude::DebugDude(int x, int y, int w, int h, const sf::Color& color, bool mo
 
 	_collideBox.set(x, y, w, h);
 	_drawObject = &_shape;
-
-	_nbCurrentlyCollidingObjects = 0;
 }
 
 void DebugDude::update(float dt)

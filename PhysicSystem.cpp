@@ -29,42 +29,38 @@ PhysicSystem::PhysicSystem()
 
 }
 
-void PhysicSystem::udpate(World& world, float dt)
+void PhysicSystem::update(World& world, float dt)
 {
 	Dimension& map = world.getCurrentMap();
+	std::vector<MovingObject*>& movingObjects = map.getMovingObjects();
 
-	//move
-	std::vector<MovingObject*> objects = map.getMovingObjects();
-	for(std::size_t i = 0; i < objects.size(); i++) {
-		objects[i]->updateStatus(dt);
+	for(std::size_t i = 0; i < movingObjects.size(); i++) {
+		//move objects
+		movingObjects[i]->updateStatus(dt);
+
+		//clear objects collisions
+		movingObjects[i]->clearCurrentlyColliding();
 	}
 
-	const std::vector<MovingObject*>& movingObjects = map.getMovingObjects();
+	//clear static objects collisions
+	StaticObject*** rawMap = map.getPlaygroundMap();
+	for(int y = 0; y < map.getSizeY(); y++)
+	{
+		for(int x = 0; x < map.getSizeX(); x++)
+		{
+			rawMap[y][x]->clearCurrentlyColliding();
+		}
+	}
 
 	//collision detection (static object)
 	for(std::size_t i = 0; i < movingObjects.size(); i++) {
 		MovingObject* object = movingObjects[i];
 
-		std::vector<Object*> lastCollidingObjects = object->getCurrentlyCollidingObjects();
 		std::vector<StaticObject*> collideList = isColliding(object, world); //will NEVER contain dynamic objects
 		for(int j = 0; j < collideList.size(); j++) {
 			StaticObject* staticObject = collideList[j];
 			staticObject->addCurrentlyColliding(object);
 			object->addCurrentlyColliding(staticObject);
-		}
-
-		//remove static objects that are not colliding anymore
-		for(std::size_t j = 0; j < lastCollidingObjects.size(); j++) {
-			Object* objectB = lastCollidingObjects[j];
-
-			std::vector<StaticObject*>::const_iterator start = collideList.begin();
-			std::vector<StaticObject*>::const_iterator end = collideList.end();
-			std::vector<StaticObject*>::const_iterator it = std::find(start, end, objectB);
-			bool found = it != end;
-			if(!found) {
-				objectB->removeCurrentlyColliding(object); //will remove dynamic objects that might be still be colliding, but its okay since they will be re-added later if they are still colliding
-				object->removeCurrentlyColliding(objectB);
-			}
 		}
 	}
 
@@ -78,13 +74,9 @@ void PhysicSystem::udpate(World& world, float dt)
 
 			if(i == j) continue; //skip collision on self
 
-			bool colliding = objectA->isColliding(*objectB);
-			if(colliding) {
+			if(objectA->isColliding(*objectB)) {
 				objectA->addCurrentlyColliding(objectB);
 			}
-			/*else if(objectA->isCurrentlyColliding(objectB)) { //will never happen
-				objectA->removeCurrentlyColliding(objectB);
-			}*/
 		}
 	}
 }

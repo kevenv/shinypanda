@@ -58,7 +58,7 @@ class PhysicSystem
 public:
 	PhysicSystem();
 
-	void udpate(World& world, float dt);
+	void update(World& world, float dt);
 
 private:
 	bool isColliding(int x, int y, const StaticObject* staticObject, const World& world) const;

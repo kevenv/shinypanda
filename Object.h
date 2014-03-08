@@ -23,7 +23,6 @@ protected:
     bool _inDream; /**< \brief Whether the object exist in the Dream World or not.
                     This variable does nothing if _collidable is false and _transparent is true. */
 	std::vector<Object*> _currentlyCollidingObjects;//TODO: VERY inefficient, but good enough for now
-	int _nbCurrentlyCollidingObjects;
 
 public:
 	Object();
@@ -73,11 +72,13 @@ public:
 
 	bool isCurrentlyColliding(const Object* object) const;
 
-	inline bool isCurrentlyColliding() const { return _nbCurrentlyCollidingObjects > 0; }
+	inline bool isCurrentlyColliding() const { return _currentlyCollidingObjects.size() > 0; }
 
 	void addCurrentlyColliding(Object* object);
 
 	void removeCurrentlyColliding(const Object* object);
+
+	void clearCurrentlyColliding();
 
 	std::vector<Object*>& getCurrentlyCollidingObjects() { return _currentlyCollidingObjects; }
 };
