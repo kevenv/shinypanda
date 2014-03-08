@@ -99,34 +99,28 @@ std::vector<StaticObject*> PhysicSystem::isColliding(const MovingObject* movingO
 	int w = movingObject->getWidth();
 	int h = movingObject->getHeight();
 
-	int index[4][2] = { {x,y}, {x+w,y}, {x,y+h}, {x+w,y+h} };
+    int minX = world.positionToTileCoords(x);
+    int maxX = world.positionToTileCoords(x+w);
+    int minY = world.positionToTileCoords(y);
+    int maxY = world.positionToTileCoords(y+h);
 
-	for(int i = 0; i < 4; i++) {
-		int indexX = world.positionToTileCoords(index[i][0]);
-		int indexY = world.positionToTileCoords(index[i][1]);
-
-		if(map.inRange(indexX,indexY)) {
-			StaticObject* staticObject = rawMap[indexY][indexX];
-			if(isColliding(indexX, indexY, staticObject, world)) {
-				collideList.push_back(staticObject);
-			}
-		}
-	}
+    for(int indexX = minX; indexX <= maxX; indexX++) {
+        for(int indexY = minY; indexY <= maxY; indexY++) {
+            if(map.inRange(indexX,indexY)) {
+                StaticObject* staticObject = rawMap[indexY][indexX];
+                if(isColliding(indexX, indexY, staticObject, world)) {
+                    collideList.push_back(staticObject);
+                }
+            }
+        }
+    }
 
 	return collideList;
 }
 
 bool PhysicSystem::isColliding(int x, int y, const StaticObject* staticObject, const World& world) const
 {
-	int gridX = staticObject->getGridX();
-	int gridY = staticObject->getGridY();
-
-	if(x == gridX && y == gridY && staticObject->isSolid()) {
-		return true;
-	}
-	else {
-		return false;
-	}
+	return staticObject->isSolid();
 }
 
 }
