@@ -27,9 +27,10 @@
 namespace spe
 {
 
-Player::Player(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x, int y, bool inDream, bool inReal)
-            : Character(name, fileSprite, filePosition, filePositionVersion, direction, x, y, inDream, inReal)
+Player::Player(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x, int y)
+            : Character(name, fileSprite, filePosition, filePositionVersion, direction, x, y)
 {
+    setPlayer(true);
     walk();
 }
 
@@ -154,6 +155,12 @@ void Player::walk()
 {
     _speed.setXMax(WALK_MAX);
 	_speed.setYMax(WALK_MAX); //ADDED TEMPORARY FOR DEBUGGING
+}
+
+void Player::collide(Object& obj)
+{
+    if(obj.isHarmful())
+        kill();
 }
 
 }

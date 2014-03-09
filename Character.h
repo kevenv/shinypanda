@@ -96,9 +96,9 @@ protected:
     */
     virtual int getSpriteRect();
 
-	virtual int getWidth() const override 
+	virtual int getWidth() const override
 	{
-		int w = _sprite.getTextureRect().width;	
+		int w = _sprite.getTextureRect().width;
 		w = w < 0 ? -w : w; //TODO: Quickfix, texture rect shouldnt be negative..
 		return w;
 	}
@@ -136,9 +136,8 @@ public:
     @param[in] filePositionVersion Last version of the positionf file.
     @param[in] direction Direction of the sprite in the file. True = right, false = left.
     @param[in] x,y Initial position of the character.
-    @param[in] inDream,inReal If the object is in the Dream/Real World or not.
     */
-    Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true);
+    Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x = 0, int y = 0);
     /**
     Destructor.
 

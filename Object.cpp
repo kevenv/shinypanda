@@ -6,24 +6,7 @@
 namespace spe
 {
 
-Object::Object()
-:	_name("unknown"),
-	_solid(false),
-	_inReal(true),
-	_inDream(true)
-{
-
-}
-
-Object::Object(const char* name, bool inDream, bool inReal, bool solid)
-:
-	_name(name),
-	_solid(solid),
-	_inReal(inReal),
-	_inDream(inDream)
-{
-
-}
+Object::Object(const char* name) : _name(name), _solid(false), _inDream(true), _inReal(true), _harmful(false), _player(false) {}
 
 bool Object::isCurrentlyColliding(const Object* object) const
 {

@@ -18,23 +18,22 @@ class Object
 protected:
     const char* _name; ///< Name of the object.
     bool _solid; ///< Whether the object if tangible or not. If false, we can pass through it.
+    bool _player; ///< If the object is a player.
+    bool _harmful; ///< \brief Whether the object kills the player on touch or not.
     bool _inReal; /**< \brief Whether the object exist in the Real World or not.
-                    This variable does nothing if _collidable is false and _transparent is true. */
+                    This variable does nothing if _collidable is false. */
     bool _inDream; /**< \brief Whether the object exist in the Dream World or not.
-                    This variable does nothing if _collidable is false and _transparent is true. */
+                    This variable does nothing if _collidable is false. */
 	std::vector<Object*> _currentlyCollidingObjects;//TODO: VERY inefficient, but good enough for now
 
 public:
-	Object();
 
     /**
     Main constructor of the class.
 
     @param[in] name Name of the object.
-    @param[in] inDream,inReal If the object is in the Dream/Real World or not.
-    @param[in] solid If the object can't be passed through.
     */
-    Object(const char* name, bool inDream = true, bool inReal = true, bool solid = true);
+    Object(const char* name = "");
 
     /**
     Destructor.
@@ -50,17 +49,49 @@ public:
     */
     inline bool isSolid() const { return _solid; }
     /**
+    @param[in] solid If the object can't be passed through.
+    */
+    inline void setSolid(bool solid) {_solid = solid; }
+    /**
+    Tells whether the object is a player object or not.
+
+    @return True if the object is a player, false otherwise.
+    */
+    inline bool isPlayer() const { return _player; }
+    /**
+    @param[in] player If the object is a player.
+    */
+    inline void setPlayer(bool player) {_player = player; }
+    /**
+    Tells whether the object kills the player on touch or not.
+
+    @return True if the object is harmful to the player, false otherwise.
+    */
+    inline bool isHarmful() const { return _harmful; }
+    /**
+    @param[in] harmful If the object is harmful to the player.
+    */
+    inline void setHarmful(bool harmful) {_harmful = harmful; }
+    /**
     Tells whether the object exists in the Real World.
 
     @return True if the object is in the Real World, false otherwise.
     */
     inline bool isInReal() const { return _inReal; }
     /**
+    @param[in] inReal If the object is in the Real World or not.
+    */
+    inline void setInReal(bool inReal) {_inReal = inReal; }
+    /**
     Tells whether the object exists in the Dream World.
 
     @return True if the object is in the Dream World, false otherwise.
     */
     inline bool isInDream() const { return _inDream; }
+    /**
+    @param[in] inDream If the object is in the Dream World or not.
+    */
+    inline void setInDream(bool inDream) {_inDream = inDream; }
     /**
     Get the name of the object.
 
@@ -81,6 +112,15 @@ public:
 	void clearCurrentlyColliding();
 
 	std::vector<Object*>& getCurrentlyCollidingObjects() { return _currentlyCollidingObjects; }
+
+    /**
+    Handle the effects on this object from being collided by an object obj.
+
+    When overriding this method, you should call the method from the base class.
+
+    @param[in] obj Object colliding with.
+    */
+	virtual void collide(Object& obj) {}
 };
 
 }

@@ -61,6 +61,7 @@ public:
 	void update(World& world, float dt);
 
 private:
+    void handleCollision(World& world);
 	bool isColliding(int x, int y, const StaticObject* staticObject, const World& world) const;
 	std::vector<StaticObject*> isColliding(const MovingObject* movingObject, World& world) const;
 };

@@ -6,9 +6,10 @@
 namespace spe
 {
 
-Panda::Panda(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x, int y, bool inDream, bool inReal)
-            : Enemy(name, fileSprite, filePosition, filePositionVersion, direction, x, y, inDream, inReal)
+Panda::Panda(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x, int y)
+            : Enemy(name, fileSprite, filePosition, filePositionVersion, direction, x, y)
 {
+    setHarmful(true);
     walk();
     _speed.move(0.1f,0.0f);
 }
