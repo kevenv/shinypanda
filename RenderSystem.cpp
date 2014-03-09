@@ -35,7 +35,7 @@ void RenderSystem::init(sf::RenderWindow& window, World& world)
 	}
 
 	for(std::size_t i = 0; i < mapReal.getParallaxLayers().size(); i++) {
-		mapReal.getParallaxLayers()[i]->getTileMap().setVertices(_tileset, _tileSize, sf::Color(128,128,128));
+		mapReal.getParallaxLayers()[i]->getTileMap().setVertices(_tileset, _tileSize);//, sf::Color(128,128,128));
 	}
 
 	//set parallax views
@@ -50,7 +50,7 @@ void RenderSystem::render(const World& world)
 	sf::RenderStates states = sf::RenderStates::Default;
 	states.texture = &_tileset;
 
-	_window->clear(sf::Color(0,0,0));
+	_window->clear(sf::Color(208,244,247));
 	
 	//draw parallax layers
 	const Dimension& map = world.getCurrentMap();

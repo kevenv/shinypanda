@@ -22,7 +22,7 @@ namespace spe
 World::World()
 :
 	_player(NULL),
-	_tileSize(64),
+	_tileSize(-1),
 	_currentDimension(REAL),
 	_currentMap(&_mapReal)
 {

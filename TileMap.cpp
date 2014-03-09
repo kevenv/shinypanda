@@ -69,11 +69,16 @@ void TileMap::setVertices(sf::Texture tileset, int tileSize, sf::Color color)
             // on récupère le numéro de tuile courant
             int tileNumber = _map[j][i]->getTileId() - 1; //In TMX, tileset id start at 1 (0 is reserved)
 
-            if(tileNumber == 35) continue; //skip tiles without texture
+            //if(tileNumber == 35) continue; //skip tiles without texture
+			if(tileNumber == -1) continue;
 
             // on en déduit sa position dans la texture du tileset
+			const int offset = 1;
             int tu = tileNumber % (tileset.getSize().x / tileSize);
             int tv = tileNumber / (tileset.getSize().x / tileSize);
+
+			int offsetX = tu * offset;
+			int offsetY = tv * offset;
 
             // on récupère un pointeur vers le quad à définir dans le tableau de vertex
             sf::Vertex* quad = &_vertices[(i + j * _sizeX) * 4];
@@ -85,10 +90,10 @@ void TileMap::setVertices(sf::Texture tileset, int tileSize, sf::Color color)
             quad[3].position = sf::Vector2f(i * tileSize, (j + 1) * tileSize);
 
             // on définit ses quatre coordonnées de texture
-            quad[0].texCoords = sf::Vector2f(tu * tileSize, tv * tileSize);
-            quad[1].texCoords = sf::Vector2f((tu + 1) * tileSize, tv * tileSize);
-            quad[2].texCoords = sf::Vector2f((tu + 1) * tileSize, (tv + 1) * tileSize);
-            quad[3].texCoords = sf::Vector2f(tu * tileSize, (tv + 1) * tileSize);
+            quad[0].texCoords = sf::Vector2f( tu		* tileSize	+ offsetX, tv		* tileSize	+ offsetY);
+            quad[1].texCoords = sf::Vector2f( (tu + 1)	* tileSize	+ offsetX, tv		* tileSize	+ offsetY);
+            quad[2].texCoords = sf::Vector2f( (tu + 1)	* tileSize	+ offsetX, (tv + 1)	* tileSize	+ offsetY);
+            quad[3].texCoords = sf::Vector2f( tu		* tileSize	+ offsetX, (tv + 1) * tileSize	+ offsetY);
 			
 			//blend texture with color
 			quad[0].color = color;
