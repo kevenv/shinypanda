@@ -33,7 +33,10 @@ MovingObject::MovingObject(const char* name, int x, int y, int w, int h) : Objec
 
 void MovingObject::collide(Object& obj)
 {
+    if(obj.isSolid())
+    {
 
+    }
 }
 
 }
