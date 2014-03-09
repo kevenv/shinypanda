@@ -79,6 +79,41 @@ void PhysicSystem::update(World& world, float dt)
 			}
 		}
 	}
+
+	handleCollision(world);
+}
+
+void PhysicSystem::handleCollision(World& world)
+{
+	Dimension& map = world.getCurrentMap();
+
+	//Static objects collisions
+    StaticObject*** rawMap = map.getPlaygroundMap();
+	for(int y = 0; y < map.getSizeY(); y++)
+	{
+		for(int x = 0; x < map.getSizeX(); x++)
+		{
+			StaticObject* staticObject = rawMap[y][x];
+			std::vector<Object*> collideList = staticObject->getCurrentlyCollidingObjects();
+			std::vector<Object*>::const_iterator end = collideList.end();
+			for(std::vector<Object*>::iterator it = collideList.begin(); it != end; ++it)
+            {
+                staticObject->collide(**it);
+            }
+		}
+	}
+
+	//Dynamic objects collisions
+	std::vector<MovingObject*>& movingObjects = map.getMovingObjects();
+	for(std::size_t i = 0; i < movingObjects.size(); i++) {
+		MovingObject* movingObject = movingObjects[i];
+        std::vector<Object*> collideList = movingObject->getCurrentlyCollidingObjects();
+        std::vector<Object*>::const_iterator end = collideList.end();
+        for(std::vector<Object*>::iterator it = collideList.begin(); it != end; ++it)
+        {
+            movingObject->collide(**it);
+        }
+	}
 }
 
 std::vector<StaticObject*> PhysicSystem::isColliding(const MovingObject* movingObject, World& world) const

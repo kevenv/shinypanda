@@ -25,11 +25,8 @@
 namespace spe
 {
 
-Character::Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x, int y, bool inDream, bool inReal)
-            : MovingObject(name, x, y, inDream, inReal), _state(STAND), _animationTime(0), _dead(false),
-			_direction(direction ? 1 : -1),
-			_initialDirection(direction)
-
+Character::Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x, int y)
+            : MovingObject(name, x, y), _state(STAND), _animationTime(0), _dead(false), _direction(direction ? 1 : -1), _initialDirection(direction)
 {
 	if (fileSprite != NULL && *fileSprite != '\0') // If the name is not empty
 	{

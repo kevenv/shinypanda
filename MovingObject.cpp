@@ -21,18 +21,22 @@
 namespace spe
 {
 
-MovingObject::MovingObject(const char* name, int x, int y, bool inDream, bool inReal, bool solid)
-    : Object(name, inDream, inReal, solid), _speed(SpeedVector2<float>()),
-	_drawObject(nullptr)
+MovingObject::MovingObject(const char* name, int x, int y) : Object(name), _speed(SpeedVector2<float>()), _drawObject(nullptr)
 {
 	_collideBox.set(x, y, 0, 0);
 }
 
-MovingObject::MovingObject(const char* name, int x, int y, int w, int h, bool inDream, bool inReal, bool solid)
-    : Object(name, inDream, inReal, solid), _speed(SpeedVector2<float>()),
-	_drawObject(nullptr)
+MovingObject::MovingObject(const char* name, int x, int y, int w, int h) : Object(name), _speed(SpeedVector2<float>()), _drawObject(nullptr)
 {
 	_collideBox.set(x, y, w, h);
+}
+
+void MovingObject::collide(Object& obj)
+{
+    if(obj.isSolid())
+    {
+
+    }
 }
 
 }

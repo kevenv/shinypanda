@@ -52,13 +52,10 @@ public:
     @param[in] fileName Path of the file containing the sprite(s).
     @param[in] direction Direction the sprite is facing in the file. true = right, false = left.
     @param[in] x,y Position of the object.
-    @param[in] inDream,inReal If the object is in the Dream/Real World or not.
-    @param[in] transparent If the is transparent.
-    @param[in] solid If the object can't be passed through.
     */
-    MovingObject(const char* name, int x = 0, int y = 0, bool inDream = true, bool inReal = true, bool solid = true);
+    MovingObject(const char* name, int x = 0, int y = 0);
 
-	MovingObject(const char* name, int x, int y, int w, int h, bool inDream, bool inReal, bool solid);
+	MovingObject(const char* name, int x, int y, int w, int h);
 
     /**
     Update the object for the next frame.
@@ -91,6 +88,8 @@ public:
 
 	virtual int getWidth() const = 0;
 	virtual int getHeight() const = 0;
+
+	virtual void collide(Object& obj) override;
 
 	inline const sf::Drawable& getDrawObject() const { return *_drawObject; }
 

@@ -42,13 +42,13 @@ public:
     @param[in] filePositionVersion Last version of the positionf file.
     @param[in] direction Direction of the sprite in the file. True = right, false = left.
     @param[in] x,y Initial position of the player.
-    @param[in] inDream,inReal If the object is in the Dream/Real World or not.
     */
-    Player(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x = 0, int y = 0, bool inDream = true, bool inReal = true);
+    Player(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x = 0, int y = 0);
     virtual void updateStatus(float dt) override;
     virtual void jump() override;
     virtual void run() override;
     virtual void walk() override;
+    virtual void collide(Object& obj) override;
 };
 
 }
