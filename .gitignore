@@ -24,6 +24,10 @@
 *.pdb
 *.opensdf
 
+# linux files
+.directory
+
 # temp files
 project/vs2013/tmp/
-project/kdevelop/build
+project/kdevelop/build/
+bin/
