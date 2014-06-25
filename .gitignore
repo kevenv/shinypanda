@@ -2,10 +2,12 @@
 *.slo
 *.lo
 *.o
+*.obj
 
 # Compiled Dynamic libraries
 *.so
 *.dylib
+*.dll
 
 # Compiled Static libraries
 *.lai
@@ -14,3 +16,14 @@
 
 # Log files
 *.log
+
+# vs files
+*.sdf
+*.filters
+*.suo
+*.pdb
+*.opensdf
+
+# temp files
+project/vs2013/tmp/
+project/kdevelop/build
