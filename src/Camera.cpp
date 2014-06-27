@@ -1,22 +1,8 @@
-/**
-    @file Camera.h
-    @author Keven Villeneuve <kev.v@hotmail.com>
-    @version 1.0
 
-    @section LICENSE
-
-
-
-    @section DESCRIPTION
-
-    Represent and control the game world's Camera.
-*/
 #include "Camera.h"
 
-#include "Character.h"
-
 #include <SFML/Graphics.hpp>
-#include <iostream>
+#include "Character.h"
 
 namespace spe
 {
@@ -29,8 +15,7 @@ Camera::Camera():
 {
 }
 
-Camera::Camera(int w, int h, sf::Rect<int> worldLimits, int x, int y)
-:
+Camera::Camera(int w, int h, sf::Rect<int> worldLimits, int x, int y):
 	_speed(1,1),
 	_worldLimits(0,0,0,0),
 	_view(sf::FloatRect(x, y, w, h)),
@@ -59,7 +44,7 @@ void Camera::follow(Character& character)
     int y = 0;
     sf::Vector2f pos = character.getPosition();
 
-    scroll(pos.x, pos.y, x, y);
+    scroll((int)pos.x, (int)pos.y, x, y);
 	_view.setCenter(x, y);
 }
 

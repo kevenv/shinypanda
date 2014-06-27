@@ -1,14 +1,16 @@
 
 #include "DebugScreen.h"
 
-#include "Engine.h"
 #include <SFML/Graphics.hpp>
 #include <sstream>
+#include "Engine.h"
 
 namespace spe
 {
 
-DebugScreen::DebugScreen()
+DebugScreen::DebugScreen():
+	_active(true),
+	_fps(0)
 {
 	_font.loadFromFile("arial.ttf");
 
@@ -17,26 +19,26 @@ DebugScreen::DebugScreen()
 	_fpsText.setPosition(10,10);
 	_fpsText.setColor(sf::Color::Red);
 	_fpsText.setFont(_font);
-
-	_active = true;
-	_fps = 0;
 }
 
 DebugScreen::~DebugScreen()
 {
+
 }
 
 void DebugScreen::init(Engine* engine)
 {
+
 }
 
 void DebugScreen::clear()
 {
+
 }
 
 void DebugScreen::handleEvents(Engine* engine)
 {
-	sf::Event event = engine->getEvent();
+	const sf::Event event = engine->getEvent();
 
     if(event.type == sf::Event::KeyPressed) {
 		if(event.key.code == sf::Keyboard::F3) {
@@ -53,7 +55,7 @@ void DebugScreen::update(Engine* engine, float dt)
 void DebugScreen::render(Engine* engine)
 {
 	if(_active) {
-		sf::RenderWindow& window = engine->getWindow();
+		sf::RenderWindow& window = engine->accessWindow();
 		window.setView(window.getDefaultView());
 
 		std::stringstream sstream;

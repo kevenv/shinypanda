@@ -39,7 +39,7 @@ void DebugDude::updateStatus(float dt)
 		_shape.move(0, _maxSpeed);
 	}
 
-	_collideBox.set(_shape.getPosition().x, _shape.getPosition().y, _shape.getSize().x, _shape.getSize().y);
+	_collideBox.set((int)_shape.getPosition().x, (int)_shape.getPosition().y, (int)_shape.getSize().x, (int)_shape.getSize().y);
 }
 
 const sf::Vector2f& DebugDude::getPosition() const
@@ -49,12 +49,12 @@ const sf::Vector2f& DebugDude::getPosition() const
 
 int DebugDude::getWidth() const
 {
-	return _shape.getSize().x;
+	return (int)_shape.getSize().x;
 }
 
 int DebugDude::getHeight() const
 {
-	return _shape.getSize().y;
+	return (int)_shape.getSize().y;
 }
 
 }

@@ -113,7 +113,7 @@ public:
 
     @return The absolute value of x.
     */
-    int getSpeedX() { return ABS(_x); }
+    int getSpeedX() { return (int)ABS(_x); }
     /**
     Get the x coordinate of the vector.
 

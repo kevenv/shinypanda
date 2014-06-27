@@ -6,8 +6,9 @@ namespace spe
 {
 
 EngineException::EngineException(const std::string& msg)
+:	msg("EngineException: " + msg)
 {
-	this->msg = "EngineException: " + msg;
+
 }
 
 #ifdef __GNUC__

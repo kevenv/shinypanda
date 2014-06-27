@@ -27,7 +27,7 @@ bool Config::parse(const char* filePath)
     file.open(filePath);
 
     if(!file) {
-        Log(ERROR) << "Can't open config file '" << filePath << "'";
+		Log(LOG_TYPE::ERROR) << "Can't open config file '" << filePath << "'";
         return false;
     }
 
@@ -46,7 +46,7 @@ bool Config::parse(const char* filePath)
         else if(!isComment(line) &&
                 !isEmpty(line)) {
             //otherwise flag line
-            Log(ERROR) << "Config: invalid line at '" << lineNb << "' : " << line;
+			Log(LOG_TYPE::ERROR) << "Config: invalid line at '" << lineNb << "' : " << line;
             return false;
         }
     }
@@ -78,7 +78,7 @@ bool Config::parseSection(const std::string& section, std::ifstream& file, int& 
             continue;
         }
         else {
-            Log(ERROR) << "Config: invalid line at '" << lineNb << "' : " << line;
+			Log(LOG_TYPE::ERROR) << "Config: invalid line at '" << lineNb << "' : " << line;
             return false;
         }
     }
@@ -117,7 +117,7 @@ void Config::extractLine(const std::string& section, const std::string& line, st
         _map.insert(std::pair<std::string, std::string>(key, value));
     }
     else {
-        Log(ERROR) << "Config: Can only have unique key names!";
+		Log(LOG_TYPE::ERROR) << "Config: Can only have unique key names!";
     }
 }
 

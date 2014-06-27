@@ -5,6 +5,7 @@
 
 namespace spe
 {
+
 class World;
 class MovingObject;
 class StaticObject;

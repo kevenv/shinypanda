@@ -30,7 +30,7 @@ private:
 	sf::Clock _timer;
 	sf::Texture _logo;
 	sf::RectangleShape _square;
-	int _transparency;
+	sf::Uint8 _transparency;
 	sf::Music _thunder;
 };
 

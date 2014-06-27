@@ -38,10 +38,10 @@ void Player::refreshAnimation(float dt)
 {
     if(_dead)
     {
-        if(_state != DEAD)
+		if (_state != CHARACTER_STATE::DEAD)
         {
             _animationTime = dt;
-            changeState(DEAD);
+			changeState(CHARACTER_STATE::DEAD);
         }
         else
             _animationTime += dt;
@@ -61,17 +61,17 @@ void Player::refreshAnimation(float dt)
     {
         if(_speed.getSpeedX() > WALK_MAX)
         {
-            if(_state != RUN)
+			if (_state != CHARACTER_STATE::RUN)
             {
                 _animationTime = dt;
-                changeState(RUN);
+				changeState(CHARACTER_STATE::RUN);
             }
             else _animationTime += dt;
         }
-        else if(_state != WALK)
+		else if (_state != CHARACTER_STATE::WALK)
         {
             _animationTime = dt;
-            changeState(WALK);
+			changeState(CHARACTER_STATE::WALK);
         }
         else
             _animationTime += dt;
@@ -80,10 +80,10 @@ void Player::refreshAnimation(float dt)
     }
     else
     {
-        if(_state != STAND)
+		if (_state != CHARACTER_STATE::STAND)
         {
             _animationTime = dt;
-            changeState(STAND);
+            changeState(CHARACTER_STATE::STAND);
         }
         else
             _animationTime += dt;

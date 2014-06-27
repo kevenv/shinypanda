@@ -26,7 +26,7 @@ namespace spe
     @enum CHARACTER_STATE
     @brief Each of the value represents of possible state of the character.
 */
-enum CHARACTER_STATE
+enum class CHARACTER_STATE
 {
     STAND, ///< The character isn't moving.
     WALK, ///< The character is walking.

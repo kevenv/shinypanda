@@ -36,15 +36,15 @@ void test_log()
 	Log() << "test2" << std::endl;
 	Log() << "test3";
 
-	Log(DEBUG_) << "DEBU GUB UBGEUB EBUE 1" << std::endl;
-	Log(WARNING) << "DEBU GUB UBGEUB EBUE 2" << std::endl;
-	Log(ERROR) << "DEBU GUB UBGEUB EBUE 3";
+	Log(LOG_TYPE::DEBUG_) << "DEBU GUB UBGEUB EBUE 1" << std::endl;
+	Log(LOG_TYPE::WARNING) << "DEBU GUB UBGEUB EBUE 2" << std::endl;
+	Log(LOG_TYPE::ERROR) << "DEBU GUB UBGEUB EBUE 3";
 
-	Log(ERROR) << "ERREEUR AHAHHA";
-	Log(ERROR) << "ERREEUR2 AHAHHA";
-	Log(WARNING) << "ERREEUR2 AHAHHA";
+	Log(LOG_TYPE::ERROR) << "ERREEUR AHAHHA";
+	Log(LOG_TYPE::ERROR) << "ERREEUR2 AHAHHA";
+	Log(LOG_TYPE::WARNING) << "ERREEUR2 AHAHHA";
 
-	Log(ERROR) << "test1" << std::endl; //multi lines
+	Log(LOG_TYPE::ERROR) << "test1" << std::endl; //multi lines
 	Log() << "test2" << std::endl;
 	Log() << "test3";
 

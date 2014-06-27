@@ -11,9 +11,9 @@
 namespace spe
 {
 
-std::ofstream* Log::_file = NULL;
+std::ofstream* Log::_file = nullptr;
 std::stringstream Log::_buffer;
-enum LOG_TYPE Log::_logType = NO_TYPE;
+LOG_TYPE Log::_logType = LOG_TYPE::NO_TYPE;
 char Log::_logTypeStr[] = {'*','?', '!', 'X'};
 
 bool Log::_initialized = false;
@@ -27,7 +27,7 @@ bool Log::_debugMode = true;
 bool Log::_debugMode = false;
 #endif
 
-Log::Log(enum LOG_TYPE logType)
+Log::Log(LOG_TYPE logType)
 {
 	if(Log::_newLine) {
 		//overwrite the log type only if the message is written on a new line
@@ -75,9 +75,9 @@ void Log::close()
 
 void Log::writeHeader()
 {
-	char logTypeStr = getLogTypeStr();
+	char logTypeStr = accessLogTypeStr();
 
-	const struct tm *const time = getTime();
+	const struct tm *const time = accessTime();
 	char dateStr[11];
 	strftime(dateStr, sizeof(dateStr), "%Y-%m-%d", time);
 	char timeStr[9];
@@ -95,7 +95,7 @@ void Log::writePadding()
 
 void Log::writeLog()
 {
-	if(Log::_logType != DEBUG_ || Log::_debugMode) {
+	if (Log::_logType != LOG_TYPE::DEBUG_ || Log::_debugMode) {
 		*Log::_file << Log::_buffer.str();
 
 		if(Log::_printToConsole) {
@@ -104,11 +104,11 @@ void Log::writeLog()
 	}
 }
 
-const struct tm *const Log::getTime()
+const struct tm *const Log::accessTime()
 {
-	const time_t rawTime = time(NULL);
+	const time_t rawTime = time(nullptr);
 	if(rawTime == -1) {
-		return NULL;
+		return nullptr;
 	}
 
 	return localtime(&rawTime);

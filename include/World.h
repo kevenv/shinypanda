@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <sfml/Graphics.hpp>
 #include "Config.h"
 #include "tinyxml2.h"
 #include "Camera.h"
@@ -13,7 +14,7 @@ namespace spe
 class MovingObject;
 class Player;
 
-enum DIMENSION
+enum class DIMENSION
 {
     REAL,
     DREAM
@@ -26,14 +27,14 @@ enum DIMENSION
 class World
 {
 public:
-    World();
-    ~World();
+	World();
+	~World();
 
-    bool load(const char* filePath);
-    void update(float dt);
+	bool load(const char* filePath);
+	void update(float dt);
 
 	inline void setWindowSize(int windowSizeX, int windowSizeY)
-	{	
+	{
 		_windowSize.x = windowSizeX;
 		_windowSize.y = windowSizeY;
 	}
@@ -46,24 +47,25 @@ public:
 	void positionToTileCoords(float posX, float posY, int& tileX, int& tileY) const;
 	int positionToTileCoords(float pos) const;
 
-    inline Dimension& getMap(enum DIMENSION dimension) { return (dimension == REAL) ? _mapReal : _mapDream; }
-	inline const Dimension& getMap(enum DIMENSION dimension) const { return (dimension == REAL) ? _mapReal : _mapDream; }
-    inline Dimension& getCurrentMap() { return *_currentMap; }
+	inline Dimension& accessMap(DIMENSION dimension) { return (dimension == DIMENSION::REAL) ? _mapReal : _mapDream; }
+	inline const Dimension& getMap(DIMENSION dimension) const { return (dimension == DIMENSION::REAL) ? _mapReal : _mapDream; }
+	inline Dimension& accessCurrentMap() { return *_currentMap; }
 	inline const Dimension& getCurrentMap() const { return *_currentMap; }
-    inline void setDimension(enum DIMENSION dimension)
+	inline void setDimension(DIMENSION dimension)
 	{
 		_currentDimension = dimension;
-		_currentMap = _currentDimension == REAL ? &_mapReal : &_mapDream;
+		_currentMap = _currentDimension == DIMENSION::REAL ? &_mapReal : &_mapDream;
 	}
 
-	inline Camera& getCamera() { return _mainCamera; }
+	inline Camera& accessCamera() { return _mainCamera; }
 	inline const Camera& getCamera() const { return _mainCamera; }
-	inline Player* getPlayer() { return _player; }
-	inline const Player* getPlayer() const { return _player; }
+	inline Camera* accessCameraPtr() { return &_mainCamera; }
+	inline Player* accessPlayerPtr() { return _player; }
+	inline const Player* getPlayerPtr() const { return _player; }
 	inline void setPlayer(Player* player) { _player = player; }
 
     void addMovingObject(MovingObject* movingObject);
-    const std::vector<MovingObject*>& getMovingObjects() { return _currentMap->getMovingObjects(); }
+    const std::vector<MovingObject*>& getMovingObjects() const { return _currentMap->getMovingObjects(); }
 
 private:
     Config _levelFile;
@@ -78,15 +80,15 @@ private:
     Dimension _mapReal;
     Dimension _mapDream;
 
-    enum DIMENSION _currentDimension;
+    DIMENSION _currentDimension;
 	Dimension* _currentMap;
 
 	Camera _mainCamera;
-	Player* _player;	//ptr to player in movingobject list
+	Player* _player;	//ptr to player in movingObject list
 
     bool loadLevelFile(const char* filePath);
     bool loadTMXFile(const char* filePath);
-    void loadTMXLayer(tinyxml2::XMLElement** layerElement, int layerId, enum DIMENSION dimension);
+    void loadTMXLayer(tinyxml2::XMLElement** layerElement, int layerId, DIMENSION dimension);
 };
 
 }

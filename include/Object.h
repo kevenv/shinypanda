@@ -111,7 +111,8 @@ public:
 
 	void clearCurrentlyColliding();
 
-	std::vector<Object*>& getCurrentlyCollidingObjects() { return _currentlyCollidingObjects; }
+	std::vector<Object*>& accessCurrentlyCollidingObjects() { return _currentlyCollidingObjects; }
+	const std::vector<Object*>& getCurrentlyCollidingObjects() { return _currentlyCollidingObjects; }
 
     /**
     Handle the effects on this object from being collided by an object obj.

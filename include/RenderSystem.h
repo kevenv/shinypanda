@@ -8,12 +8,14 @@
 
 namespace spe
 {
+
 class AnimatedTile;
 
 class RenderSystem
 {
 public:
 	RenderSystem();
+
 	void init(sf::RenderWindow& window, World& world);
 	void render(const World& world);
 

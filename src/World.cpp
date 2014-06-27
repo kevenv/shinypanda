@@ -21,9 +21,9 @@ namespace spe
 
 World::World()
 :
-	_player(NULL),
+	_player(nullptr),
 	_tileSize(-1),
-	_currentDimension(REAL),
+	_currentDimension(DIMENSION::REAL),
 	_currentMap(&_mapReal)
 {
 }
@@ -114,14 +114,14 @@ bool World::loadTMXFile(const char* filePath)
 	for(int i = 0; i < 3; i++) {
 		//const int layerId = SPE_NB_LAYERS-i+3; //load map in reverse order (background to foreground)
 		ParallaxLayer* layer = new ParallaxLayer(i+1, _mapReal.getSizeX(), _mapReal.getSizeY(), &layerElement);//layerId);
-        _mapReal.getParallaxLayers().push_back(layer);
+        _mapReal.accessParallaxLayers().push_back(layer);
         layerElement = layerElement->NextSiblingElement("layer");
     }
 
     //load map layers
     for(int i = 0; i < SPE_NB_LAYERS; i++) {
         const int layerId = SPE_NB_LAYERS-i-1; //load map in reverse order (background to foreground)
-        loadTMXLayer(&layerElement, layerId, REAL);
+		loadTMXLayer(&layerElement, layerId, DIMENSION::REAL);
         layerElement = layerElement->NextSiblingElement("layer");
     }
 
@@ -131,15 +131,15 @@ bool World::loadTMXFile(const char* filePath)
 /*
     --- TEMPORARY FUNCTION ---
 */
-void World::loadTMXLayer(tinyxml2::XMLElement** layerElement, int layerId, enum DIMENSION dimension)
+void World::loadTMXLayer(tinyxml2::XMLElement** layerElement, int layerId, DIMENSION dimension)
 {
-    Dimension& currentDimension = getMap(dimension);
+	Dimension& currentDimension = accessMap(dimension);
 
     //Get layer dimensions
     /*currentDimension._sizeX = (*layerElement)->FirstAttribute()->Next()->IntValue();
     currentDimension._sizeY = (*layerElement)->FirstAttribute()->Next()->Next()->IntValue();*/
 
-	currentDimension.getTileMaps()[layerId].load(currentDimension.getSizeX(), currentDimension.getSizeY(), layerElement);
+	currentDimension.accessTileMaps()[layerId].load(currentDimension.getSizeX(), currentDimension.getSizeY(), layerElement);
 
     //check if layer is correcly loaded
     for(int y = 0; y < currentDimension.getSizeY(); y++) {
@@ -167,19 +167,19 @@ void World::addMovingObject(MovingObject* movingObject)
 {
     if(movingObject) {
         _movingObjectsPool.push_back(movingObject);
-		_currentMap->getMovingObjects().push_back(movingObject);
+		_currentMap->accessMovingObjects().push_back(movingObject);
     }
 }
 
 void World::positionToTileCoords(float posX, float posY, int& tileX, int& tileY) const
 {
-	tileX = posX / _tileSize;
-	tileY = posY / _tileSize;
+	tileX = (int)(posX / _tileSize);
+	tileY = (int)(posY / _tileSize);
 }
 
 int World::positionToTileCoords(float pos) const
 {
-	return pos / _tileSize;
+	return (int)(pos / _tileSize);
 }
 
 }

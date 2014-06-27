@@ -4,8 +4,8 @@
 #include <stack>
 #include <string>
 #include <sstream>
-#include "GameState.h"
-#include "Game.h"
+#include <SFML/Graphics.hpp>
+#include "DebugScreen.h"
 #include "SplashScreen.h"
 #include "Log.h"
 #include "Config.h"

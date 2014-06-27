@@ -1,21 +1,21 @@
 
 #include "SplashScreen.h"
-#include "Engine.h"
-#include "Game.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio/Music.hpp>
+#include "Engine.h"
+#include "Game.h"
 
 namespace spe
 {
 
-SplashScreen::SplashScreen()
+SplashScreen::SplashScreen():
+	_transparency(0)
 {
 	_timer.restart();
 	_logo.loadFromFile("logo.png");
 	_square.setSize(sf::Vector2f(_logo.getSize().x, _logo.getSize().y));
 	_square.setPosition((800-_logo.getSize().x)/2, (600-_logo.getSize().y)/2);
-	_transparency = 0;
 	_square.setTexture(&_logo);
 
 	_thunder.openFromFile("thunder.wav");
@@ -24,33 +24,37 @@ SplashScreen::SplashScreen()
 
 SplashScreen::~SplashScreen()
 {
+
 }
 
 void SplashScreen::init(Engine* engine)
 {
+
 }
 
 void SplashScreen::clear()
 {
+
 }
 
 void SplashScreen::pause()
 {
+
 }
 
 void SplashScreen::resume()
 {
+
 }
 
 void SplashScreen::handleEvents(Engine* engine)
 {
-	sf::Event event = engine->getEvent();
+	const sf::Event event = engine->getEvent();
 
     if (event.type == sf::Event::Closed) {
         engine->changeState(new Game(engine));
 	}
-	else if(event.type == sf::Event::KeyPressed)
-	{
+	else if(event.type == sf::Event::KeyPressed) {
 		if (event.key.code == sf::Keyboard::Escape) {
 			engine->changeState(new Game(engine));
 		}
@@ -80,7 +84,7 @@ void SplashScreen::update(Engine* engine, float dt)
 
 void SplashScreen::render(Engine* engine)
 {
-	sf::RenderWindow& window = engine->getWindow();
+	sf::RenderWindow& window = engine->accessWindow();
 	window.clear(sf::Color::Black);
 
 	window.draw(_square);

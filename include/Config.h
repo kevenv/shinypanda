@@ -61,7 +61,7 @@ private:
 		std::istringstream istr(value);
 		T type;
 		if (!(istr >> type)) {
-            Log(ERROR) << "Config: Not a valid type '" + (std::string)typeid(T).name() + "'";
+			Log(LOG_TYPE::ERROR) << "Config: Not a valid type '" + (std::string)typeid(T).name() + "'";
 		}
 
 		return type;

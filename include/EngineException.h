@@ -9,9 +9,6 @@ namespace spe
 
 class EngineException : public std::exception
 {
-private:
-	std::string msg;
-
 public:
 	EngineException(const std::string& msg);
 
@@ -20,6 +17,9 @@ public:
 #else
     virtual const char* what() const;
 #endif
+
+private:
+	std::string msg;
 };
 
 }

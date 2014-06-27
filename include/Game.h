@@ -39,6 +39,7 @@ private:
 
 	Camera* _camera;	//ptr to cam in world
 	Player* _player;	//ptr to player in objects list in world
+						//(not a ref because we cant assign the ref at ctor time)
 };
 
 }

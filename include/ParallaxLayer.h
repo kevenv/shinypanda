@@ -17,7 +17,8 @@ public:
 	void update(const sf::View& cameraView);
 	inline void setView(const sf::View& cameraView) { _view = cameraView; }
 
-	inline TileMap& getTileMap() { return _map; }
+	inline TileMap& accessTileMap() { return _map; }
+	inline const TileMap& getTileMap() const { return _map; }
 	inline const sf::View& getView() const { return _view; }
 
 private:

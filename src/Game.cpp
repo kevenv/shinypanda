@@ -14,15 +14,15 @@ namespace spe
 {
 
 Game::Game(Engine* engine)
-:	_camera(NULL),
-	_player(NULL)
+:	_camera(nullptr),
+	_player(nullptr)
 {
 }
 
 Game::~Game()
 {
-	_camera = NULL;
-	_player = NULL;
+	_camera = nullptr;
+	_player = nullptr;
 }
 
 void Game::init(Engine* engine)
@@ -30,10 +30,10 @@ void Game::init(Engine* engine)
 	_world.setWindowSize(engine->getWindowSize().x, engine->getWindowSize().y);
     _world.load("test.tmx");
 
-	_player = _world.getPlayer();
-	_camera = &_world.getCamera();
+	_player = _world.accessPlayerPtr();
+	_camera = _world.accessCameraPtr();
 
-	_renderSystem.init(engine->getWindow(), _world);
+	_renderSystem.init(engine->accessWindow(), _world);
 	//_physicSystem.init();
 }
 
@@ -58,7 +58,7 @@ void Game::handleEvents(Engine* engine)
 		engine->pushState(new PauseScreen(engine));
 		break;
     case sf::Event::Closed:
-        engine->getWindow().close();
+        engine->accessWindow().close();
         engine->quit();
         break;
     case sf::Event::KeyPressed:

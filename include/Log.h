@@ -34,7 +34,7 @@ namespace spe
 {
 
 //Log message type
-enum LOG_TYPE
+enum class LOG_TYPE
 {
 	NO_TYPE = -1,
 	DEBUG_,
@@ -50,7 +50,7 @@ public:
 	Create new log message
 	logType : log message type
 	*/
-	Log(enum LOG_TYPE logType = INFO);
+	Log(LOG_TYPE logType = LOG_TYPE::INFO);
 	~Log();
 
 	friend const Log& operator<<(const Log& log, int n);
@@ -79,7 +79,7 @@ public:
 private:
 	static std::ofstream* _file; //log file
 	static std::stringstream _buffer; //message buffer
-	static enum LOG_TYPE _logType; //current log message type
+	static LOG_TYPE _logType; //current log message type
 	static char _logTypeStr[]; //log message type identifier-character
 
 	static bool _initialized; //true if logger is already initialized
@@ -91,8 +91,8 @@ private:
 	static void writeHeader();
 	static void writePadding();
 	static void writeLog();
-	inline static char getLogTypeStr() { return Log::_logTypeStr[Log::_logType]; }
-	static const struct tm *const getTime();
+	inline static char accessLogTypeStr() { return Log::_logTypeStr[(int)Log::_logType]; }
+	static const struct tm *const accessTime();
 };
 
 }

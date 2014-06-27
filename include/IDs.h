@@ -22,7 +22,7 @@ namespace spe
     This enum is there to make sure that no ID are used twice and to simplify the verification process.
     It must contains only distincts prime numbers as values.
 */
-enum ID
+enum class ID
 {
     MOVING_OBJECT = 2,
     CHARACTER = 3,

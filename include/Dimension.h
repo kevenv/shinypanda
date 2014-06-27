@@ -6,14 +6,14 @@
 
 #define SPE_NB_LAYERS 3
 
-
 namespace spe
 {
+
 class MovingObject;
 class AnimatedTile;
 class ParallaxLayer;
 
-enum LAYER
+enum class LAYER
 {
 	FOREGROUND,
 	PLAYGROUND,
@@ -27,15 +27,15 @@ public:
     ~Dimension();
 
 	inline const std::vector<MovingObject*>& getMovingObjects() const { return _movingObjects; }
-	inline std::vector<MovingObject*>& getMovingObjects() { return _movingObjects; }
+	inline std::vector<MovingObject*>& accessMovingObjects() { return _movingObjects; }
 
 	inline const std::vector<ParallaxLayer*>& getParallaxLayers() const { return _parallaxLayers; }
-	inline std::vector<ParallaxLayer*>& getParallaxLayers() { return _parallaxLayers; }
+	inline std::vector<ParallaxLayer*>& accessParallaxLayers() { return _parallaxLayers; }
 
 	inline const TileMap* getTileMaps() const { return _maps; }
-	inline TileMap* getTileMaps() { return _maps; }
+	inline TileMap* accessTileMaps() { return _maps; }
 
-	StaticObject*** getPlaygroundMap() { return _maps[PLAYGROUND].getData(); }
+	StaticObject*** getPlaygroundMap() { return _maps[(int)LAYER::PLAYGROUND].accessData(); }
 
 	inline int getSizeX() const { return _sizeX; }
 	inline int getSizeY() const { return _sizeY; }

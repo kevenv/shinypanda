@@ -55,7 +55,7 @@ public:
 	const StaticObject* operator()(int x, int y) const;
 
 	const sf::VertexArray& getVertices() const { return _vertices; }
-	StaticObject*** getData() { return _map; }
+	StaticObject*** accessData() { return _map; }
 	inline int getSizeX() const { return _sizeX; }
 	inline int getSizeY() const { return _sizeY; }
 

@@ -4,19 +4,21 @@
 #include <SFML/Graphics.hpp>
 #include "tinyxml2.h"
 
-namespace spe {
+namespace spe
+{
 
 TileMap::TileMap():
-	_map(NULL),
+	_map(nullptr),
 	_sizeX(0),
 	_sizeY(0)
 {
+
 }
 
 TileMap::~TileMap()
 {
 	//Delete all layers
-	//Does not delete the actual Tiles, this is handled by the ~Level()
+	//Does not delete the actual Tiles, this is handled by the ~World()
 	//Because another map could be using the same Tiles
 
 	for(int y = 0; y < _sizeY; y++) {
@@ -37,7 +39,6 @@ void TileMap::load(int sizeX, int sizeY, tinyxml2::XMLElement** layerElement)
 
 	//alloc layer
     _map = new StaticObject**[_sizeY];
-
     for(int i = 0; i < _sizeY ; i++) {
         _map[i] = new StaticObject*[_sizeX];
     }

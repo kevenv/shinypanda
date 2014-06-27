@@ -28,7 +28,7 @@ public:
 private:
 	sf::Font _font;
 	sf::Text _text;
-	int _transparency;
+	sf::Uint8 _transparency;
 };
 
 }

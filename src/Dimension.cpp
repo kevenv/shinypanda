@@ -1,9 +1,8 @@
 
 #include "Dimension.h"
 
-#include <vector>
-
-namespace spe {
+namespace spe
+{
 
 Dimension::Dimension()
 {

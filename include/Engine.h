@@ -27,7 +27,7 @@ public:
 
 	void clear();
 
-	inline sf::RenderWindow& getWindow() { return _window; }
+	inline sf::RenderWindow& accessWindow() { return _window; }
 	inline const sf::Event& getEvent() const { return _event; }
 	inline const Config& getConfig() const { return _config; }
 	inline void quit() { _running = false; }

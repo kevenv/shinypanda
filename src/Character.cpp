@@ -26,13 +26,13 @@ namespace spe
 {
 
 Character::Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x, int y)
-            : MovingObject(name, x, y), _state(STAND), _animationTime(0), _dead(false), _direction(direction ? 1 : -1), _initialDirection(direction)
+	: MovingObject(name, x, y), _state(CHARACTER_STATE::STAND), _animationTime(0), _dead(false), _direction(direction ? 1 : -1), _initialDirection(direction)
 {
-	if (fileSprite != NULL && *fileSprite != '\0') // If the name is not empty
+	if (fileSprite != nullptr && *fileSprite != '\0') // If the name is not empty
 	{
 		if(!_sprites.loadFromFile(fileSprite)) // If it can't load the file.
 		{
-			Log(ERROR) << "Can't load the sprite sheet for " << _name << ".";
+			Log(LOG_TYPE::ERROR) << "Can't load the sprite sheet for " << _name << ".";
 		}
 		_sprite.setTexture(_sprites);
 	}
@@ -60,7 +60,7 @@ void Character::readPosition(const char* file, const int fileVersion)
 
     if (!inf) // If it can't load the file.
     {
-        Log(ERROR) << "Unable to load position file for " << _name << ".";
+		Log(LOG_TYPE::ERROR) << "Unable to load position file for " << _name << ".";
     }
 
     int version;
@@ -68,7 +68,7 @@ void Character::readPosition(const char* file, const int fileVersion)
 
     if(version != fileVersion)
     {
-        Log(ERROR) << "Position file for " << _name << " is out of date.";
+		Log(LOG_TYPE::ERROR) << "Position file for " << _name << " is out of date.";
     }
 
     inf >> _lCldSide >> _rCldSide;
@@ -119,18 +119,18 @@ void Character::refreshSprite()
 
 int Character::getSpriteRect()
 {
-    int time = 20*_animationTime;
+    int time = (int)(20*_animationTime);
     switch(_state)
     {
-        case DEAD:
-        case DUCK:
-        case JUMP: // TODO (vincent#1#): JUMP
-            return _states[_state][0] + (time/2 >= _states[_state][1] ? _states[_state][1]-1 : time/2);
-        case STAND:
-        case WALK:
-        case RUN:
-        case FALL:
-            return _states[_state][0] + (time)%_states[_state][1];
+	case CHARACTER_STATE::DEAD:
+	case CHARACTER_STATE::DUCK:
+	case CHARACTER_STATE::JUMP: // TODO (vincent#1#): JUMP
+		return _states[(int)_state][0] + (time / 2 >= _states[(int)_state][1] ? _states[(int)_state][1] - 1 : time / 2);
+	case CHARACTER_STATE::STAND:
+	case CHARACTER_STATE::WALK:
+	case CHARACTER_STATE::RUN:
+	case CHARACTER_STATE::FALL:
+		return _states[(int)_state][0] + (time) % _states[(int)_state][1];
     }
     return -1; //Never gonna happen as long as state stay within the constants.
 }
@@ -159,7 +159,7 @@ void Character::update(float dt)
 	int w = getWidth();
 	int h = getHeight();
 
-	_collideBox.set(_sprite.getPosition().x, _sprite.getPosition().y, w, h);
+	_collideBox.set((int)_sprite.getPosition().x, (int)_sprite.getPosition().y, w, h);
 }
 
 }

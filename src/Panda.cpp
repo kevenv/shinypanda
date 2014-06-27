@@ -18,20 +18,20 @@ void Panda::refreshAnimation(float dt)
 {
     if(_dead)
     {
-        if(_state != DEAD)
+        if(_state != CHARACTER_STATE::DEAD)
         {
             _animationTime = dt;
-            _state = DEAD;
+			_state = CHARACTER_STATE::DEAD;
         }
         else
             _animationTime += dt;
     }
     else if(_speed.getDirectionX() != 0)
     {
-        if(_state != WALK)
+		if (_state != CHARACTER_STATE::WALK)
         {
             _animationTime = dt;
-            _state = WALK;
+			_state = CHARACTER_STATE::WALK;
         }
         else
             _animationTime += dt;
@@ -40,10 +40,10 @@ void Panda::refreshAnimation(float dt)
     }
     else
     {
-        if(_state != STAND)
+		if (_state != CHARACTER_STATE::STAND)
         {
             _animationTime = dt;
-            _state = STAND;
+			_state = CHARACTER_STATE::STAND;
         }
         else
             _animationTime += dt;

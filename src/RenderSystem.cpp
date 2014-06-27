@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "World.h"
+#include "Dimension.h"
 #include "ParallaxLayer.h"
 #include "EngineException.h"
 #include <cassert>
@@ -11,8 +12,8 @@
 namespace spe
 {
 
-RenderSystem::RenderSystem()
-:	_debugOverlayEnabled(true)
+RenderSystem::RenderSystem():
+	_debugOverlayEnabled(true)
 {
 
 }
@@ -28,14 +29,14 @@ void RenderSystem::init(sf::RenderWindow& window, World& world)
 		throw EngineException("Can't load tileset '" + _tilesetFilePath + "'");
 	}
 
-	Dimension& mapReal = world.getMap(REAL);
+	Dimension& mapReal = world.accessMap(DIMENSION::REAL);
 	//set vertices
 	for(int i = 0; i < SPE_NB_LAYERS; i++) {
-		mapReal.getTileMaps()[i].setVertices(_tileset, _tileSize);
+		mapReal.accessTileMaps()[i].setVertices(_tileset, _tileSize);
 	}
 
 	for(std::size_t i = 0; i < mapReal.getParallaxLayers().size(); i++) {
-		mapReal.getParallaxLayers()[i]->getTileMap().setVertices(_tileset, _tileSize);//, sf::Color(128,128,128));
+		mapReal.getParallaxLayers()[i]->accessTileMap().setVertices(_tileset, _tileSize);//, sf::Color(128,128,128));
 	}
 
 	//set parallax views
@@ -66,10 +67,10 @@ void RenderSystem::render(const World& world)
 	_window->setView(camera.getView());
 
 	//draw tilemap layers
-	_window->draw(map.getTileMaps()[BACKGROUND], states);
-	_window->draw(map.getTileMaps()[PLAYGROUND], states);
+	_window->draw(map.getTileMaps()[(int)LAYER::BACKGROUND], states);
+	_window->draw(map.getTileMaps()[(int)LAYER::PLAYGROUND], states);
 	if(_debugOverlayEnabled) { 
-		drawDebugStaticCollisions(map, PLAYGROUND, sf::Color::Blue);
+		drawDebugStaticCollisions(map, LAYER::PLAYGROUND, sf::Color::Blue);
 		drawDebugDynamicCollisions(map);
 		//drawDebugGrid(x,y,3,3,sf::Color::Red);
 
@@ -78,7 +79,7 @@ void RenderSystem::render(const World& world)
 		for(std::size_t i = 0; i < movingObjects.size(); i++) {
 			MovingObject* object = movingObjects[i];
 			
-			drawDebugPoint(object->getPosition().x,object->getPosition().y, sf::Color::Yellow);
+			drawDebugPoint((int)object->getPosition().x, (int)object->getPosition().y, sf::Color::Yellow);
 		}
 	}
 
@@ -86,17 +87,17 @@ void RenderSystem::render(const World& world)
 	for(std::size_t i = 0; i < map.getMovingObjects().size(); i++) {
 		_window->draw(map.getMovingObjects()[i]->getDrawObject(), states);
 	}
-	_window->draw(map.getTileMaps()[FOREGROUND], states);
+	_window->draw(map.getTileMaps()[(int)LAYER::FOREGROUND], states);
 }
 
 void RenderSystem::drawDebugStaticCollisions(const Dimension& map, LAYER layerID, const sf::Color& color)
 {
-	int sizeX = map.getTileMaps()[layerID].getSizeX();
-	int sizeY = map.getTileMaps()[layerID].getSizeY();
+	int sizeX = map.getTileMaps()[(int)layerID].getSizeX();
+	int sizeY = map.getTileMaps()[(int)layerID].getSizeY();
 
 	for(int y = 0; y < sizeY; y++) {
 		for(int x = 0; x < sizeX; x++) {
-			const StaticObject* obj = map.getTileMaps()[layerID](x,y);
+			const StaticObject* obj = map.getTileMaps()[(int)layerID](x,y);
 			if(obj->isCurrentlyColliding()) {
 				drawDebugRectangle(x*_tileSize, y*_tileSize, _tileSize, _tileSize, sf::Color::Red);
 			}
@@ -115,8 +116,8 @@ void RenderSystem::drawDebugDynamicCollisions(const Dimension& map)
 		MovingObject* object = movingObjects[i];
 		bool colliding = object->isCurrentlyColliding();
 
-		int x = object->getPosition().x;
-		int y = object->getPosition().y;
+		int x = (int)object->getPosition().x;
+		int y = (int)object->getPosition().y;
 		int w = object->getWidth();
 		int h = object->getHeight();
 
