@@ -8,6 +8,8 @@
 namespace spe
 {
 
+class World;
+
 class StaticObject : public Object
 {
 
@@ -50,7 +52,7 @@ public:
 	TileMap();
 	~TileMap();
 
-	void load(int sizeX, int sizeY, tinyxml2::XMLElement** layerElement);
+	void load(int sizeX, int sizeY, tinyxml2::XMLElement** layerElement, World& world);
 	void setVertices(sf::Texture tileset, int tileSize, sf::Color color = sf::Color::White);
 	const StaticObject* operator()(int x, int y) const;
 

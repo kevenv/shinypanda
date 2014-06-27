@@ -8,10 +8,12 @@
 namespace spe
 {
 
+class World;
+
 class ParallaxLayer
 {
 public:
-	ParallaxLayer(float depth, int sizeX, int sizeY, tinyxml2::XMLElement** layerElement);
+	ParallaxLayer(float depth, int sizeX, int sizeY, tinyxml2::XMLElement** layerElement, World& world);
 	~ParallaxLayer();
 
 	void update(const sf::View& cameraView);

@@ -67,6 +67,8 @@ public:
     void addMovingObject(MovingObject* movingObject);
     const std::vector<MovingObject*>& getMovingObjects() const { return _currentMap->getMovingObjects(); }
 
+	void addStaticObjectToPool(StaticObject* staticObject);
+
 private:
     Config _levelFile;
     

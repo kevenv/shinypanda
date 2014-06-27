@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "tinyxml2.h"
+#include "World.h"
 
 namespace spe
 {
@@ -32,7 +33,7 @@ const StaticObject* TileMap::operator()(int x, int y) const
 	return _map[y][x]; //TODO: CHECK BOUNDS??
 }
 
-void TileMap::load(int sizeX, int sizeY, tinyxml2::XMLElement** layerElement)
+void TileMap::load(int sizeX, int sizeY, tinyxml2::XMLElement** layerElement, World& world)
 {
 	_sizeX = sizeX;
 	_sizeY = sizeY;
@@ -52,7 +53,7 @@ void TileMap::load(int sizeX, int sizeY, tinyxml2::XMLElement** layerElement)
             const int tileId = tileElement->FirstAttribute()->IntValue();
 			StaticObject* tile = new StaticObject(x, y, tileId);
             _map[y][x] = tile;
-			//_tilesPool.push_back(tile); //todo: HOW DO WE KNOW WICH OBJECT IS SHARED OR NOT???
+			world.addStaticObjectToPool(tile); //todo: HOW DO WE KNOW WICH OBJECT IS SHARED OR NOT???
             tileElement = tileElement->NextSiblingElement("tile");
         }
     }

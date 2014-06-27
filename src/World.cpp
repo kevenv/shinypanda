@@ -19,13 +19,13 @@
 namespace spe
 {
 
-World::World()
-:
+World::World():
 	_player(nullptr),
 	_tileSize(-1),
 	_currentDimension(DIMENSION::REAL),
 	_currentMap(&_mapReal)
 {
+
 }
 
 World::~World()
@@ -76,11 +76,11 @@ bool World::loadLevelFile(const char* filePath)
 {
 	loadTMXFile(filePath);
 
-    if(!_mapReal.getTileMaps()) {
+    if(!_mapReal.isLoaded()) {
         std::cout << "WARNING: Real Map hasn't been loaded!" << std::endl;
     }
 
-    if(!_mapDream.getTileMaps()) {
+	if (!_mapDream.isLoaded()) {
         std::cout << "WARNING: Dream Map hasn't been loaded!" << std::endl;
     }
 
@@ -113,7 +113,7 @@ bool World::loadTMXFile(const char* filePath)
 
 	for(int i = 0; i < 3; i++) {
 		//const int layerId = SPE_NB_LAYERS-i+3; //load map in reverse order (background to foreground)
-		ParallaxLayer* layer = new ParallaxLayer(i+1, _mapReal.getSizeX(), _mapReal.getSizeY(), &layerElement);//layerId);
+		ParallaxLayer* layer = new ParallaxLayer(i+1, _mapReal.getSizeX(), _mapReal.getSizeY(), &layerElement, *this);//layerId);
         _mapReal.accessParallaxLayers().push_back(layer);
         layerElement = layerElement->NextSiblingElement("layer");
     }
@@ -124,6 +124,7 @@ bool World::loadTMXFile(const char* filePath)
 		loadTMXLayer(&layerElement, layerId, DIMENSION::REAL);
         layerElement = layerElement->NextSiblingElement("layer");
     }
+	_mapReal.setLoaded(true);
 
     return true;
 }
@@ -139,8 +140,8 @@ void World::loadTMXLayer(tinyxml2::XMLElement** layerElement, int layerId, DIMEN
     /*currentDimension._sizeX = (*layerElement)->FirstAttribute()->Next()->IntValue();
     currentDimension._sizeY = (*layerElement)->FirstAttribute()->Next()->Next()->IntValue();*/
 
-	currentDimension.accessTileMaps()[layerId].load(currentDimension.getSizeX(), currentDimension.getSizeY(), layerElement);
-
+	currentDimension.accessTileMaps()[layerId].load(currentDimension.getSizeX(), currentDimension.getSizeY(), layerElement, *this);
+	
     //check if layer is correcly loaded
     for(int y = 0; y < currentDimension.getSizeY(); y++) {
         for(int x = 0; x < currentDimension.getSizeX(); x++) {
@@ -169,6 +170,11 @@ void World::addMovingObject(MovingObject* movingObject)
         _movingObjectsPool.push_back(movingObject);
 		_currentMap->accessMovingObjects().push_back(movingObject);
     }
+}
+
+void World::addStaticObjectToPool(StaticObject* staticObject)
+{
+	_tilesPool.push_back(staticObject);
 }
 
 void World::positionToTileCoords(float posX, float posY, int& tileX, int& tileY) const

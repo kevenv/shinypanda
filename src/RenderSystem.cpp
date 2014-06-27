@@ -69,12 +69,13 @@ void RenderSystem::render(const World& world)
 	//draw tilemap layers
 	_window->draw(map.getTileMaps()[(int)LAYER::BACKGROUND], states);
 	_window->draw(map.getTileMaps()[(int)LAYER::PLAYGROUND], states);
+
+	const std::vector<MovingObject*>& movingObjects = map.getMovingObjects();
+
 	if(_debugOverlayEnabled) { 
 		drawDebugStaticCollisions(map, LAYER::PLAYGROUND, sf::Color::Blue);
 		drawDebugDynamicCollisions(map);
 		//drawDebugGrid(x,y,3,3,sf::Color::Red);
-
-		const std::vector<MovingObject*>& movingObjects = map.getMovingObjects();
 
 		for(std::size_t i = 0; i < movingObjects.size(); i++) {
 			MovingObject* object = movingObjects[i];
@@ -84,8 +85,8 @@ void RenderSystem::render(const World& world)
 	}
 
 	//draw MovingObjects
-	for(std::size_t i = 0; i < map.getMovingObjects().size(); i++) {
-		_window->draw(map.getMovingObjects()[i]->getDrawObject(), states);
+	for (std::size_t i = 0; i < movingObjects.size(); i++) {
+		_window->draw(movingObjects[i]->getDrawObject(), states);
 	}
 	_window->draw(map.getTileMaps()[(int)LAYER::FOREGROUND], states);
 }

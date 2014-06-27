@@ -47,11 +47,15 @@ public:
 		return x >= 0 && x < _sizeX && y >= 0 && y < _sizeY;
 	}
 
+	inline bool isLoaded() const { return _loaded; }
+	inline void setLoaded(bool loaded) { _loaded = loaded; }
+
 private:
 	TileMap _maps[SPE_NB_LAYERS];
 	std::vector<ParallaxLayer*> _parallaxLayers;
     int _sizeX;
     int _sizeY;
+	bool _loaded;
 
     std::vector<MovingObject*> _movingObjects;
     std::vector<AnimatedTile*> _animatedTiles;

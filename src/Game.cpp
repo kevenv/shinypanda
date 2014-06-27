@@ -62,7 +62,7 @@ void Game::handleEvents(Engine* engine)
         engine->quit();
         break;
     case sf::Event::KeyPressed:
-        if(event.key.code == sf::Keyboard::LShift || event.key.code == sf::Keyboard::LShift)
+        if(event.key.code == sf::Keyboard::LShift)
             _player->run();
 		else if(event.key.code == sf::Keyboard::Escape)
 			engine->quit();
@@ -70,7 +70,7 @@ void Game::handleEvents(Engine* engine)
 			_renderSystem.setDebugOverlayEnabled(!_renderSystem.getDebugOverlayEnabled());
         break;
     case sf::Event::KeyReleased:
-        if(event.key.code == sf::Keyboard::LShift || event.key.code == sf::Keyboard::LShift)
+        if(event.key.code == sf::Keyboard::LShift)
             _player->walk();
         break;
 	}
