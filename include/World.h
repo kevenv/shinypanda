@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <sfml/Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include "Config.h"
 #include "tinyxml2.h"
 #include "Camera.h"
