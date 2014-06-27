@@ -1,5 +1,6 @@
 
 #include "Dimension.h"
+#include "ParallaxLayer.h"
 
 namespace spe
 {

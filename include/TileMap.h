@@ -65,6 +65,7 @@ private:
 	StaticObject*** _map; //2D Array of Tile*
 	int _sizeX;
 	int _sizeY;
+	bool _loaded;
 
 	sf::VertexArray _vertices;
 

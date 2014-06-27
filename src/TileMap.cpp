@@ -11,7 +11,8 @@ namespace spe
 TileMap::TileMap():
 	_map(nullptr),
 	_sizeX(0),
-	_sizeY(0)
+	_sizeY(0),
+	_loaded(false)
 {
 
 }
@@ -21,11 +22,12 @@ TileMap::~TileMap()
 	//Delete all layers
 	//Does not delete the actual Tiles, this is handled by the ~World()
 	//Because another map could be using the same Tiles
-
-	for(int y = 0; y < _sizeY; y++) {
-		delete[] _map[y];
+	if (_loaded) {
+		for (int y = 0; y < _sizeY; y++) {
+			delete[] _map[y];
+		}
+		delete[] _map;
 	}
-	delete[] _map;
 }
 
 const StaticObject* TileMap::operator()(int x, int y) const
@@ -57,6 +59,8 @@ void TileMap::load(int sizeX, int sizeY, tinyxml2::XMLElement** layerElement, Wo
             tileElement = tileElement->NextSiblingElement("tile");
         }
     }
+
+	_loaded = true;
 }
 
 void TileMap::setVertices(sf::Texture tileset, int tileSize, sf::Color color)

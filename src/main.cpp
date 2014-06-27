@@ -1,3 +1,6 @@
+#if (defined(_WIN32) || defined(_WIN64)) && defined(_DEBUG)
+	#include <vld.h> Visual Leak Detector
+#endif
 
 #include "Engine.h"
 #include "Log.h"
