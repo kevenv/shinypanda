@@ -1,37 +1,25 @@
-/**
-    @file Character.cpp
-    @author Vincent Girard <vin100_jrare@hotmail.com>
-    @version 1.0
-
-    @section LICENSE
-
-
-
-    @section DESCRIPTION
-
-    This file is the source of a class representing a character.
-*/
 #include "Character.h"
-#include "MovingObject.h"
+
+#include <SFML/Graphics.hpp>
+#include <iostream>
+#include <fstream>
 #include "Log.h"
+#include "MovingObject.h"
 #include "SpeedVector2.h"
-
-#include <SFML/Graphics.hpp> //For the graphics
-#include <iostream> //For cout tests
-#include <fstream> //For reading files
-
-#define ABS(x) ((x) < 0 ? -(x) : (x)) //Absolute value function
 
 namespace spe
 {
 
-Character::Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x, int y)
-	: MovingObject(name, x, y), _state(CHARACTER_STATE::STAND), _animationTime(0), _dead(false), _direction(direction ? 1 : -1), _initialDirection(direction)
+Character::Character(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x, int y):
+	MovingObject(name, x, y),
+	_state(CHARACTER_STATE::STAND),
+	_animationTime(0),
+	_dead(false),
+	_direction(direction ? 1 : -1),
+	_initialDirection(direction)
 {
-	if (fileSprite != nullptr && *fileSprite != '\0') // If the name is not empty
-	{
-		if(!_sprites.loadFromFile(fileSprite)) // If it can't load the file.
-		{
+	if (fileSprite != nullptr && *fileSprite != '\0') {
+		if(!_sprites.loadFromFile(fileSprite)) {
 			Log(LOG_TYPE::ERROR) << "Can't load the sprite sheet for " << _name << ".";
 		}
 		_sprite.setTexture(_sprites);
@@ -58,16 +46,14 @@ void Character::readPosition(const char* file, const int fileVersion)
 {
     std::ifstream inf (file);
 
-    if (!inf) // If it can't load the file.
-    {
+    if (!inf) {
 		Log(LOG_TYPE::ERROR) << "Unable to load position file for " << _name << ".";
     }
 
     int version;
     inf >> version;
 
-    if(version != fileVersion)
-    {
+    if(version != fileVersion) {
 		Log(LOG_TYPE::ERROR) << "Position file for " << _name << " is out of date.";
     }
 
@@ -81,23 +67,46 @@ void Character::readPosition(const char* file, const int fileVersion)
 
     int x, y, length, height, offsetX, offsetY;
 
-    for(int i = 0; i < n; i++)
-	{
+    for(int i = 0; i < n; i++) {
 	    inf >> x >> y >> length >> height >> offsetX >> offsetY;
         _spriteRects[i] = sf::IntRect(x, y, length, height);
         _offsets[i] = sf::Vector2i(offsetX, offsetY);
 	}
 
-	for (int i = 0; i < NB_CHARACTER_STATES; i++)
-        for (int j = 0; j < 2; j++)
-            inf >> _states[i][j];
+	for (int i = 0; i < NB_CHARACTER_STATES; i++) {
+		for (int j = 0; j < 2; j++) {
+			inf >> _states[i][j];
+		}
+	}
 
 	inf.close();
 }
 
-void Character::changeState(CHARACTER_STATE state)
+const sf::Vector2f& Character::getPosition() const
 {
-    _state = state;
+	// If right: +width-xOffset, if left: +xOffset TODO: position use for camera following, might be useless
+	//return _sprite.getPosition() + sf::Vector2f((_initialDirection == (_direction < 0)) ? _spriteRects[_currentOffset].width - _offsets[_currentOffset].x : _offsets[_currentOffset].x, _spriteRects[_currentOffset].height);
+	return _sprite.getPosition();
+}
+
+void Character::update(float dt)
+{
+	refreshAnimation(dt);
+
+	int w = getWidth();
+	int h = getHeight();
+
+	_collideBox.set((int)_sprite.getPosition().x, (int)_sprite.getPosition().y, w, h);
+}
+
+void Character::switchDirection()
+{
+	int direction = _initialDirection ? _direction : -_direction;
+	//If changing for right: +width-2xOffset, if changing left: +2xOffset-width
+	float newX = direction*(2 * _offsets[_currentOffset].x - _spriteRects[_currentOffset].width);
+
+	_sprite.move(sf::Vector2f(newX, 0));
+	_direction *= -1;
 }
 
 void Character::refreshSprite()
@@ -124,7 +133,7 @@ int Character::getSpriteRect()
     {
 	case CHARACTER_STATE::DEAD:
 	case CHARACTER_STATE::DUCK:
-	case CHARACTER_STATE::JUMP: // TODO (vincent#1#): JUMP
+	case CHARACTER_STATE::JUMP:
 		return _states[(int)_state][0] + (time / 2 >= _states[(int)_state][1] ? _states[(int)_state][1] - 1 : time / 2);
 	case CHARACTER_STATE::STAND:
 	case CHARACTER_STATE::WALK:
@@ -132,34 +141,7 @@ int Character::getSpriteRect()
 	case CHARACTER_STATE::FALL:
 		return _states[(int)_state][0] + (time) % _states[(int)_state][1];
     }
-    return -1; //Never gonna happen as long as state stay within the constants.
-}
-
-void Character::switchDirection()
-{
-    int direction = _initialDirection ? _direction : -_direction;
-    //If changing for right: +width-2xOffset, if changing left: +2xOffset-width
-	float newX = direction*(2*_offsets[_currentOffset].x-_spriteRects[_currentOffset].width);
-
-    _sprite.move(sf::Vector2f(newX,0));
-    _direction *= -1;
-}
-
-const sf::Vector2f& Character::getPosition() const
-{
-    // If right: +width-xOffset, if left: +xOffset TODO: position use for camera following, might be useless
-    //return _sprite.getPosition() + sf::Vector2f((_initialDirection == (_direction < 0)) ? _spriteRects[_currentOffset].width - _offsets[_currentOffset].x : _offsets[_currentOffset].x, _spriteRects[_currentOffset].height);
-	return _sprite.getPosition();
-}
-
-void Character::update(float dt)
-{
-	refreshAnimation(dt);
-
-	int w = getWidth();
-	int h = getHeight();
-
-	_collideBox.set((int)_sprite.getPosition().x, (int)_sprite.getPosition().y, w, h);
+    return -1; //Never gonna happen as long as state stay within the constants
 }
 
 }

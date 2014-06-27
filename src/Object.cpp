@@ -1,12 +1,19 @@
 
 #include "Object.h"
+
 #include <vector>
 #include <algorithm>
 
 namespace spe
 {
 
-Object::Object(const char* name) : _name(name), _solid(false), _inDream(true), _inReal(true), _harmful(false), _player(false) {}
+Object::Object(const char* name):
+	_name(name),
+	_solid(false),
+	_harmful(false)
+{
+
+}
 
 bool Object::isCurrentlyColliding(const Object* object) const
 {

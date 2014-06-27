@@ -1,11 +1,13 @@
 
 #include "DebugDude.h"
 
+#include "MovingObject.h"
+
 namespace spe
 {
 
-DebugDude::DebugDude(int x, int y, int w, int h, const sf::Color& color, bool move)
-	:MovingObject("Debug Dude", x, y),
+DebugDude::DebugDude(int x, int y, int w, int h, const sf::Color& color, bool move):
+	MovingObject("Debug Dude", x, y),
 	_shape(sf::Vector2f(w,h)),
 	_move(move)
 {

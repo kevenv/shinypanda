@@ -1,50 +1,90 @@
-/**
-    @file Player.cpp
-    @author Vincent Girard <vin100_jrare@hotmail.com>
-    @version 1.0
-
-    @section LICENSE
-
-
-
-    @section DESCRIPTION
-
-    This file is the source of a class representing the player.
-*/
 #include "Player.h"
-#include "Character.h"
-#include "Log.h"
-#include "SpeedVector2.h"
-#include "IDs.h"
 
 #include <vector>
-#include <iostream> //For cout tests
-#include <SFML/Graphics.hpp> //For the graphics
+#include <SFML/Graphics.hpp>
+#include "Character.h"
+#include "SpeedVector2.h"
 
-#define WALK_MAX 5 //Maximum speed when walking
+#define WALK_MAX 5 //Maximum speed when walking TODO: HEUUNUUU NOOOO !?
 #define RUN_MAX 10 //Maximum speed when running
 
 namespace spe
 {
 
-Player::Player(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x, int y)
-            : Character(name, fileSprite, filePosition, filePositionVersion, direction, x, y)
+Player::Player(const char* name, const char* fileSprite, const char* filePosition, const int filePositionVersion, bool direction, int x, int y):
+	Character(name, fileSprite, filePosition, filePositionVersion, direction, x, y)
 {
-    setPlayer(true);
     walk();
+}
+
+void Player::updateStatus(float dt)
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
+		_dead = false;
+	else if (_dead)
+		_speed.slowX(50 * dt);
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::K))
+		_dead = true;
+	else
+	{
+		bool run = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift);
+		//TEMPORARY DISACTIVATED FOR DEBUGGING
+		/*if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		{
+		_speed.slowX(50*dt);
+		}
+		else*/ if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+				_speed.slowX(50 * dt);
+			else
+				_speed.move(-(run ? 100 : 50)*dt, 0);
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		{
+			_speed.move((run ? 100 : 50)*dt, 0);
+		}
+		else
+			_speed.slowX(50 * dt);
+		//TEMPORARY ADDED FOR DEBUGGING
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+			{
+				_speed.slowY(50 * dt);
+			}
+			else
+				_speed.move(0, -50 * dt);
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		{
+			_speed.move(0, 50 * dt);
+		}
+		else
+			_speed.slowY(50 * dt);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			jump();
+	}
+	_sprite.move(_speed.getVector2());
+}
+
+void Player::collide(Object& obj)
+{
+	if (obj.isHarmful()) {
+		kill();
+	}
 }
 
 void Player::refreshAnimation(float dt)
 {
-    if(_dead)
-    {
-		if (_state != CHARACTER_STATE::DEAD)
-        {
+    if(_dead) {
+		if (_state != CHARACTER_STATE::DEAD) {
             _animationTime = dt;
 			changeState(CHARACTER_STATE::DEAD);
         }
-        else
-            _animationTime += dt;
+		else {
+			_animationTime += dt;
+		}
     }
 	//TEMPORARY DISACTIVATED FOR DEBUGGING
    /* else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
@@ -57,93 +97,44 @@ void Player::refreshAnimation(float dt)
         else
             _animationTime += dt;
     }*/
-    else if(_speed.getDirectionX() != 0)
-    {
-        if(_speed.getSpeedX() > WALK_MAX)
-        {
-			if (_state != CHARACTER_STATE::RUN)
-            {
+    else if(_speed.getDirectionX() != 0) {
+        if(_speed.getSpeedX() > WALK_MAX) {
+			if (_state != CHARACTER_STATE::RUN) {
                 _animationTime = dt;
 				changeState(CHARACTER_STATE::RUN);
             }
-            else _animationTime += dt;
+			else {
+				_animationTime += dt;
+			}
         }
-		else if (_state != CHARACTER_STATE::WALK)
-        {
+		else if (_state != CHARACTER_STATE::WALK) {
             _animationTime = dt;
 			changeState(CHARACTER_STATE::WALK);
         }
-        else
-            _animationTime += dt;
-        if(_speed.getDirectionX() == -_direction)
-            switchDirection();
+		else {
+			_animationTime += dt;
+		}
+
+		if (_speed.getDirectionX() == -_direction) {
+			switchDirection();
+		}
     }
-    else
-    {
-		if (_state != CHARACTER_STATE::STAND)
-        {
+    else {
+		if (_state != CHARACTER_STATE::STAND) {
             _animationTime = dt;
             changeState(CHARACTER_STATE::STAND);
         }
-        else
-            _animationTime += dt;
+		else {
+			_animationTime += dt;
+		}
     }
-    refreshSprite();
-}
 
-void Player::updateStatus(float dt)
-{
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::L))
-        _dead = false;
-    else if(_dead)
-        _speed.slowX(50*dt);
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::K))
-        _dead = true;
-    else
-    {
-        bool run = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift);
-		//TEMPORARY DISACTIVATED FOR DEBUGGING
-        /*if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-        {
-            _speed.slowX(50*dt);
-        }
-        else*/ if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-        {
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-                _speed.slowX(50*dt);
-            else
-                _speed.move(-(run?100:50)*dt,0);
-        }
-        else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-        {
-            _speed.move((run?100:50)*dt,0);
-        }
-        else
-            _speed.slowX(50*dt);
-		//TEMPORARY ADDED FOR DEBUGGING
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		{
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-            {
-                _speed.slowY(50*dt);
-            } else
-                _speed.move(0,-50*dt);
-		}
-		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-        {
-			_speed.move(0,50*dt);
-		}
-        else
-            _speed.slowY(50*dt);//
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-            jump();
-    }
-    _sprite.move(_speed.getVector2());
+    refreshSprite();
 }
 
 void Player::jump()
 {
-    std::cout << "Boing!\n"; // TODO (vincent#1#): Jump
+
 }
 
 void Player::run()
@@ -154,13 +145,7 @@ void Player::run()
 void Player::walk()
 {
     _speed.setXMax(WALK_MAX);
-	_speed.setYMax(WALK_MAX); //ADDED TEMPORARY FOR DEBUGGING
-}
-
-void Player::collide(Object& obj)
-{
-    if(obj.isHarmful())
-        kill();
+	_speed.setYMax(WALK_MAX); //TODO : ADDED TEMPORARY FOR DEBUGGING
 }
 
 }

@@ -22,7 +22,6 @@
     <ClInclude Include="..\..\include\EngineException.h" />
     <ClInclude Include="..\..\include\Game.h" />
     <ClInclude Include="..\..\include\GameState.h" />
-    <ClInclude Include="..\..\include\IDs.h" />
     <ClInclude Include="..\..\include\Log.h" />
     <ClInclude Include="..\..\include\MovingObject.h" />
     <ClInclude Include="..\..\include\Object.h" />
